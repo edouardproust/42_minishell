@@ -1,0 +1,8 @@
+minishell
+src/obj
+
+*.a
+*.o
+*.out
+*.swp
+*.swo
