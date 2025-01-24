@@ -10,31 +10,32 @@
 
 // TODO
 
-##OVERVIEW
+## Overview
 
 **Features:**
-    -Display a prompt when waiting for a new command.
-    -Have a working history.
-    -Execute commands with arguments.
-    -Handle environment variables ($ followed by a sequence of characters).
-    -Manage signals (Ctrl+C, Ctrl+D, Ctrl+\).
-    -Redirections (>, <, , <<, >>).
-    -Pipes (|).
-    -Built-ins (echo -n, cd, export, unset, env, exit).
+	
+	Display a prompt when waiting for a new command.
+	Have a working history.
+	Execute commands with arguments.
+	Handle environment variables ($ followed by a sequence of characters).
+	Manage signals (Ctrl+C, Ctrl+D, Ctrl+\).
+	Redirections (>, <, <<, >>).
+	Pipes (|).
+	Built-ins (echo, cd, export, unset, env, exit).
 
 **Collaborative notes:**
     (eg how the collaborating will be, who handles which feature)
 
-##REQUIREMENTS
+## Requirements
 					
 **Mandatory:**
-    -Allowed functions : ~/minishell/functions
-    -Behaviour : Should match Bash as close as possible
+    Allowed functions : ~/minishell/functions
+    Behaviour : Should match Bash as close as possible
 **Bonus:**
-    -&& and || with parenthesis for priorities
-    -Wildcards * should work for the current working directory.
+    && and || with parenthesis for priorities
+    Wildcards * should work for the current working directory.
 
-##ARCHITECTURE
+## Architecture
 
 **Modules (eg module names)**
 
@@ -51,7 +52,7 @@
 Flow Diagram about how input will move through:
     **Input -> Lexer -> Parser -> Executor -> Output
 
-##FUNCTIONS
+## Functions
 					
     Name: Function name.
     Purpose: Brief description of what it does.
@@ -59,7 +60,7 @@ Flow Diagram about how input will move through:
     Example: Usage example if applicable.
     Key Notes: Caveats or special handling.
 
-##FEATURES/IMPLEMENTATION DETAILS
+## Features/Implementation Details
 				
 **Command Execution
 
@@ -92,12 +93,12 @@ Details of the implementation of each built-in:
 
     cd, echo, exit, export, unset, etc.
     
-##ERROR HANDLING
+## Error Handling
 				
 Description of how errors are handled.
 Mention where and how error messages are displayed.
 
-##TESTING
+## Testing
 					
 Test Plan :
 
@@ -109,7 +110,7 @@ Test Plan :
 Manual Testing: Commands to test in minishell and expected behaviour.
 *Automated Testing: Mention in case we use scripts.
 
-##External references:
+## External references:
 
 https://medium.com/@WinnieNgina/guide-to-code-a-simple-shell-in-c-bd4a3a4c41cd
 https://www.rozmichelle.com/pipes-forks-dups/
