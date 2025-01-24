@@ -24,16 +24,16 @@
 	Built-ins (echo, cd, export, unset, env, exit).
 
 **Collaborative notes:**
-    (eg how the collaborating will be, who handles which feature)
+	(eg how the collaborating will be, who handles which feature)
 
 ## Requirements
 					
 **Mandatory:**
-    Allowed functions : ~/minishell/functions
-    Behaviour : Should match Bash as close as possible
+	Allowed functions : ~/minishell/functions
+	Behaviour : Should match Bash as close as possible
 **Bonus:**
-    && and || with parenthesis for priorities
-    Wildcards * should work for the current working directory.
+	&& and || with parenthesis for priorities
+	Wildcards * should work for the current working directory.
 
 ## Architecture
 
@@ -47,10 +47,9 @@
 
 **Data structures:** 
 
-    Here we can describe key data structures  (e.g., a structure for the command tree, a linked list  for tokens).
-
-Flow Diagram about how input will move through:
-    **Input -> Lexer -> Parser -> Executor -> Output
+	Here we can describe key data structures  (e.g., a structure for the command tree, a linked list  for tokens).
+	Flow Diagram about how input will move through:
+	Input -> Lexer -> Parser -> Executor -> Output
 
 ## Functions
 					
@@ -112,5 +111,5 @@ Manual Testing: Commands to test in minishell and expected behaviour.
 
 ## External references:
 
-https://medium.com/@WinnieNgina/guide-to-code-a-simple-shell-in-c-bd4a3a4c41cd
-https://www.rozmichelle.com/pipes-forks-dups/
+	https://medium.com/@WinnieNgina/guide-to-code-a-simple-shell-in-c-bd4a3a4c41cd
+	https://www.rozmichelle.com/pipes-forks-dups/
