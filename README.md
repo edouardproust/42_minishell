@@ -61,32 +61,32 @@
 
 ## Features/Implementation Details
 				
-**Command Execution
+**Command Execution**
 
     How execve is used to run commands.
     Handling paths and PATH variable.
     Error handling for invalid commands.
 
-Pipes (|)
+**Pipes (|)**
 
     How pipes connect the output of one command to the input of another.
     Use of pipe() and dup2().
 
-Redirections (>, <, >>)
+**Redirections (>, <, >>)**
 
     File handling with open(), dup2(), and close().
     Managing multiple redirections in a single command.
 
-Signals
+**Signals**
 
     How signals like Ctrl+C (SIGINT) and Ctrl+D (EOF) are managed.
 
-Environment Variables
+**Environment Variables**
 
     Using getenv to handle environment variables.
     Built-ins like export and unset.
 
-Built-in Commands
+**Built-in Commands**
 
 Details of the implementation of each built-in:
 
@@ -99,7 +99,7 @@ Mention where and how error messages are displayed.
 
 ## Testing
 					
-Test Plan :
+**Test Plan :**
 
     Single commands.
     Multiple commands with pipes.
