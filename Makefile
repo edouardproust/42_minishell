@@ -6,7 +6,7 @@
 #    By: eproust <contact@edouardproust.dev>        +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2025/01/19 18:25:08 by eproust           #+#    #+#              #
-#    Updated: 2025/01/22 14:47:38 by eproust          ###   ########.fr        #
+#    Updated: 2025/01/26 18:56:27 by eproust          ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -61,7 +61,7 @@ LIBFT_DIR = $(LIBS_DIR)/libft
 
 LIBFT = $(LIBFT_DIR)/libft.a
 
-LIBS = $(LIBFT)
+LIBS = $(LIBFT) -lreadline
 
 
 # ************************************
