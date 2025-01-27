@@ -6,7 +6,7 @@
 /*   By: eproust <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/27 15:41:36 by eproust           #+#    #+#             */
-/*   Updated: 2025/01/27 16:28:10 by eproust          ###   ########.fr       */
+/*   Updated: 2025/01/27 16:45:15 by eproust          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,7 +40,7 @@ t_node *init_struct(void)
     t_node node2 = { &cmd2, &node3 };
     t_node node1 = { &cmd1, &node2 };	
     
-	return (node1);
+	return (&node1);
 }
 
 // TODO: Remove (created for testing purpose)

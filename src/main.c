@@ -6,7 +6,7 @@
 /*   By: eproust <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/22 14:48:00 by eproust           #+#    #+#             */
-/*   Updated: 2025/01/27 16:37:55 by eproust          ###   ########.fr       */
+/*   Updated: 2025/01/27 16:46:05 by eproust          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,8 +47,8 @@ int	main(void)
 		}
 		add_history(input);
 		free(input);
-		t_node *cmd = *init_struct(); // TODO: Remove (created for testing purpose)
-		execute(t_node *cmd);
+		t_node *cmd = init_struct(); // TODO: Remove (created for testing purpose)
+		execute_command(cmd);
 	}
 	return (EXIT_SUCCESS);
 }
