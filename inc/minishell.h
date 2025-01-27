@@ -6,7 +6,7 @@
 /*   By: eproust <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/22 14:49:19 by eproust           #+#    #+#             */
-/*   Updated: 2025/01/27 16:19:26 by eproust          ###   ########.fr       */
+/*   Updated: 2025/01/27 16:25:37 by eproust          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,8 +29,5 @@ typedef struct s_node {
     t_cmd			*cmd;
 	struct s_node	*next;
 } t_node;
-
-t_node *init_struct(void); // TODO remove (created for test purpose)
-int	execute_command(t_node *cmd);
 
 #endif
