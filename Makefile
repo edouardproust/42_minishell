@@ -7,8 +7,7 @@ NAME = ./minishell
 
 C_DIR = src
 
-C_FILES = main.c \
-	execute.c
+C_FILES = main.c
 
 SRCS = $(addprefix $(C_DIR)/,$(C_FILES))
 
