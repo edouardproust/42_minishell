@@ -27,10 +27,9 @@
 	(eg how the collaborating will be, who handles which feature)
 
 ## Requirements
-					
-**Mandatory:**
-	Allowed functions :
 
+List of allowed functions:
+					
 **Readline Library Functions**
 
     readline(prompt)
@@ -308,3 +307,4 @@ Manual Testing: Commands to test in minishell and expected behaviour.
 
 	https://medium.com/@WinnieNgina/guide-to-code-a-simple-shell-in-c-bd4a3a4c41cd
 	https://www.rozmichelle.com/pipes-forks-dups/
+	https://medium.com/@mostafa.omrane/mes-conseils-si-je-devais-recommencer-minishell-a9783c51ba1b
