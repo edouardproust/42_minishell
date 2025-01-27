@@ -6,7 +6,7 @@
 #    By: eproust <contact@edouardproust.dev>        +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2025/01/19 18:25:08 by eproust           #+#    #+#              #
-#    Updated: 2025/01/27 15:53:06 by eproust          ###   ########.fr        #
+#    Updated: 2025/01/27 16:48:52 by eproust          ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -19,8 +19,7 @@ NAME = ./minishell
 
 C_DIR = src
 
-C_FILES = main.c \
-	execute.c
+C_FILES = main.c
 
 SRCS = $(addprefix $(C_DIR)/,$(C_FILES))
 
