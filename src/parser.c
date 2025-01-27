@@ -13,41 +13,15 @@ char	**tokenizer(char *input)
 	return (tokens);
 }
 
-t_node	*create_node(void *cmd)
+//Only handle <, > redirections for now to test
+//TO DO (F) single and double quotes handling, pipes (|), <<, >>
+void	parse_token(char **tokens, t_cmd *cmd)
 {
-	t_node	*node;
+	int	i;
+	int	args_count;
 
-	t_node = malloc(sizeof(t_node));
-	if (!node)
-		return (NULL);
-	node->cmd = malloc(sizeof(t_cmd));
-	if (!node->cmd)
-	{
-		free(node);
-		return (NULL);
-	}
-	node->cmd->args = NULL;
-	node->cmd->infile = NULL;
-	node->cmd->outfile = NULL;
-	return (node);
-}
-
-void	parse_command(char *group, t_cmd *cmd)
-{
-	char	**tokens;
-	int		i;
-	int		args_count;
-
-	if (!group || !cmd)
-		return;
-	tokens = tokenizer(group);
-	if (!tokens)
-		return;
-	cmd->args = malloc(sizeof(char *) * (ft_strlen(group) + 1));
-	cmd->infile = NULL;
-	cmd->outfile = NULL;
-	args_count = 0;
 	i = 0;
+	args_count = 0;
 	while (tokens[i])
 	{
 		if (ft_strncmp(tokens[i], "<", 1) == 0)
@@ -65,15 +39,49 @@ void	parse_command(char *group, t_cmd *cmd)
 		else
 		{
 			cmd->args[args_count] = ft_strdup(tokens[i]);
+			if (!cmd->args[args_count])
+				return;
 			args_count++;
 		}
-	cmd->args[args_count] = '\0';
-	i = 0;
-	while (tokens && tokens[i])
-	{
-		free(tokens[i]);
 		i++;
-
 	}
+	cmd->args[args_count] = NULL;
+}
+
+void	parse_command(char *group, t_cmd *cmd)
+{
+	char	**tokens;
+	int		i;
+	int		token_count;
+
+	if (!group || !cmd)
+		return;
+	tokens = tokenizer(group);
+	if (!tokens)
+		return;
+	if (cmd->args)
+	{
+		i = 0;
+		while (cmd->args[i])
+			free(cmd->args[i++]);
+		free(cmd->args);
+	}
+	token_count = 0;
+	while (tokens[token_count])
+		token_count++;
+	cmd->args = malloc(sizeof(char *) * (token_count + 1));
+	if (cmd->args)
+	{
+		i = 0;
+		while (tokens[i])
+			free(tokens[i++]);
+		free(tokens);
+		return ;
+	}
+	parse_token(tokens, cmd);
+	i = 0;
+	parse_token(tokens, cmd);
+	while (tokens[i])
+		free(tokens[i++]);
 	free(tokens);
 }
