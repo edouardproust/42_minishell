@@ -6,7 +6,7 @@
 /*   By: eproust <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/22 14:49:19 by eproust           #+#    #+#             */
-/*   Updated: 2025/01/27 15:20:28 by eproust          ###   ########.fr       */
+/*   Updated: 2025/01/27 15:24:32 by eproust          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,6 +28,6 @@ typedef struct s_cmd {
 typedef struct s_node {
     t_cmd	*cmd;
 	t_cmd	*next;
-} t_node
+} t_node;
 
 #endif
