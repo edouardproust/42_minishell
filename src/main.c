@@ -6,7 +6,7 @@
 /*   By: eproust <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/22 14:48:00 by eproust           #+#    #+#             */
-/*   Updated: 2025/01/27 15:18:01 by fpapadak         ###   ########.fr       */
+/*   Updated: 2025/01/27 16:13:11 by eproust          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,10 +46,9 @@ int	main(void)
 			break;
 		}
 		add_history(input);
-		//t_token *tokens = tokenize(input);
 		free(input);
-		//t_ast_node *ast = parse(input);
-		//execute(ast);
+		t_node *cmd = init_struct(); // TODO remove (create for test purpose)
+		execute_command(cmd);
 	}
 	return (EXIT_SUCCESS);
 }
