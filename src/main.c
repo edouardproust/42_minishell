@@ -1,15 +1,3 @@
-/* ************************************************************************** */
-/*                                                                            */
-/*                                                        :::      ::::::::   */
-/*   main.c                                             :+:      :+:    :+:   */
-/*                                                    +:+ +:+         +:+     */
-/*   By: eproust <marvin@42.fr>                     +#+  +:+       +#+        */
-/*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/01/22 14:48:00 by eproust           #+#    #+#             */
-/*   Updated: 2025/01/27 16:57:29 by eproust          ###   ########.fr       */
-/*                                                                            */
-/* ************************************************************************** */
-
 #include "minishell.h"
 
 /*
@@ -47,11 +35,8 @@ int	main(void)
 		}
 		add_history(input);
 		free(input);
-<<<<<<< HEAD
 		t_node *cmd = init_struct(); // TODO: Remove (created for testing purpose)
 		execute_command(cmd);
-=======
->>>>>>> main
 	}
 	return (EXIT_SUCCESS);
 }
