@@ -6,7 +6,7 @@
 #    By: eproust <contact@edouardproust.dev>        +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2025/01/19 18:25:08 by eproust           #+#    #+#              #
-#    Updated: 2025/01/26 18:56:27 by eproust          ###   ########.fr        #
+#    Updated: 2025/01/27 15:23:41 by eproust          ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -37,7 +37,7 @@ OBJS = $(addprefix $(O_DIR)/,$(C_FILES:.c=.o))
 # Headers                            *
 # ************************************
 
-H_DIR = include
+H_DIR = inc
 
 H_FILES = minishell.h
 
