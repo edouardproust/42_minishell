@@ -6,7 +6,7 @@
 /*   By: eproust <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/22 14:48:00 by eproust           #+#    #+#             */
-/*   Updated: 2025/01/26 19:38:58 by eproust          ###   ########.fr       */
+/*   Updated: 2025/01/27 15:18:01 by fpapadak         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,6 +41,7 @@ int	main(void)
 		input = readline("minishell $");
 		if (ft_strncmp(input, "exit", 5) == 0)
 		{
+			ft_printf("exit\n");
 			ft_free_ptrs(1, &input);
 			break;
 		}
