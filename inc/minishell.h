@@ -9,8 +9,8 @@
 
 typedef struct s_cmd {
 	char	**args;
-	char	**infile;
-	char	**outfile;
+	char	*infile;
+	char	*outfile;
 } t_cmd;
 
 typedef struct s_node {
@@ -18,7 +18,13 @@ typedef struct s_node {
 	struct s_node	*next;
 } t_node;
 
-t_node	*init_struct(void); // TODO remove (created for test purpose)
-int	execute_command(t_node *cmd);
+int	execute_input(t_node *parsed_input);
+
+// list_utils
+//int list_len(t_list *lst)
+
+// TODO Delete follwoing lines (functions created for testing execute.c)
+t_node	*exec_init_struct(void);
+void	exec_print_cmd_input(t_node *cmds);
 
 #endif

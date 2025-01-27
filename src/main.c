@@ -22,6 +22,7 @@ int	execute(t_ast_node *ast)
 
 int	main(void)
 {
+/*
 	char	*input;
 
 	while (1)
@@ -35,8 +36,10 @@ int	main(void)
 		}
 		add_history(input);
 		free(input);
-		t_node *cmd = init_struct(); // TODO: Remove (created for testing purpose)
-		execute_command(cmd);
 	}
+*/
+	t_node *parsed_input = exec_init_struct(); // TODO: Remove (created for testing purpose)
+	execute_input(parsed_input);
+
 	return (EXIT_SUCCESS);
 }
