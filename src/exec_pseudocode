@@ -1,0 +1,43 @@
+cmd0 [1]===[0] cmd1 [1]===[0] cmd2
+
+On consiedre que la commande est correcte (infile OU pipe_before, outfile OU pipe_after)
+
+while (lst):
+	
+	if (lst->pipe_after)
+		pipe(fds);
+		lst->cmd->fdout = fds[1];
+		lst->next->cmd->fdin = fd[0];
+	else
+		if (lst->cmd->infile)
+			lst->cmd->fdin = open(lst->cmd->infile, W_RDONLY)
+		if (lst->cmd->outfile)
+			lst->cmd->fdout = open(lst->cmd->outfile, W_WRONLY)
+	
+	pid = fork()
+	
+	if (pid < 0)
+		perror();
+	
+	if (pid == 0):
+		if (lst->cmd->fdin != -1):
+			dup2(lst->cmd->fdin, STDIN)
+			close(lst->cmd->fdin)
+		if (lst->cmd->outfd != -1):
+			dup2(lst->cmd->outfd, STDOUT)
+			close(lst->cmd->outfd
+		if (lst->pipe_after)
+			close(fds[0]);
+		execve(cmd->args[0], comd->args, envp)
+		exit (1)
+	
+	if (lst->pipe_after):
+		close(fds[1]);
+	if (lst->cmd->fdin != -1):
+		close(lst->cmd->fdin);
+	if (lst->cmd->fdout) != -1):
+		close(lst->cmd->fdout);
+  	
+  	waitpid(pid, &status, 0);
+  	
+  	lst = lst->next;
