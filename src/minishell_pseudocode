@@ -1,0 +1,38 @@
+cmd0 [1]===[0] cmd1 [1]===[0] cmd2
+
+On consiedre que la commande est correcte (infile OU pipe_before, outfile OU pipe_after)
+
+t_pipe
+ int fds[2];
+ int in; // 0 if closed, 1 if open
+ int out; // 0 if closed, 1 if open
+
+while (lst):
+	
+	infd = lst->cmd->infile ? lst->cmd->infile : STDIN 
+	outfd = lst->cmd->outfile ? lst->cmd->outfile : STDOUT
+	
+	if (cmd->pipe_after)
+		fds = pipe();
+		lst->cmd->fdout = fds[1];
+		lst->next->cmd->fdin = fd[0];
+	
+	pid = fork()
+	
+	if (pid == 0) // still open: fds[0] / fds[1]
+		// TODO close unused pipe end
+		if (infd != STDIN)
+			dup2(infd, STDIN)
+			close(infd) // still open: fds[1]
+		if (outfd != STDOUT)
+			dup2(outfd, STDOUT)
+			close(outfd) // still open: fds[0]
+		execve(cmd->args[0], comd->args, envp);
+	
+	else if (pid > 0) // now opened: fds[0] / fds[1]
+		// TODO close unsused pipe end
+		waitpid(pid);
+		if (cmd->pipe_after)
+			infd = fds[0];
+  	
+  	lst = lst->next;
