@@ -1,6 +1,6 @@
 #include "minishell.h"
 
-void	execute_command(t_cmd *cmd, int *pipefd)
+void	execute_command(t_cmd *cmd, int *pipefd, int haspipe)
 {
 	if (cmd->infile != NULL)
 	{
@@ -14,7 +14,7 @@ void	execute_command(t_cmd *cmd, int *pipefd)
 int	execute_input(t_node *input)
 {
 	int		*pipefd;
-	pid_t	pid;
+	pid_t	child_pid;
 	int		status;
 
 	exec_print_cmd_input(input); // TODO (E) remove (testing)
@@ -25,15 +25,14 @@ int	execute_input(t_node *input)
 		{
 			if (pipe(pipefd) == -1)
 				ft_perror("pipe"); // TODO (E) Leaks
-			if (pid == -1)
-				ft_perror("fork"); // TODO (E) Leaks
-			if (pid == 0)
-				exec_command(input, pipefd);
-			else
-			{
-				waitpid(pid, &status, 0); // TODO (E) Protect inside a loop with status checks
-			}
+			//child_pid = execute_command(??);
+			//close(pipefd[??]);
 		}
+		else
+		//	child_pid = execute_command(???);
+		waitpid(child_pid, &status, 0);
+		if (WIFEXITED(status) && WEXITSTATUS(status) != 0)
+			ft_perror("child status"); // TODO leaks
 		input = input->next;
 	}
 	(void)list;
