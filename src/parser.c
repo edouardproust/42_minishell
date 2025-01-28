@@ -1,86 +1,75 @@
-
 #include "minishell.h"
 
-char	**tokenizer(char *input)
+void	parse_arguments(char **tokens, t_node **args_list)
 {
-	char	**tokens;
-	
-	if (!input)
-		return (NULL);
-	tokens = ft_split(input, ' ');
-	if (!tokens)
-		return (NULL);
-	return (tokens);
+	int		i;
+	t_node	*new_node;
+	t_node	*tmp;
+
+	i = 0;
+	while (tokens[i])
+	{
+		if (ft_strncmp(tokens[i], "<", 2) == 0 || ft_strncmp(tokens[i], ">", 2) == 0)
+		{
+			i = i + 2; //we need to skip redirections here and the next target file
+			continue ;
+		}
+		new_node = create_node(NULL);
+		if (!new_node)
+			return ;
+		populate_node(new_node, tokens[i]);
+		if (!(*args_list))
+			*args_list = new_node;
+		else
+		{
+			tmp = args_list;
+			while (tmp->next)
+				tmp = tmp->next;
+			tmp->next = new_node;
+		}
+		i++;
+	}
 }
 
 //Only handle <, > redirections for now to test
 //TO DO (F) single and double quotes handling, pipes (|), <<, >>
-void	parse_token(char **tokens, t_cmd *cmd)
+void	parse_redirections(char **tokens, t_cmd *cmd)
 {
 	int	i;
-	int	args_count;
 
 	i = 0;
-	args_count = 0;
 	while (tokens[i])
 	{
-		if (ft_strncmp(tokens[i], "<", 1) == 0)
+		if (ft_strncmp(tokens[i], "<", 2) == 0 && tokens[i +  1])
 		{
-			i++;
-			if (tokens[i])
-				cmd->infile = ft_strdup(tokens[i]);
+			free(cmd->infile);
+			cmd->infile = ft_strdup(tokens[i++]);
 		}
-		else if (ft_strncmp(tokens[i], ">", 1) == 0)
+		else if (ft_strncmp(tokens[i], ">", 2) == 0 && tokens[i + 1])
 		{
-			i++;
-			if (tokens[i])
-				cmd->outfile = ft_strdup(tokens[i]);
-		}
-		else
-		{
-			cmd->args[args_count] = ft_strdup(tokens[i]);
-			if (!cmd->args[args_count])
-				return;
-			args_count++;
+			free(cmd->outfile);
+			cmd->outfile = ft_strdup(tokens[i++]);
 		}
 		i++;
 	}
-	cmd->args[args_count] = NULL;
 }
 
-void	parse_command(char *group, t_cmd *cmd)
+void	parse_command(char *input, t_cmd *cmd)
 {
 	char	**tokens;
 	int		i;
-	int		token_count;
 
-	if (!group || !cmd)
+	if (!input || !cmd)
 		return;
-	tokens = tokenizer(group);
+	tokens = tokenizer(input);
 	if (!tokens)
 		return;
-	if (cmd->args)
-	{
-		i = 0;
-		while (cmd->args[i])
-			free(cmd->args[i++]);
-		free(cmd->args);
-	}
-	token_count = 0;
-	while (tokens[token_count])
-		token_count++;
-	cmd->args = malloc(sizeof(char *) * (token_count + 1));
-	if (cmd->args)
-	{
-		i = 0;
-		while (tokens[i])
-			free(tokens[i++]);
-		free(tokens);
-		return ;
-	}
-	parse_token(tokens, cmd);
+	cmd->args = NULL;
+	cmd->infile = NULL;
+	cmd->outfile = NULL;
+	parse_redirections(tokens, cmd);
+	parse_arguments(tokens, cmd);
 	i = 0;
-	parse_token(tokens, cmd);
 	while (tokens[i])
 		free(tokens[i++]);
 	free(tokens);
