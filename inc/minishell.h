@@ -9,10 +9,11 @@
 
 typedef struct s_cmd {
 	char	**args;
+	int		pipe_after;
 	char	*infile;
 	char	*outfile;
-	int		fdin; // -1 by default
-	int		fdout; // -1 by default
+	int		fdin;
+	int		fdout;
 } t_cmd;
 
 typedef struct s_node {
