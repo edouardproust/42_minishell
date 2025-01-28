@@ -12,7 +12,7 @@ t_node	*create_node(void *cmd)
 		return (free(node), NULL);
 	node->cmd->args = NULL;
 	node->cmd->infile = NULL;
-	node->cmd->outffile = NULL;
+	node->cmd->outfile = NULL;
 	return (node);
 }
 
@@ -24,7 +24,7 @@ void	populate_node(t_node *node, char *arg)
 	if (!node->cmd->args)
 		return ;
 	node->cmd->args[0] = ft_strdup(arg);
-	if (!node>cmd->args[0])
+	if (!node->cmd->args[0])
 	{
 		free(node->cmd->args);
 		node->cmd->args = NULL;
@@ -32,5 +32,5 @@ void	populate_node(t_node *node, char *arg)
 	}
 	node->cmd->args[1] = NULL;
 	node->cmd->infile = NULL;
-	node->cmd->outffile = NULL;
+	node->cmd->outfile = NULL;
 }

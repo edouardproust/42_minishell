@@ -1,4 +1,4 @@
-#include "minishell.c"
+#include "minishell.h"
 
 char	**tokenizer(char *input)
 {

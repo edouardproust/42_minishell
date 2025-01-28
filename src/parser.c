@@ -22,7 +22,7 @@ void	parse_arguments(char **tokens, t_node **args_list)
 			*args_list = new_node;
 		else
 		{
-			tmp = args_list;
+			tmp = *args_list;
 			while (tmp->next)
 				tmp = tmp->next;
 			tmp->next = new_node;
@@ -33,28 +33,31 @@ void	parse_arguments(char **tokens, t_node **args_list)
 
 //Only handle <, > redirections for now to test
 //TO DO (F) single and double quotes handling, pipes (|), <<, >>
-void	parse_redirections(char **tokens, t_cmd *cmd)
+void	parse_redirections(char **tokens, t_node *node)
 {
 	int	i;
 
 	i = 0;
 	while (tokens[i])
 	{
-		if (ft_strncmp(tokens[i], "<", 2) == 0 && tokens[i +  1])
+		if (ft_strncmp(tokens[i], "<", 2) == 0)
 		{
-			free(cmd->infile);
-			cmd->infile = ft_strdup(tokens[i++]);
+			free(node->cmd->infile);
+			node->cmd->infile = ft_strdup(tokens[i + 1]);
+			i = i + 2;
 		}
-		else if (ft_strncmp(tokens[i], ">", 2) == 0 && tokens[i + 1])
+		else if (ft_strncmp(tokens[i], ">", 2) == 0)
 		{
-			free(cmd->outfile);
-			cmd->outfile = ft_strdup(tokens[i++]);
+			free(node->cmd->outfile);
+			node->cmd->outfile = ft_strdup(tokens[i + 1]);
+			i = i + 2;
 		}
-		i++;
+		else
+			i++;
 	}
 }
 
-void	parse_command(char *input, t_cmd *cmd)
+void	parse_command(char *input, t_cmd **cmd)
 {
 	char	**tokens;
 	int		i;
