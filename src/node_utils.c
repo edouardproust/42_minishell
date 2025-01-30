@@ -1,6 +1,6 @@
 #include "minishell.h"
 
-t_node	*create_node(void *cmd)
+t_node	*create_node(void)
 {
 	t_node	*node;
 
@@ -13,6 +13,7 @@ t_node	*create_node(void *cmd)
 	node->cmd->args = NULL;
 	node->cmd->infile = NULL;
 	node->cmd->outfile = NULL;
+	node->next = NULL;
 	return (node);
 }
 
@@ -31,6 +32,34 @@ void	populate_node(t_node *node, char *arg)
 		return ;
 	}
 	node->cmd->args[1] = NULL;
-	node->cmd->infile = NULL;
-	node->cmd->outfile = NULL;
+}
+
+void	free_nodes(t_node *node)
+{
+	int	i;
+	
+	if (!node)
+		return;
+	free_nodes(node->next);
+	if (node->cmd)
+	{
+		if (node->cmd->args)
+		{
+			i = 0;
+			while (node->cmd->args[i])
+			{
+				free(node->cmd->args[i]);
+				i++;
+			}
+			free(node->cmd->args);
+		}
+		free(node->cmd->infile);
+		free(node->cmd->outfile);
+		if (node->cmd->fdin > 0)
+			close(node->cmd->fdin);
+		if (node->cmd->fdout > 0)
+			close(node->cmd->fdout);
+		free(node->cmd);
+	}
+	free(node);
 }
