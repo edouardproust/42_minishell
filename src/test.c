@@ -6,25 +6,21 @@
 t_node	*exec_init_struct(void)
 {
     t_cmd *cmd0 = malloc(sizeof(t_cmd));
-	cmd0->args = malloc(sizeof(char *) * 3);
 	cmd0->args = ft_split("grep test", ' ');
 	cmd0->infile = ft_strdup("test/infile");
 	cmd0->outfile = NULL;
     
 	t_cmd *cmd1 = malloc(sizeof(t_cmd));
-	cmd1->args = malloc(sizeof(char *) * 3);
 	cmd1->args = ft_split("uniq -c", ' ');
 	cmd1->infile = NULL;
 	cmd1->outfile = NULL;
 	 
 	t_cmd *cmd2 = malloc(sizeof(t_cmd));
-	cmd2->args = malloc(sizeof(char *) * 2);
 	cmd2->args = ft_split("sort", ' ');
 	cmd2->infile = NULL;
 	cmd2->outfile = NULL;
  
 	t_cmd *cmd3 = malloc(sizeof(t_cmd));
-	cmd3->args = malloc(sizeof(char *) * 4);
 	cmd3->args = ft_split("head -n 3", ' ');
 	cmd3->infile = NULL;
 	cmd3->outfile = ft_strdup("test.outfile");

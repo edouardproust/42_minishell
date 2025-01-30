@@ -39,7 +39,8 @@ int	main(void)
 	}
 */
 	t_node *parsed_input = exec_init_struct(); // TODO: Remove (created for testing purpose)
-	execute_input(parsed_input);
+	execute_input(&parsed_input);
+	free_parsed_input(&parsed_input);
 
 	return (EXIT_SUCCESS);
 }

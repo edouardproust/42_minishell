@@ -3,6 +3,7 @@
 
 # include "libft.h"
 
+#include <errno.h>
 #include <stdio.h>
 #include <fcntl.h>
 #include <readline/readline.h>
@@ -23,10 +24,11 @@ typedef struct s_node {
 	int				pipe_after;
 } t_node;
 
-void	execute_input(t_node *parsed_input);
+void	execute_input(t_node **parsed_input);
+char    *get_exec_path(char *arg, t_node **pinput);
 
-// list_utils
-//int list_len(t_list *lst)
+void	exit_exec(t_node **parsed_input, char *fmt, ...);
+void	free_parsed_input(t_node **pinput);
 
 // TODO (E) Delete follwoing lines (functions created for testing execute.c)
 t_node	*exec_init_struct(void);

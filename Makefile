@@ -10,7 +10,8 @@ C_DIR = src
 C_FILES = test.c \
 	main.c \
 	execute.c \
-	list_utils.c
+	execute_utils.c \
+	execute_path.c \
 
 SRCS = $(addprefix $(C_DIR)/,$(C_FILES))
 
