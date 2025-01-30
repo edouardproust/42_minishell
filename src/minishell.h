@@ -21,9 +21,10 @@ typedef struct s_node {
 
 int main(int argc, char **argv);
 char    **tokenizer(char *input);
-t_node  *create_node(void *cmd);
+t_node  *create_node(void);
 void    populate_node(t_node *node, char *arg);
-void    parse_arguments(char **tokens, t_node **args_list);
+void	free_nodes(t_node *node);
+void    parse_arguments(char **tokens, t_node *node);
 void    parse_redirections(char **tokens, t_node *node);
 void    parse_command(char *input, t_node **args_list);
 
