@@ -6,7 +6,7 @@
 /*   By: eproust <contact@edouardproust.dev>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/20 17:31:01 by eproust           #+#    #+#             */
-/*   Updated: 2025/01/19 15:06:43 by eproust          ###   ########.fr       */
+/*   Updated: 2025/01/30 12:48:07 by eproust          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,13 +18,16 @@
  */
 void	ft_free_split(char ***array)
 {
+	char	**element;
+
 	if (!array || !*array)
 		return ;
-	while (*array)
+	element =  *array;
+	while (*element)
 	{
-		free(**array);
-		**array = NULL;
-		(*array)++;
+		free(*element);
+		*element = NULL;
+		element++;
 	}
 	free(*array);
 	*array = NULL;

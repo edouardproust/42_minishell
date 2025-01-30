@@ -4,6 +4,7 @@
 # include "libft.h"
 
 #include <stdio.h>
+#include <fcntl.h>
 #include <readline/readline.h>
 #include <readline/history.h>
 
@@ -22,7 +23,7 @@ typedef struct s_node {
 	int				pipe_after;
 } t_node;
 
-int	execute_input(t_node *parsed_input);
+void	execute_input(t_node *parsed_input);
 
 // list_utils
 //int list_len(t_list *lst)
