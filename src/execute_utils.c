@@ -1,6 +1,6 @@
 #include "minishell.h"
 
-void	free_parsed_input(t_node **pinput)
+void	free_pinput(t_node **pinput)
 {
 	t_node *next;
 
@@ -21,16 +21,15 @@ void	exit_exec(t_node **parsed_input, char *fmt, ...)
 
 	if (dup2(STDERR_FILENO, STDOUT_FILENO) == -1)
 	{
-		free_parsed_input(parsed_input);
+		free_pinput(parsed_input);
 		ft_pexit("dup2 (error_exit)");
 	}	
 	va_start(args, fmt);
 	ft_printf("minishell: ");
-	if (ft_vprintf(fmt, args) > 0)
-		ft_printf(": ");
+	if (ft_vprintf(fmt, args) > 0 && errno != 0)
+		ft_printf(": %s", strerror(errno));
+	ft_printf("\n");
 	va_end(args);
-	perror("");
-	(void)parsed_input; // TODO remove
-	free_parsed_input(parsed_input);
+	free_pinput(parsed_input);
 	exit(EXIT_FAILURE);
 }

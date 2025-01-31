@@ -20,8 +20,11 @@ int	execute(t_ast_node *ast)
 }
 */
 
-int	main(void)
+int	main(int ac, char **av, char **envp)
 {
+	(void)av;
+	if (ac > 1)
+		return (EXIT_FAILURE); // TODO (E) Deal with non-interactive mode
 /*
 	char	*input;
 
@@ -38,9 +41,10 @@ int	main(void)
 		free(input);
 	}
 */
-	t_node *parsed_input = exec_init_struct(); // TODO: Remove (created for testing purpose)
-	execute_input(&parsed_input);
-	free_parsed_input(&parsed_input);
+	t_node *pinput = test_init_pinput(); // TODO (E) Remove (created for testing purpose)
+	// test_print_pinput(pinput); // TODO DEBUG
+	execute_input(&pinput, envp);
+	free_pinput(&pinput);
 
 	return (EXIT_SUCCESS);
 }
