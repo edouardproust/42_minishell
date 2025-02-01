@@ -21,17 +21,21 @@ void	populate_node(t_node *node, char *arg)
 {
 	if (!node || !arg)
 		return ;
+//	node->cmd = malloc(sizeof(t_cmd));
+//	if (!node->cmd)
+//		return ;
+//	init_cmd_struct(node->cmd);
 	node->cmd->args = malloc(sizeof(char *) * 2);
 	if (!node->cmd->args)
-		return ;
-	node->cmd->args[0] = ft_strdup(arg);
-	if (!node->cmd->args[0])
 	{
-		free(node->cmd->args);
-		node->cmd->args = NULL;
+		printf("Error: Failed to allocate memory for args.\n");
 		return ;
 	}
+	node->cmd->args[0] = ft_strdup(arg);
 	node->cmd->args[1] = NULL;
+//	node->cmd->infile = NULL;
+//	node->cmd->outfile = NULL;
+	printf("populate_node: args[0]: %s\n", node->cmd->args[0]);
 }
 
 void	free_nodes(t_node *node)
@@ -55,10 +59,10 @@ void	free_nodes(t_node *node)
 		}
 		free(node->cmd->infile);
 		free(node->cmd->outfile);
-		if (node->cmd->fdin > 0)
-			close(node->cmd->fdin);
-		if (node->cmd->fdout > 0)
-			close(node->cmd->fdout);
+//		if (node->cmd->fdin > 0)
+//			close(node->cmd->fdin);
+//		if (node->cmd->fdout > 0)
+//			close(node->cmd->fdout);
 		free(node->cmd);
 	}
 	free(node);

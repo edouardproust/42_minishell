@@ -5,9 +5,8 @@
 int	main(int argc, char **argv)
 {
 	char	*input;
-	t_node	*args_list;
-	t_node	*tmp;
-	int	i;
+	t_token	*tokens;
+	t_cmd	*cmds;
 
 	(void)argc;
 	(void)argv;
@@ -24,27 +23,75 @@ int	main(int argc, char **argv)
 		}
 		if (*input)
         		add_history(input);
-		args_list = NULL;
-		parse_command(input, &args_list);
-		free(input);
-		tmp = args_list;
-		i = 1;
-		while (tmp)
-		{
-			printf("Command: %s\n", tmp->cmd->args[0]);
-			while (tmp->cmd->args[i])
-			{
-				printf("  Arg[%d]: %s\n", i, tmp->cmd->args[i]);
-				i++;
-			}
-			if (tmp->cmd->infile)
-				printf("  Input file: %s\n", tmp->cmd->infile);
-			if (tmp->cmd->outfile)
-				printf("  Output file: %s\n", tmp->cmd->outfile);
-			printf("\n");
-			tmp = tmp->next;
-		}	
-		free_nodes(args_list);
+		tokens = tokenizer(input);
+		printf("\n---- Tokenized Input ----\n");
+		print_tokens(tokens); 
+		cmds = parse_tokens(tokens);
+		printf("\n---- Parsed Commands ----\n");
+		print_cmds(cmds);
+		free_tokens(tokens);
+		free_cmds(cmds);
 	}
     return (EXIT_SUCCESS);
+}
+
+void	print_tokens(t_token *tokens)
+{
+	while (tokens)
+	{
+		printf("Token: '%s' (Type: %d)\n", tokens->value, tokens->type);
+		tokens = tokens->next;
+	}
+}
+
+void free_tokens(t_token *tokens)
+{
+	t_token *tmp;
+
+	while (tokens)
+	{
+		tmp = tokens;
+		tokens = tokens->next;
+		free(tmp->value);
+		free(tmp);
+	}
+}
+
+void free_cmds(t_cmd *cmds)
+{
+	t_cmd *tmp;
+
+	while (cmds)
+	{
+		tmp = cmds->next;
+		if (cmds->args)
+			free(cmds->args); 
+		if (cmds->outfile)
+			free(cmds->outfile);
+		free(cmds);
+		cmds = tmp;
+	}
+}
+
+void print_cmds(t_cmd *cmd)
+{
+	int	i;
+
+	while (cmd)
+	{
+		printf("Command: ");
+		if (cmd->args)
+		{
+			i = 0;
+			while (cmd->args[i])
+			{
+				printf("%s ", cmd->args[i]);
+				i++;
+			}
+		}
+		printf("\nInfile: %s\n", cmd->infile ? cmd->infile : "(none)");
+		printf("Outfile: %s\n", cmd->outfile ? cmd->outfile : "(none)");
+		printf("----------------\n");
+		cmd = cmd->next;
+	}
 }
