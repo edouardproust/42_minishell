@@ -6,6 +6,7 @@ SRCS = get_next_line.c \
 	ft_bzero.c \
 	ft_calloc.c \
 	ft_exit.c \
+	ft_fprintf.c \
 	ft_free_ptrs.c \
 	ft_free_split.c \
 	ft_isalnum.c \
@@ -49,7 +50,8 @@ SRCS = get_next_line.c \
 	ft_substr.c \
 	ft_tolower.c \
 	ft_toupper.c \
-	ft_vprintf.c
+	ft_vfprintf.c \
+	ft_vprintf.c \
 
 SRCS_BONUS = ft_lstnew_bonus.c \
 	ft_lstadd_front_bonus.c \

@@ -124,21 +124,34 @@ void debug_fd(char *label, int fd) {
 
 void	debug_read_fd(char *label, int fd)
 {
-	char	*buffer[1024];
+	char	buffer[1024];
 	int		bytes_read;
+	int		fdo = STDERR_FILENO;
 
-	ft_printf("▶ ");
+	ft_putstr_fd("▶ ", fdo);
 	if (label != NULL)
-		ft_printf("Read %s", label);
+	{
+		ft_putstr_fd("Read ", fdo);
+		ft_putstr_fd(label, fdo);
+	}
 	else
-		ft_printf("Read fd", label);
-	ft_printf(":\n");
-	bytes_read = read(fd, buffer, 1024);
-	if (bytes_read > 0)
-		ft_printf("%s", buffer);
-	else if (bytes_read == 0)
-		ft_printf("%s", NULL);
-	else
-		ft_printf("Error");
-	ft_printf("\n");
+		ft_putstr_fd("Read fd", fdo);
+	ft_putstr_fd(":\n", fdo);
+	while (1)
+	{
+		bytes_read = read(fd, buffer, 1024);
+		if (bytes_read > 0)
+			ft_putstr_fd(buffer, fdo);
+		else if (bytes_read == 0)
+		{
+			ft_putstr_fd("(null)", fdo);
+			break;
+		}
+		else
+		{
+			ft_putstr_fd("Error", fdo);
+			break;
+		}
+	}
+	ft_putstr_fd("\n", fdo);
 }
