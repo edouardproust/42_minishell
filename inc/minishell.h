@@ -10,6 +10,7 @@
 typedef struct s_cmd {
 	char	**args;
 	int		pipe_after;
+	int		pipe_before;
 	char	*infile;
 	char	*outfile;
 	int		fdin;
