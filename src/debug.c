@@ -1,9 +1,9 @@
-// TODO (E) Delete file (created for test purpose)
+
 // TODO (E) Remove file from makefile SRCS
 
 #include "minishell.h"
 
-t_node	*test_init_pinput(void)
+t_node	*debug_init_pinput(void)
 {
     t_cmd *cmd0 = malloc(sizeof(t_cmd));
 	cmd0->args = ft_split("grep test", ' ');
@@ -56,10 +56,13 @@ t_node	*test_init_pinput(void)
 	return (node0);
 }
 
-void	test_print_cmd(t_cmd *cmd)
+void	debug_cmd(t_cmd *cmd, char *label)
 {
 	//ft_printf("■  cmd\n");
-	ft_printf("╭─ cmd ─────────────────────────╮\n");
+	if (label == NULL)
+		ft_printf("╭─ cmd ─────────────────────────╮\n");
+	else
+		ft_printf("╭─ %s ─────────────────────────╮\n", label);
 	char *before = "│ • ";
 	char *after = "\n";
 	ft_printf("%sargs: ", before);
@@ -77,18 +80,65 @@ void	test_print_cmd(t_cmd *cmd)
 	ft_printf("%spipe_after: %d%s", before, cmd->pipe_after, after);
 	ft_printf("%sfdin: %d%s", before, cmd->fdin, after);
 	ft_printf("%sfdout: %d%s", before, cmd->fdout, after);	
-	ft_printf("╰───────────────────────────────╯\n");
+	if (label == NULL)
+		ft_printf("╰───────────────────────────────╯\n");
+	else
+	{	
+		ft_printf("╰────────────────────────────");
+		int len = ft_strlen(label);
+		while (len > 0)
+		{
+			ft_printf("─");
+			len--;
+		}
+		ft_printf("╯\n");
+	}
 }
 
-void	test_print_pinput(t_node *pinput)
+void	debug_pinput(t_node *pinput)
 {
+	int		i = 0;
+	char	*a;
+
 	while (pinput != NULL)
 	{
-		test_print_cmd(pinput->cmd);
+		a = ft_itoa(i++);
+		char *title = ft_strjoin("cmd", a);
+		free(a);
+		debug_cmd(pinput->cmd, title);
+		free(title);
 		if (pinput->cmd->pipe_after)
 			ft_printf("\t\t▼\n");
 		pinput = pinput->next;
 	}	
 }
 
+void debug_fd(char *label, int fd) {
+	int flags = fcntl(fd, F_GETFL);
+	if (flags == -1) {
+		ft_printf("➡ %s: fd=%d, status=%s\n", label, fd, strerror(errno));
+	} else {
+		ft_printf("➡ %s: fd=%d, status=OK\n", label, fd);
+	}
+}
 
+void	debug_read_fd(char *label, int fd)
+{
+	char	*buffer[1024];
+	int		bytes_read;
+
+	ft_printf("▶ ");
+	if (label != NULL)
+		ft_printf("Read %s", label);
+	else
+		ft_printf("Read fd", label);
+	ft_printf(":\n");
+	bytes_read = read(fd, buffer, 1024);
+	if (bytes_read > 0)
+		ft_printf("%s", buffer);
+	else if (bytes_read == 0)
+		ft_printf("%s", NULL);
+	else
+		ft_printf("Error");
+	ft_printf("\n");
+}

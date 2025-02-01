@@ -7,7 +7,7 @@ NAME = ./minishell
 
 C_DIR = src
 
-C_FILES = test.c \
+C_FILES = debug.c \
 	main.c \
 	execute.c \
 	execute_utils.c \

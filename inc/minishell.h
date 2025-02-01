@@ -30,9 +30,11 @@ char    *get_exec_path(char *arg, t_node **pinput);
 void	exit_exec(t_node **parsed_input, char *fmt, ...);
 void	free_pinput(t_node **pinput);
 
-// TODO Testing functions to delete
-t_node	*test_init_pinput(void);
-void	test_print_pinput(t_node *pinput);
-void	test_print_cmd(t_cmd *cmd);
+// TODO Debug functions to delete
+t_node	*debug_init_pinput(void);
+void	debug_pinput(t_node *pinput);
+void	debug_cmd(t_cmd *cmd, char *title);
+void	debug_fd(char *label, int fd);
+void	debug_read_fd(char *label, int fd);
 
 #endif
