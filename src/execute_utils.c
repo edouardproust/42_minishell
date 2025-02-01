@@ -18,17 +18,14 @@ void	free_pinput(t_node **pinput)
 void	exit_exec(t_node **parsed_input, char *fmt, ...)
 {
 	va_list	args;
+	int		fdout;
 
-	if (dup2(STDERR_FILENO, STDOUT_FILENO) == -1)
-	{
-		free_pinput(parsed_input);
-		ft_pexit("dup2 (error_exit)");
-	}	
+	fdout = STDERR_FILENO;
 	va_start(args, fmt);
-	ft_printf("minishell: ");
-	if (ft_vprintf(fmt, args) > 0 && errno != 0)
-		ft_printf(": %s", strerror(errno));
-	ft_printf("\n");
+	ft_fprintf(fdout, "minishell: ");
+	if (ft_vfprintf(fdout, fmt, args) > 0 && errno != 0)
+		ft_fprintf(fdout, ": %s", strerror(errno));
+	ft_fprintf(fdout, "\n");
 	va_end(args);
 	free_pinput(parsed_input);
 	exit(EXIT_FAILURE);

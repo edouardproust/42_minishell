@@ -58,40 +58,41 @@ t_node	*debug_init_pinput(void)
 
 void	debug_cmd(t_cmd *cmd, char *label)
 {
-	//ft_printf("■  cmd\n");
+	int	o = STDERR_FILENO;
+	
 	if (label == NULL)
-		ft_printf("╭─ cmd ─────────────────────────╮\n");
+		ft_fprintf(o, "╭─ cmd ─────────────────────────╮\n");
 	else
-		ft_printf("╭─ %s ─────────────────────────╮\n", label);
+		ft_fprintf(o, "╭─ %s ─────────────────────────╮\n", label);
 	char *before = "│ • ";
 	char *after = "\n";
-	ft_printf("%sargs: ", before);
+	ft_fprintf(o, "%sargs: ", before);
 	int	j = 0;
 	while (cmd->args[j] != NULL)
 	{
-		ft_printf("%s", cmd->args[j]);
+		ft_fprintf(o, "%s", cmd->args[j]);
 		if (cmd->args[j + 1] != NULL)
-			ft_printf(", ");
+			ft_fprintf(o, ", ");
 		j++;
 	}
-	ft_printf("%s", after);
-	ft_printf("%sinfile: %s%s", before, cmd->infile, after);
-	ft_printf("%soutfile: %s%s", before, cmd->outfile, after);
-	ft_printf("%spipe_after: %d%s", before, cmd->pipe_after, after);
-	ft_printf("%sfdin: %d%s", before, cmd->fdin, after);
-	ft_printf("%sfdout: %d%s", before, cmd->fdout, after);	
+	ft_fprintf(o, "%s", after);
+	ft_fprintf(o, "%sinfile: %s%s", before, cmd->infile, after);
+	ft_fprintf(o, "%soutfile: %s%s", before, cmd->outfile, after);
+	ft_fprintf(o, "%spipe_after: %d%s", before, cmd->pipe_after, after);
+	ft_fprintf(o, "%sfdin: %d%s", before, cmd->fdin, after);
+	ft_fprintf(o, "%sfdout: %d%s", before, cmd->fdout, after);	
 	if (label == NULL)
-		ft_printf("╰───────────────────────────────╯\n");
+		ft_fprintf(o, "╰───────────────────────────────╯\n");
 	else
 	{	
-		ft_printf("╰────────────────────────────");
+		ft_fprintf(o, "╰────────────────────────────");
 		int len = ft_strlen(label);
 		while (len > 0)
 		{
-			ft_printf("─");
+			ft_fprintf(o, "─");
 			len--;
 		}
-		ft_printf("╯\n");
+		ft_fprintf(o, "╯\n");
 	}
 }
 
@@ -114,11 +115,13 @@ void	debug_pinput(t_node *pinput)
 }
 
 void debug_fd(char *label, int fd) {
+	int	o = STDERR_FILENO;
 	int flags = fcntl(fd, F_GETFL);
+
 	if (flags == -1) {
-		ft_printf("➡ %s: fd=%d, status=%s\n", label, fd, strerror(errno));
+		ft_fprintf(o, "➡ %s: fd=%d, status=%s\n", label, fd, strerror(errno));
 	} else {
-		ft_printf("➡ %s: fd=%d, status=OK\n", label, fd);
+		ft_fprintf(o, "➡ %s: fd=%d, status=OK\n", label, fd);
 	}
 }
 
@@ -126,32 +129,23 @@ void	debug_read_fd(char *label, int fd)
 {
 	char	buffer[1024];
 	int		bytes_read;
-	int		fdo = STDERR_FILENO;
+	int		o = STDERR_FILENO;
 
-	ft_putstr_fd("▶ ", fdo);
+	ft_fprintf(o, "▶ ");
 	if (label != NULL)
-	{
-		ft_putstr_fd("Read ", fdo);
-		ft_putstr_fd(label, fdo);
-	}
+		ft_fprintf(o, "Read %s", label);
 	else
-		ft_putstr_fd("Read fd", fdo);
-	ft_putstr_fd(":\n", fdo);
-	while (1)
+		ft_fprintf(o, "Read fd");
+	ft_fprintf(o, ":\n");
+	bytes_read = read(fd, buffer, 1024);
+	if (bytes_read == -1)
+		ft_fprintf(o, "Error");	
+	if (bytes_read == 0)
+		ft_fprintf(o, "(null)");
+	while (bytes_read > 0)
 	{
+		ft_fprintf(o, "%s", buffer);
 		bytes_read = read(fd, buffer, 1024);
-		if (bytes_read > 0)
-			ft_putstr_fd(buffer, fdo);
-		else if (bytes_read == 0)
-		{
-			ft_putstr_fd("(null)", fdo);
-			break;
-		}
-		else
-		{
-			ft_putstr_fd("Error", fdo);
-			break;
-		}
 	}
-	ft_putstr_fd("\n", fdo);
+	ft_fprintf(o, "\n");
 }
