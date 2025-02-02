@@ -9,8 +9,8 @@
 
 #define TOKEN_WORD 0
 #define	TOKEN_PIPE 1
-#define	TOKEN_REDIR_IN 3
-#define	TOKEN_REDIR_OUT 4
+#define	TOKEN_REDIR_IN 2
+#define	TOKEN_REDIR_OUT 3
 
 typedef struct s_token
 {
