@@ -12,20 +12,18 @@
 
 typedef struct s_cmd {
 	char	**args;
-	int		pipe_after;
-	int		pipe_before;
 	char	*infile;
 	char	*outfile;
-	int		fdin;
-	int		fdout;
+	int		*fds;
 } t_cmd;
 
 typedef struct s_node {
     t_cmd			*cmd;
 	struct s_node	*next;
+	struct s_node	*prev;
 } t_node;
 
-void	execute_input(t_node **parsed_input, char **envp);
+void	execute_input(t_node **pinput, char **envp);
 char    *get_exec_path(char *arg, t_node **pinput);
 
 void	exit_exec(t_node **parsed_input, char *fmt, ...);

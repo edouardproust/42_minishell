@@ -2,85 +2,58 @@
 
 void	execute_input(t_node **pinput, char **envp)
 {
-	int		fds[2];
-	char	*exec_path;
+	t_node	*pi = *pinput;
 	pid_t	pid;
+	int		fdin = STDIN_FILENO;
+	int		fdout = STDOUT_FILENO;
+	char	*exec_path;
 	int		status;
 
-	while (*pinput)
+	while (pi)
 	{
-		t_cmd *cmd = (*pinput)->cmd;
+		t_cmd	*cmd = pi->cmd;
 
-		// DEBUG TODO ============================================
-		debug_cmd(cmd, "curr cmd (start)");
-		debug_read_fd("cmd->fdin", cmd->fdin);
-		// END DEBUG =============================================
-
-		if (cmd->pipe_after) {
-			if (pipe(fds) == -1)
-				exit_exec(pinput, "pipe");
-			cmd->fdout = fds[1];
-			(*pinput)->next->cmd->fdin = fds[0];
-		}
-
-		// DEBUG TODO ============================================
-		debug_fd("curr->fdin", cmd->fdin);
-		debug_fd("curr->fdout", cmd->fdout);
-		debug_fd("next->fdin", (*pinput)->next->cmd->fdin);
-		// END DEBUG =============================================
-
+		if (pi->next)
+			pipe(cmd->fds);
+		debug_cmd(cmd, cmd->args[0]); // TODO debug
 		pid = fork();
-
 		if (pid < 0)
 			exit_exec(pinput, "fork");
-
-		if (pid == 0) {
-			if (cmd->pipe_after == 1)
+		if (pid == 0)
+		{
+			// dup stdin
+			if (pi->prev)
+				fdin = pi->prev->cmd->fds[0];
+			else if (cmd->infile)
+				fdin = open(cmd->infile, O_RDONLY);
+			if (fdin != STDIN_FILENO)
 			{
-				close(fds[0]);
-				if (dup2(cmd->fdout, STDOUT_FILENO) == -1)
-					exit_exec(pinput, "dup2 pipe");
-				close(cmd->fdout);
-			}	
-			else if (cmd->outfile != NULL) {
-				cmd->fdout = open(cmd->outfile, O_WRONLY | O_CREAT | O_TRUNC, 0644);
-				if (cmd->fdout == -1)
-					exit_exec(pinput, "open outfile");
-				if (dup2(cmd->fdout, STDOUT_FILENO) == -1)
-					exit_exec(pinput, "dup2 outfile");
-				close(cmd->fdout);
+				dup2(fdin, STDIN_FILENO);
+				close(fdin);
 			}
-
-			if (cmd->infile != NULL) {
-				cmd->fdin = open(cmd->infile, O_RDONLY);
-				if (cmd->fdin == -1)
-					exit_exec(pinput, "open infile");
-				if (dup2(cmd->fdin, STDIN_FILENO) == -1)
-					exit_exec(pinput, "dup2 infile");
-				close(cmd->fdin);
+			// dup stdout
+			if (pi->next) // if we created a pipe in this loop:
+			{
+				close(cmd->fds[0]); // we won't read in pipe in this loop
+				fdout = cmd->fds[1];
 			}
-
-			if (cmd->fdin != -1 && cmd->fdin != STDIN_FILENO) {
-				close(cmd->fdin);
-				cmd->fdin = -1;
+			else if (cmd->outfile)
+				fdout = open(cmd->outfile, O_WRONLY | O_CREAT | O_TRUNC, 0644);	
+			if (fdout != STDOUT_FILENO)
+			{
+				dup2(fdout, STDOUT_FILENO);
+				close(fdout);
 			}
-			if (cmd->fdout != -1 && cmd->fdout != STDOUT_FILENO) {
-				close(cmd->fdout);
-				cmd->fdout = -1;
-			}
-
+			// execute cmd
 			exec_path = get_exec_path(cmd->args[0], pinput);
 			execve(exec_path, cmd->args, envp);
 			exit(127);
 		}
-
-		if (cmd->pipe_after)
-			close(fds[1]);
-
 		waitpid(pid, &status, 0);
-		if (WIFEXITED(status) && WEXITSTATUS(status) != 0)
-			exit_exec(pinput, "execve");
-
-		(*pinput) = (*pinput)->next;
+		if (pi->next) // if we created a pipe in this loop:
+			close(cmd->fds[1]); // we won't write in pipe in next loop
+		if (pi->prev) // if we created a pipe in the previous loop:
+			close(pi->prev->cmd->fds[0]); // we finished reading in previous pipe
+		pi = pi->next;
 	}
 }

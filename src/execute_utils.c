@@ -7,7 +7,8 @@ void	free_pinput(t_node **pinput)
 	while (*pinput)
 	{
 		ft_free_split(&(*pinput)->cmd->args);
-		ft_free_ptrs(2, &(*pinput)->cmd->infile, &(*pinput)->cmd->outfile);
+		ft_free_ptrs(3, &(*pinput)->cmd->infile, &(*pinput)->cmd->outfile,
+			&(*pinput)->cmd->fds);
 		next = (*pinput)->next;
 		ft_free_ptrs(2, &(*pinput)->cmd, pinput);
 		*pinput = next;

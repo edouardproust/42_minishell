@@ -42,6 +42,7 @@ int	main(int ac, char **av, char **envp)
 	}
 */
 	t_node *pinput = debug_init_pinput(); // TODO (E) Remove (created for testing purpose)
+	//(void)envp;
 	//debug_pinput(pinput); // TODO DEBUG
 	execute_input(&pinput, envp);
 	free_pinput(&pinput);
