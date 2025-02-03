@@ -23,7 +23,9 @@ static t_node *node_create(char *bash_cmd, char *infile, char *outfile, t_node *
 	cmd->args = NULL;
 	cmd->infile = NULL;
 	cmd->outfile = NULL;
-	cmd->fds = NULL;
+	cmd->pipe = NULL;
+	cmd->fdin = STDIN_FILENO;
+	cmd->fdout = STDOUT_FILENO;
 
 	cmd->args = ft_split(bash_cmd, ' ');
 	if (infile == NULL)
@@ -34,9 +36,9 @@ static t_node *node_create(char *bash_cmd, char *infile, char *outfile, t_node *
 		cmd->outfile = NULL;
 	else
 		cmd->outfile = ft_strdup(outfile);
-	cmd->fds = malloc(sizeof(int) * 2);
-	cmd->fds[0] = -1;
-	cmd->fds[1] = -1;
+	cmd->pipe = malloc(sizeof(int) * 2);
+	cmd->pipe[0] = -1;
+	cmd->pipe[1] = -1;
 
 	t_node *node = malloc(sizeof(t_node));
 	node->cmd = cmd;
@@ -70,9 +72,11 @@ void	debug_cmd(t_cmd *cmd, char *label)
 	ft_fprintf(o, "%sinfile: %s%s", before, cmd->infile, after);
 	ft_fprintf(o, "%soutfile: %s%s", before, cmd->outfile, after);
 	ft_fprintf(o, "%sfds: ", before);
-		ft_fprintf(o, "write=%d, ", cmd->fds[1]);
-		ft_fprintf(o, "read=%d", cmd->fds[0]);
+		ft_fprintf(o, "write=%d, ", cmd->pipe[1]);
+		ft_fprintf(o, "read=%d", cmd->pipe[0]);
 	ft_fprintf(o, "%s", after);
+	ft_fprintf(o, "%sfdin: %d%s", before, cmd->fdin, after);
+	ft_fprintf(o, "%sfdout: %d%s", before, cmd->fdout, after);
 	if (label == NULL)
 		ft_fprintf(o, "╰───────────────────────────────╯\n");
 	else

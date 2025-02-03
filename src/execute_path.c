@@ -1,6 +1,6 @@
 #include "minishell.h"
 
-static char	**split_env_path()
+static char	**split_env_path(void)
 {
 	char	*path_env;
 
@@ -25,13 +25,13 @@ static char	*join_abspath(char *dir, char *progname, char **dirnames)
 		return (NULL);
 	}
 	path = ft_strjoin(dir_tmp, progname);
-	if (path ==  NULL)
+	if (path == NULL)
 	{
 		ft_free_ptrs(1, &dir_tmp);
 		ft_free_split(&dirnames);
 		return (NULL);
 	}
-    ft_free_ptrs(1, &dir_tmp);
+	ft_free_ptrs(1, &dir_tmp);
 	return (path);
 }
 
@@ -48,7 +48,7 @@ static char	*find_abspath(char **dirnames, char *progname)
 	int		i;
 
 	i = 0;
-  	while (dirnames[i] != NULL)
+	while (dirnames[i] != NULL)
 	{
 		abspath_tmp = join_abspath(dirnames[i], progname, dirnames);
 		if (abspath_tmp == NULL)
@@ -56,10 +56,10 @@ static char	*find_abspath(char **dirnames, char *progname)
 			errno = ENOENT; // TODO adapt to errcode in bash
 			return (NULL);
 		}
-	    if (access(abspath_tmp, X_OK) == 0)
+		if (access(abspath_tmp, X_OK) == 0)
 			return (abspath_tmp);
 		ft_free_ptrs(1, &abspath_tmp);
-    	i++;
+		i++;
 	}
 	errno = ENOENT;
 	return (NULL);
