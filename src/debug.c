@@ -4,9 +4,27 @@
 #include "minishell.h"
 #include <sys/stat.h>
 
+static t_node *node_create(char *bash_cmd, char *infile, char *outfile, t_node *prev_node);
+
+t_node	*debug_init_pinput(void)
+{
+	t_node *node0 = node_create("tail -n +4", "test/infile", NULL, NULL);
+	t_node *node1 = node_create("grep a", NULL, NULL, node0);
+	t_node *node2 = node_create("sort", NULL, NULL, node1);
+	t_node *node3 = node_create("uniq -c", NULL, NULL, node2);
+	t_node *node4 = node_create("sort -nr", NULL, NULL, node3); 
+	node_create("head -n 3", NULL, "test/outfile", node4);
+	return (node0);
+}
+
 static t_node *node_create(char *bash_cmd, char *infile, char *outfile, t_node *prev_node)
 {
     t_cmd *cmd = malloc(sizeof(t_cmd));
+	cmd->args = NULL;
+	cmd->infile = NULL;
+	cmd->outfile = NULL;
+	cmd->fds = NULL;
+
 	cmd->args = ft_split(bash_cmd, ' ');
 	if (infile == NULL)
 		cmd->infile = NULL;
@@ -23,23 +41,10 @@ static t_node *node_create(char *bash_cmd, char *infile, char *outfile, t_node *
 	t_node *node = malloc(sizeof(t_node));
 	node->cmd = cmd;
 	node->next = NULL;
-	node->next = NULL;
+	node->prev = prev_node;
 	if (prev_node != NULL)
-	{
 		prev_node->next = node;
-		node->prev = prev_node;
-	}
 	return (node);
-}
-
-t_node	*debug_init_pinput(void)
-{
-	t_node *node0 = node_create("grep a", "test/infile", NULL, NULL);
-	t_node *node1 = node_create("sort", NULL, NULL, node0);
-	t_node *node2 = node_create("uniq -c", NULL, NULL, node1);
-	t_node *node3 = node_create("sort -nr", NULL, NULL, node2); 
-	node_create("head -n 3", NULL, "test/outfile", node3); 
-	return (node0);
 }
 
 void	debug_cmd(t_cmd *cmd, char *label)

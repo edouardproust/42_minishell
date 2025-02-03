@@ -15,19 +15,21 @@ void	free_pinput(t_node **pinput)
 	}
 }
 
-#include <stdio.h>
 void	exit_exec(t_node **parsed_input, char *fmt, ...)
 {
 	va_list	args;
 	int		fdout;
 
-	fdout = STDERR_FILENO;
-	va_start(args, fmt);
-	ft_fprintf(fdout, "minishell: ");
-	if (ft_vfprintf(fdout, fmt, args) > 0 && errno != 0)
-		ft_fprintf(fdout, ": %s", strerror(errno));
-	ft_fprintf(fdout, "\n");
-	va_end(args);
+	if (fmt != NULL && fmt[0] != '\0')
+	{
+		fdout = STDERR_FILENO;
+		va_start(args, fmt);
+		ft_fprintf(fdout, "minishell: ");
+		if (ft_vfprintf(fdout, fmt, args) > 0 && errno != 0)
+			ft_fprintf(fdout, ": %s", strerror(errno));
+		ft_fprintf(fdout, "\n");
+		va_end(args);
+	}
 	free_pinput(parsed_input);
 	exit(EXIT_FAILURE);
 }
