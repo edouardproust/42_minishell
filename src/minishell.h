@@ -11,11 +11,12 @@
 #define	TOKEN_PIPE 1
 #define	TOKEN_REDIR_IN 2
 #define	TOKEN_REDIR_OUT 3
+//<<, >> tokens will be added here
 
 typedef struct s_token
 {
 	char	*value; //here store the text here eg, "echo", "<"
-	int	type; //we store the number of what kind of token this is
+	int		type; //we store the number of what kind of token this is
 	struct s_token *next;
 } t_token;
 
@@ -32,23 +33,22 @@ typedef struct s_node {
     struct s_node   *next;
 } t_node;
 
-int main(int argc, char **argv);
-void    init_cmd_struct(t_cmd *cmd);
-t_token *create_token(char *value, int type);
-int get_token_type(char c);
+int		main(int argc, char **argv);
+t_token *token_new(char *value, int type);
+int		get_token_type(char c);
 t_token *create_word_token(char *input, int *index);
-void add_token(t_token **tokens, t_token *new);
+void	token_addback(t_token **tokens, t_token *new);
 t_token *tokenizer(char *input);
-//t_node  *create_node(void);
-//void    populate_node(t_node *node, char *arg);
-//void	free_nodes(t_node *node);
-t_cmd *create_cmd();
-void add_arg_to_cmd(t_cmd *cmd, char *arg);
-t_cmd *parse_tokens(t_token *tokens);
-void print_cmds(t_cmd *cmd);
-void print_tokens(t_token *tokens);
-void free_tokens(t_token *tokens);
-void free_cmds(t_cmd *cmds);
+t_cmd	*cmd_new();
+void	add_arg_to_cmd(t_cmd *cmd, char *arg);
+void    handle_input_redirection(t_cmd *current_cmd, t_token **tokens);
+void    handle_output_redirection(t_cmd *current_cmd, t_token **tokens);
+void    handle_word(t_cmd *current_cmd, t_token *tokens);
+void    handle_pipe(t_cmd **current_cmd);
+t_cmd	*parse_tokens(t_token *tokens);
+void 	print_cmds(t_cmd *cmd);
+void	print_tokens(t_token *tokens);
+void	free_tokens(t_token *tokens);
+void	free_cmds(t_cmd *cmds);
 
 #endif
-
