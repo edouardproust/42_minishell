@@ -10,7 +10,7 @@ t_node	*debug_init_pinput(void)
 {
 	t_node *node0 = node_create("tail -n +4", "test/infile", NULL, NULL);
 	t_node *node1 = node_create("grep a", NULL, NULL, node0);
-	t_node *node2 = node_create("sort", NULL, NULL, node1);
+	t_node *node2 = node_create("llsort", NULL, NULL, node1);
 	t_node *node3 = node_create("uniq -c", NULL, NULL, node2);
 	t_node *node4 = node_create("sort -nr", NULL, NULL, node3); 
 	node_create("head -n 3", NULL, "test/outfile", node4);

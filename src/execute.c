@@ -49,7 +49,7 @@ static void	execute_command(t_cmd *cmd, char **envp, t_node **pinput)
 			duplicate_io(cmd->fdout, STDOUT_FILENO, pinput);
 		exec_path = get_exec_path(cmd->args[0], pinput);
 		execve(exec_path, cmd->args, envp);
-		exit_exec(pinput, "%s", exec_path);
+		exit_exec(pinput, exec_path);
 	}
 	waitpid(pid, &status, 0);
 	if (WIFEXITED(status) && WEXITSTATUS(status) != 0)
