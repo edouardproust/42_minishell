@@ -65,7 +65,7 @@ static char	*find_abspath(char **dirnames, char *progname)
 	return (NULL);
 }
 
-char	*get_exec_path(char *progname, t_node **pinput)
+char	*get_exec_path(char *progname, t_cmd **cmd_lst)
 {
 	char	*abspath;
 	char	**dirnames;
@@ -74,17 +74,17 @@ char	*get_exec_path(char *progname, t_node **pinput)
 	{
 		abspath = check_duplicate_abspath(progname);
 		if (abspath == NULL)
-			exit_exec(pinput, progname);
+			exit_exec(cmd_lst, progname);
 	}
 	else
 	{
 		dirnames = split_env_path();
 		if (dirnames == NULL)
-			exit_exec(pinput, progname);
+			exit_exec(cmd_lst, progname);
 		abspath = find_abspath(dirnames, progname);
 		ft_free_split(&dirnames);
 		if (abspath == NULL)
-			exit_exec(pinput, progname);
+			exit_exec(cmd_lst, progname);
 	}
 	return (abspath);
 }

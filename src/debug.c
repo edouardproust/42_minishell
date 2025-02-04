@@ -4,20 +4,20 @@
 #include "minishell.h"
 #include <sys/stat.h>
 
-static t_node *node_create(char *bash_cmd, char *infile, char *outfile, t_node *prev_node);
+static t_cmd *cmd_new_addback(char *bash_cmd, char *infile, char *outfile, t_cmd *prev_cmd);
 
-t_node	*debug_init_pinput(void)
+t_cmd	*create_cmd_lst(void)
 {
-	t_node *node0 = node_create("tail -n +4", "test/infile", NULL, NULL);
-	t_node *node1 = node_create("grep a", NULL, NULL, node0);
-	t_node *node2 = node_create("llsort", NULL, NULL, node1);
-	t_node *node3 = node_create("uniq -c", NULL, NULL, node2);
-	t_node *node4 = node_create("sort -nr", NULL, NULL, node3); 
-	node_create("head -n 3", NULL, "test/outfile", node4);
-	return (node0);
+	t_cmd *cmd0 = cmd_new_addback("tail -n +4", "test/infile", NULL, NULL);
+	t_cmd *cmd1 = cmd_new_addback("grep a", NULL, NULL, cmd0);
+	t_cmd *cmd2 = cmd_new_addback("ffsort", NULL, NULL, cmd1);
+	t_cmd *cmd3 = cmd_new_addback("uniq -c", NULL, NULL, cmd2);
+	t_cmd *cmd4 = cmd_new_addback("sort -nr", NULL, NULL, cmd3); 
+	cmd_new_addback("head -n 3", NULL, "test/outfile", cmd4);
+	return (cmd0);
 }
 
-static t_node *node_create(char *bash_cmd, char *infile, char *outfile, t_node *prev_node)
+static t_cmd *cmd_new_addback(char *bash_cmd, char *infile, char *outfile, t_cmd *prev_cmd)
 {
     t_cmd *cmd = malloc(sizeof(t_cmd));
 	cmd->args = NULL;
@@ -26,27 +26,21 @@ static t_node *node_create(char *bash_cmd, char *infile, char *outfile, t_node *
 	cmd->pipe = NULL;
 	cmd->fdin = STDIN_FILENO;
 	cmd->fdout = STDOUT_FILENO;
+	cmd->prev = prev_cmd;
+	cmd->next = NULL;
 
 	cmd->args = ft_split(bash_cmd, ' ');
-	if (infile == NULL)
-		cmd->infile = NULL;
-	else
+	if (infile != NULL)
 		cmd->infile = ft_strdup(infile);
-	if (outfile == NULL)
-		cmd->outfile = NULL;
-	else
+	if (outfile != NULL)
 		cmd->outfile = ft_strdup(outfile);
 	cmd->pipe = malloc(sizeof(int) * 2);
+	if (cmd->prev)
+		cmd->prev->next = cmd;
 	cmd->pipe[0] = -1;
 	cmd->pipe[1] = -1;
 
-	t_node *node = malloc(sizeof(t_node));
-	node->cmd = cmd;
-	node->next = NULL;
-	node->prev = prev_node;
-	if (prev_node != NULL)
-		prev_node->next = node;
-	return (node);
+	return (cmd);
 }
 
 void	debug_cmd(t_cmd *cmd, char *label)
@@ -92,21 +86,23 @@ void	debug_cmd(t_cmd *cmd, char *label)
 	}
 }
 
-void	debug_pinput(t_node *pinput)
+void	debug_cmd_lst(t_cmd *cmd_lst)
 {
 	int		i = 0;
 	char	*a;
+	t_cmd	*cmd;
 
-	while (pinput != NULL)
+	cmd = cmd_lst;
+	while (cmd)
 	{
 		a = ft_itoa(i++);
 		char *title = ft_strjoin("cmd", a);
 		free(a);
-		debug_cmd(pinput->cmd, title);
+		debug_cmd(cmd, title);
 		free(title);
-		if (pinput->next)
+		if (cmd->next)
 			ft_printf("\t\t▼\n");
-		pinput = pinput->next;
+	 	cmd = cmd->next;
 	}	
 }
 

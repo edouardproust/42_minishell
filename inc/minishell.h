@@ -10,30 +10,36 @@
 #include <readline/history.h>
 #include <sys/wait.h>
 
+#define TRUE 1
+#define FALSE 0
+typedef int t_bool;
+
 typedef struct s_cmd {
-	char	**args;
-	char	*infile;
-	char	*outfile;
-	int		*pipe;
-	int		fdin;
-	int		fdout;
+	char			**args;
+	char			*infile;
+	char			*outfile;
+	int				*pipe;
+	int				fdin;
+	int				fdout;
+	struct s_cmd	*prev;
+	struct s_cmd	*next;
 } t_cmd;
 
-typedef struct s_node {
-    t_cmd			*cmd;
-	struct s_node	*next;
-	struct s_node	*prev;
-} t_node;
+// execute.c
+void	execute_cmd_lst(t_cmd **cmd_lst, char **envp);
+char    *get_exec_path(char *arg, t_cmd **cmd_lst);
 
-void	execute_input(t_node **pinput, char **envp);
-char    *get_exec_path(char *arg, t_node **pinput);
+// exit.c
+void	exit_parsing(t_cmd **foo, char *fmt, ...); // TODO (Ava) Edit function in exit.c
+void	exit_exec(t_cmd **head, char *fmt, ...);
 
-void	exit_exec(t_node **parsed_input, char *fmt, ...);
-void	free_pinput(t_node **pinput);
+// free.c
+t_cmd	*free_cmd(t_cmd **cmd);
+void	free_cmd_lst(t_cmd **cmd_lst);
 
-// TODO Debug functions to delete
-t_node	*debug_init_pinput(void);
-void	debug_pinput(t_node *pinput);
+// debug.c (TODO Delete these lines + debug.c before submit)
+t_cmd	*create_cmd_lst(void);
+void	debug_cmd_lst(t_cmd *cmd_lst);
 void	debug_cmd(t_cmd *cmd, char *title);
 void	debug_fd(char *label, int fd);
 void	debug_read_fd(char *label, int fd);

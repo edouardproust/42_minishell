@@ -1,38 +1,50 @@
 #include "minishell.h"
 
-static void	setup_io(t_node *pi, t_cmd *cmd, t_node **pinput)
+static void	setup_io(t_cmd *cmd, t_cmd **cmd_lst)
 {
-	if (pi->next)
+	if (cmd->next)
 	{
 		if (pipe(cmd->pipe) == -1)
-			exit_exec(pinput, "pipe");
+			exit_exec(cmd_lst, "pipe");
 	}
-	if (pi->prev)
-		cmd->fdin = pi->prev->cmd->pipe[0];
+	if (cmd->prev)
+		cmd->fdin = cmd->prev->pipe[0];
 	else if (cmd->infile)
 	{
 		cmd->fdin = open(cmd->infile, O_RDONLY);
 		if (cmd->fdin == -1)
-			exit_exec(pinput, cmd->infile);
+			exit_exec(cmd_lst, cmd->infile);
 	}
-	if (pi->next) // if we created a pipe in this loop
+	if (cmd->next) // if we created a pipe in this loop
 		cmd->fdout = cmd->pipe[1];
 	else if (cmd->outfile)
 	{
 		cmd->fdout = open(cmd->outfile, O_WRONLY | O_CREAT | O_TRUNC, 0644);
 		if (cmd->fdout == -1)
-			exit_exec(pinput, cmd->outfile);
+			exit_exec(cmd_lst, cmd->outfile);
 	}
 }
 
-static void	duplicate_io(int newfd, int oldfd, t_node **pinput)
+static void	cleanup_io(t_cmd *cmd)
+{
+	if (cmd->infile)
+		close(cmd->fdin);
+	if (cmd->outfile)
+		close(cmd->fdout);
+	if (cmd->next) // if we created a pipe in this loop
+		close(cmd->pipe[1]); // we won't write in pipe in next loop
+	if (cmd->prev) // if we created a pipe in the previous loop
+		close(cmd->prev->pipe[0]); // we finished reading in previous pipe
+}
+
+static void	duplicate_io(int newfd, int oldfd, t_cmd **cmd_lst)
 {
 	if (dup2(newfd, oldfd) == -1)
-		exit_exec(pinput, "dup2");
+		exit_exec(cmd_lst, "dup2");
 	close(newfd);
 }
 
-static void	execute_command(t_cmd *cmd, char **envp, t_node **pinput)
+static void	execute_cmd(t_cmd *cmd, char **envp, t_cmd **cmd_lst)
 {
 	pid_t	pid;
 	char	*exec_path;
@@ -40,47 +52,34 @@ static void	execute_command(t_cmd *cmd, char **envp, t_node **pinput)
 
 	pid = fork();
 	if (pid < 0)
-		exit_exec(pinput, "fork");
+		exit_exec(cmd_lst, "fork");
 	if (pid == 0)
 	{
 		if (cmd->fdin != STDIN_FILENO)
-			duplicate_io(cmd->fdin, STDIN_FILENO, pinput);
+			duplicate_io(cmd->fdin, STDIN_FILENO, cmd_lst);
 		if (cmd->fdout != STDOUT_FILENO)
-			duplicate_io(cmd->fdout, STDOUT_FILENO, pinput);
-		exec_path = get_exec_path(cmd->args[0], pinput);
+			duplicate_io(cmd->fdout, STDOUT_FILENO, cmd_lst);
+		exec_path = get_exec_path(cmd->args[0], cmd_lst);
 		execve(exec_path, cmd->args, envp);
-		exit_exec(pinput, exec_path);
+		exit_exec(cmd_lst, exec_path);
 	}
 	waitpid(pid, &status, 0);
 	if (WIFEXITED(status) && WEXITSTATUS(status) != 0)
-		exit_exec(pinput, NULL);
+		exit_exec(cmd_lst, NULL);
 }
 
-static void	cleanup_io(t_node *pi, t_cmd *cmd)
+void	execute_cmd_lst(t_cmd **cmd_lst, char **envp)
 {
-	if (cmd->infile)
-		close(cmd->fdin);
-	if (cmd->outfile)
-		close(cmd->fdout);
-	if (pi->next) // if we created a pipe in this loop
-		close(cmd->pipe[1]); // we won't write in pipe in next loop
-	if (pi->prev) // if we created a pipe in the previous loop
-		close(pi->prev->cmd->pipe[0]); // we finished reading in previous pipe
-}
-
-void	execute_input(t_node **pinput, char **envp)
-{
-	t_node	*pi;
 	t_cmd	*cmd;
 
-	pi = *pinput;
-	while (pi)
+	cmd = *cmd_lst;
+	while (cmd)
 	{
-		cmd = pi->cmd;
-		setup_io(pi, cmd, pinput);
+		ft_fprintf(STDERR_FILENO, "[debug: %s]\n", cmd->args[0]);
+		setup_io(cmd, cmd_lst);
 		debug_cmd(cmd, cmd->args[0]); // DEBUG
-		execute_command(cmd, envp, pinput);
-		cleanup_io(pi, cmd);
-		pi = pi->next;
+		execute_cmd(cmd, envp, cmd_lst);
+		cleanup_io(cmd);
+		cmd = cmd->next;
 	}
 }
