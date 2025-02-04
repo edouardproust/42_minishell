@@ -14,7 +14,7 @@ t_cmd	*create_cmd()
 	cmd->next = NULL;
 	return (cmd);
 }
-
+//adds an argument to the args list
 void	add_arg_to_cmd(t_cmd *cmd, char *arg)
 {
 	int	i;
@@ -22,23 +22,23 @@ void	add_arg_to_cmd(t_cmd *cmd, char *arg)
 	char	**new_args;
 	
 	count = 0;
-	while (cmd->args && cmd->args[count])
+	while (cmd->args && cmd->args[count]) //we count existing args
 		count++;
-	new_args = malloc(sizeof(char *) * (count + 2));
+	new_args = malloc(sizeof(char *) * (count + 2)); // 1 for existing args, 1 for NULL
 	if (!new_args)
 		return ;
 	i = 0;
-	while (i < count)
+	while (i < count) //copy the old arguments
 	{
 		new_args[i] = cmd->args[i];
 		i++;
 	}
-	new_args[i] = arg;
+	new_args[i] = arg; // add new arg
 	new_args[i + 1] = NULL;
 	free(cmd->args);
 	cmd->args = new_args;
 }
-
+//arse tokens into commands
 t_cmd	*parse_tokens(t_token *tokens)
 {
 	t_cmd	*cmd_list;
@@ -49,21 +49,21 @@ t_cmd	*parse_tokens(t_token *tokens)
 
 	while (tokens)
 	{
-		if (tokens->type == TOKEN_WORD)
+		if (tokens->type == TOKEN_WORD) //if it's a word add it as an arg
 			add_arg_to_cmd(current_cmd, tokens->value);
 		else if (tokens->type == TOKEN_REDIR_IN && tokens->next)
 		{
 			if (current_cmd->infile)
 				free(current_cmd->infile);
 			current_cmd->infile = ft_strdup(tokens->next->value);
-			tokens = tokens->next;
+			tokens = tokens->next; //here we skip the filename
 		}
 		else if (tokens->type == TOKEN_REDIR_OUT && tokens->next)
 		{
 			if (current_cmd->outfile)
 				free(current_cmd->outfile);
 			current_cmd->outfile = ft_strdup(tokens->next->value);
-			tokens = tokens->next;
+			tokens = tokens->next; //here we skip the filename
 		}
 		else if (tokens->type == TOKEN_PIPE)
 		{

@@ -14,8 +14,8 @@
 
 typedef struct s_token
 {
-	char	*value;
-	int	type;
+	char	*value; //here store the text here eg, "echo", "<"
+	int	type; //we store the number of what kind of token this is
 	struct s_token *next;
 } t_token;
 

@@ -1,6 +1,6 @@
 #include "minishell.h"
 #include <stdio.h>
-
+//create a new token + allocate memory for it
 t_token	*create_token(char *value, int type)
 {
 	t_token *token;
@@ -35,7 +35,7 @@ t_token	*create_word_token(char *input, int *index)
 		(*index)++;
 	return create_token(ft_substr(input, start, *index - start), TOKEN_WORD);
 }
-
+//adds a new token to the list
 void 	add_token(t_token **tokens, t_token *new)
 {
 	t_token *tmp;
