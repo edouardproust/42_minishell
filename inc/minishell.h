@@ -10,9 +10,7 @@
 #include <readline/history.h>
 #include <sys/wait.h>
 
-#define TRUE 1
-#define FALSE 0
-typedef int t_bool;
+#define FD_LIMIT 1024
 
 typedef struct s_cmd {
 	char			**args;

@@ -75,9 +75,7 @@ void	execute_cmd_lst(t_cmd **cmd_lst, char **envp)
 	cmd = *cmd_lst;
 	while (cmd)
 	{
-		ft_fprintf(STDERR_FILENO, "[debug: %s]\n", cmd->args[0]);
 		setup_io(cmd, cmd_lst);
-		debug_cmd(cmd, cmd->args[0]); // DEBUG
 		execute_cmd(cmd, envp, cmd_lst);
 		cleanup_io(cmd);
 		cmd = cmd->next;

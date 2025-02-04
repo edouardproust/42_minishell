@@ -68,7 +68,7 @@ void	exit_exec(t_cmd **cmd_lst, char *fmt, ...)
 	va_end(args);
 	free_cmd_lst(cmd_lst);
 	fd = 3;
-	while (fd < 1024)
+	while (fd < FD_LIMIT)
 		close(fd++);
 	exit(EXIT_FAILURE);
 }
