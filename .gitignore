@@ -6,8 +6,5 @@ src/obj
 *.out
 *.swp
 *.swo
-<<<<<<< HEAD
 .vscode
-=======
->>>>>>> main
 test/outfile
