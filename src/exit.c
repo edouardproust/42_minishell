@@ -61,14 +61,11 @@ void	exit_parsing(t_cmd **foo, char *fmt, ...)
 void	exit_exec(t_cmd **cmd_lst, char *fmt, ...)
 {
 	va_list	args;
-	int		fd;
 
 	va_start(args, fmt);
 	print_error(fmt, args);
 	va_end(args);
 	free_cmd_lst(cmd_lst);
-	fd = 3;
-	while (fd < FD_LIMIT)
-		close(fd++);
+	flush_fds();
 	exit(EXIT_FAILURE);
 }

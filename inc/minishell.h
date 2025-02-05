@@ -45,6 +45,7 @@ void	exit_exec(t_cmd **head, char *fmt, ...);
 // free.c
 t_cmd	*free_cmd(t_cmd **cmd);
 void	free_cmd_lst(t_cmd **cmd_lst);
+void	flush_fds(void);
 
 // debug.c (TODO Delete these lines + debug.c before submit)
 t_cmd	*create_cmd_lst(void);

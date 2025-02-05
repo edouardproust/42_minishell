@@ -33,3 +33,15 @@ void	free_cmd_lst(t_cmd **cmd_lst)
 		cur_cmd = nxt_cmd;
 	}
 }
+
+/*
+ * Closes any fd up to FD_LIMIT, except standard ones.
+ */
+void	flush_fds(void)
+{
+	int	fd;
+
+	fd = 3;
+	while (fd < FD_LIMIT)
+		close(fd++);
+}
