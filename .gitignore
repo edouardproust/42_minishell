@@ -6,3 +6,4 @@ src/obj
 *.out
 *.swp
 *.swo
+test/outfile
