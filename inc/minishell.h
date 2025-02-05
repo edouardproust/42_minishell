@@ -20,12 +20,12 @@ typedef struct s_token {
 
 typedef struct s_cmd {
 	char	**args;
-	int		pipe_after;
-	int		pipe_before;
 	char	*infile;
 	char	*outfile;
+	int		*pipe;
 	int		fdin;
 	int		fdout;
+	struct s_cmd	*prev;
 	struct s_cmd	*next;
 } t_cmd;
 
