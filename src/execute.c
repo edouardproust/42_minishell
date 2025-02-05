@@ -59,12 +59,14 @@ static void	execute_cmd(t_cmd *cmd, char **envp, t_cmd **cmd_lst)
 			duplicate_io(cmd->fdin, STDIN_FILENO, cmd_lst);
 		if (cmd->fdout != STDOUT_FILENO)
 			duplicate_io(cmd->fdout, STDOUT_FILENO, cmd_lst);
+		if (ft_strncmp("cd", cmd->args[0], 3) == 0) // TODO DEBUG
+			exit(0);
 		exec_path = get_exec_path(cmd->args[0], cmd_lst);
 		execve(exec_path, cmd->args, envp);
-		exit_exec(cmd_lst, exec_path);
+		exit_exec_code(127, cmd_lst, exec_path);
 	}
 	waitpid(pid, &status, 0);
-	if (WIFEXITED(status) && WEXITSTATUS(status) != 0)
+	if (WIFEXITED(status) && WEXITSTATUS(status) == 127)
 		exit_exec(cmd_lst, NULL);
 }
 
@@ -75,6 +77,7 @@ void	execute_cmd_lst(t_cmd **cmd_lst, char **envp)
 	cmd = *cmd_lst;
 	while (cmd)
 	{
+		debug_cmd(cmd, cmd->args[0]); // DEBUG
 		setup_io(cmd, cmd_lst);
 		execute_cmd(cmd, envp, cmd_lst);
 		cleanup_io(cmd);

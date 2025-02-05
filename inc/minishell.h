@@ -3,27 +3,32 @@
 
 # include "libft.h"
 
-#include <errno.h>
-#include <stdio.h>
-#include <fcntl.h>
-#include <readline/readline.h>
-#include <readline/history.h>
-#include <sys/wait.h>
+# include <errno.h>
+# include <stdio.h>
+# include <fcntl.h>
+# include <readline/readline.h>
+# include <readline/history.h>
+# include <sys/wait.h>
 
-#define FD_LIMIT 1024
+# define FD_LIMIT 1024
 
-#define TOKEN_WORD 0
-#define TOKEN_PIPE 1
-#define TOKEN_REDIR_IN 2
-#define TOKEN_REDIR_OUT 3
+enum e_token
+{
+	TOKEN_WORD,
+	TOKEN_PIPE,
+	TOKEN_REDIR_IN,
+	TOKEN_REDIR_OUT
+};
 
-typedef struct s_token {
-	char	*value;
-	int		type;
-	struct s_token *next;
-} t_token;
+typedef struct s_token
+{
+	char			*value;
+	int				type;
+	struct s_token	*next;
+}	t_token;
 
-typedef struct s_cmd {
+typedef struct s_cmd
+{
 	char			**args;
 	char			*infile;
 	char			*outfile;
@@ -32,15 +37,19 @@ typedef struct s_cmd {
 	int				fdout;
 	struct s_cmd	*prev;
 	struct s_cmd	*next;
-} t_cmd;
+}	t_cmd;
 
-// execute.c
-void	execute_cmd_lst(t_cmd **cmd_lst, char **envp);
-char    *get_exec_path(char *arg, t_cmd **cmd_lst);
+typedef struct s_builtin
+{
+	char	*name;
+	void	(*fn)(char **args);
+	int		affects_state;
+} t_builtin;
 
 // exit.c
 void	exit_parsing(t_cmd **foo, char *fmt, ...); // TODO (Ava) Edit function in exit.c
 void	exit_exec(t_cmd **head, char *fmt, ...);
+void	exit_exec_code(int err_code, t_cmd **cmd_lst, char *fmt, ...);
 
 // free.c
 t_cmd	*free_cmd(t_cmd **cmd);
@@ -53,5 +62,20 @@ void	debug_cmd_lst(t_cmd *cmd_lst);
 void	debug_cmd(t_cmd *cmd, char *title);
 void	debug_fd(char *label, int fd);
 void	debug_read_fd(char *label, int fd);
+
+// execute.c
+void	execute_cmd_lst(t_cmd **cmd_lst, char **envp);
+// execute_path.c
+char    *get_exec_path(char *arg, t_cmd **cmd_lst);
+// execute_builtins.c
+t_builtin	*get_builtin(char *progname);
+// execute/builtins
+void exec_echo(char **args);
+void exec_cd(char **args);
+void exec_pwd(char **args);
+void exec_export(char **args);
+void exec_unset(char **args);
+void exec_env(char **args);
+void exec_exit(char **args);
 
 #endif

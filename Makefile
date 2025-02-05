@@ -12,7 +12,15 @@ C_FILES = debug.c \
 	exit.c \
 	main.c \
 	execute.c \
+	execute_buildins.c \
 	execute_path.c \
+	builtins/builtin_cd.c \
+	builtins/builtin_echo.c \
+	builtins/builtin_env.c \
+	builtins/builtin_exit.c \
+	builtins/builtin_export.c \
+	builtins/builtin_pwd.c \
+	builtins/builtin_unset.c
 
 SRCS = $(addprefix $(C_DIR)/,$(C_FILES))
 
@@ -71,7 +79,7 @@ INCLUDES = -I$(H_DIR) -I$(LIBFT_DIR)
 all: libft $(NAME)
 
 $(O_DIR)/%.o: $(C_DIR)/%.c Makefile $(HEADERS)
-	@mkdir -p $(O_DIR)
+	@mkdir -p $(@D)
 	cc -c -o $@ $< $(INCLUDES) $(CFLAGS)
 
 $(NAME): $(OBJS)
