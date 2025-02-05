@@ -1,7 +1,6 @@
 #include "minishell.h"
-#include <stdio.h>
 
-t_cmd	*create_cmd()
+t_cmd	*cmd_new()
 {
 	t_cmd *cmd;
 
@@ -38,40 +37,24 @@ void	add_arg_to_cmd(t_cmd *cmd, char *arg)
 	free(cmd->args);
 	cmd->args = new_args;
 }
-//arse tokens into commands
+//Parse tokens into commands
 t_cmd	*parse_tokens(t_token *tokens)
 {
 	t_cmd	*cmd_list;
 	t_cmd	*current_cmd;
 
-	cmd_list = create_cmd();
+	cmd_list = cmd_new();
 	current_cmd = cmd_list;
-
 	while (tokens)
 	{
-		if (tokens->type == TOKEN_WORD) //if it's a word add it as an arg
-			add_arg_to_cmd(current_cmd, tokens->value);
-		else if (tokens->type == TOKEN_REDIR_IN && tokens->next)
-		{
-			if (current_cmd->infile)
-				free(current_cmd->infile);
-			current_cmd->infile = ft_strdup(tokens->next->value);
-			tokens = tokens->next; //here we skip the filename
-		}
-		else if (tokens->type == TOKEN_REDIR_OUT && tokens->next)
-		{
-			if (current_cmd->outfile)
-				free(current_cmd->outfile);
-			current_cmd->outfile = ft_strdup(tokens->next->value);
-			tokens = tokens->next; //here we skip the filename
-		}
+		if (tokens->type == TOKEN_REDIR_IN)
+			handle_input_redirection(current_cmd, &tokens);
+		else if (tokens->type == TOKEN_REDIR_OUT)
+			handle_output_redirection(current_cmd, &tokens);
+		else if (tokens->type == TOKEN_WORD)
+			handle_word(current_cmd, tokens);
 		else if (tokens->type == TOKEN_PIPE)
-		{
-			if (!current_cmd->args || !current_cmd->args[0]) //check for empty commands
-				return (NULL);
-			current_cmd->next = create_cmd(); //create new cmd
-			current_cmd = current_cmd->next; //move to new cmd
-		}
+			handle_pipe(&current_cmd);
 		tokens = tokens->next;
 	}
 	return (cmd_list);

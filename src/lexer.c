@@ -1,7 +1,7 @@
 #include "minishell.h"
-#include <stdio.h>
+
 //create a new token + allocate memory for it
-t_token	*create_token(char *value, int type)
+t_token	*token_new(char *value, int type)
 {
 	t_token *token;
 
@@ -33,10 +33,10 @@ t_token	*create_word_token(char *input, int *index)
 	while (input[*index] && input[*index] != ' ' &&
 			input[*index] != '|' && input[*index] != '<' && input[*index] != '>')
 		(*index)++;
-	return create_token(ft_substr(input, start, *index - start), TOKEN_WORD);
+	return token_new(ft_substr(input, start, *index - start), TOKEN_WORD);
 }
 //adds a new token to the list
-void 	add_token(t_token **tokens, t_token *new)
+void 	token_addback(t_token **tokens, t_token *new)
 {
 	t_token *tmp;
 
@@ -62,12 +62,12 @@ t_token	*tokenizer(char *input)
 	{
 		while (input[i] == ' ')
 			i++;
-		if (input[i] == '\0')
-			break ;
+//		if (input[i] == '\0')
+//			break ;
 		if (input[i] == '|' || input[i] == '<' || input[i] == '>')
-			add_token(&tokens, create_token(ft_substr(input, i, 1), get_token_type(input[i])));
+			token_addback(&tokens, token_new(ft_substr(input, i, 1), get_token_type(input[i])));
 		else
-			add_token(&tokens, create_word_token(input, &i));
+			token_addback(&tokens, create_word_token(input, &i));
 		i++;
 	}
 	return (tokens);
