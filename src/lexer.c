@@ -13,14 +13,28 @@ t_token	*token_new(char *value, int type)
 	token->next = NULL;
 	return (token);
 }
-
+//added conditions for token types heredoc + append, TB implemented
 int	get_token_type(char c)
 {
 	if (c == '|')
 		return (TOKEN_PIPE);
 	if (c == '<')
+	{
+		if (c + 1 == '<')
+		{
+			c++;
+			return (TOKEN_HEREDOC);
+		}
+	}
 		return (TOKEN_REDIR_IN);
 	if (c == '>')
+	{
+		if (c + 1 == '>')
+		{
+			c++;
+			return (TOKEN_APPEND);
+		}
+	}
 		return (TOKEN_REDIR_OUT);
 	return (TOKEN_WORD);
 }

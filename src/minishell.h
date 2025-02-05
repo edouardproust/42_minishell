@@ -11,7 +11,8 @@
 #define	TOKEN_PIPE 1
 #define	TOKEN_REDIR_IN 2
 #define	TOKEN_REDIR_OUT 3
-//<<, >> tokens will be added here
+#define	TOKEN_APPEND 4
+#define	TOKEN_HEREDOC 5
 
 typedef struct s_token
 {
@@ -21,10 +22,12 @@ typedef struct s_token
 } t_token;
 
 typedef struct s_cmd {
-    char    **args;
-    char    *infile;
-    char    *outfile;
-    int     pipe_after;
+    char	**args;
+    char	*infile;
+    char	*outfile;
+    int		pipe_after;
+//  int		append; (to be implemented later)
+//  char	*heredoc_del; (to be implemented later)
     struct s_cmd *next;
 } t_cmd;
 
