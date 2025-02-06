@@ -38,7 +38,7 @@ typedef struct s_node {
 
 int		main(int argc, char **argv);
 t_token *token_new(char *value, int type);
-int		get_token_type(char c);
+int		get_token_type(char *input, int i);
 t_token *create_word_token(char *input, int *index);
 void	token_addback(t_token **tokens, t_token *new);
 t_token *tokenizer(char *input);

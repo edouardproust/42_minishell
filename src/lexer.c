@@ -14,28 +14,22 @@ t_token	*token_new(char *value, int type)
 	return (token);
 }
 //added conditions for token types heredoc + append, TB implemented
-int	get_token_type(char c)
+int	get_token_type(char *input, int i)
 {
-	if (c == '|')
+	if (input[i] == '|')
 		return (TOKEN_PIPE);
-	if (c == '<')
+	if (input[i] == '<')
 	{
-		if (c + 1 == '<')
-		{
-			c++;
+		if (input[i + 1] == '<')
 			return (TOKEN_HEREDOC);
-		}
-	}
 		return (TOKEN_REDIR_IN);
-	if (c == '>')
-	{
-		if (c + 1 == '>')
-		{
-			c++;
-			return (TOKEN_APPEND);
-		}
 	}
+	if (input[i] == '>')
+	{
+		if (input[i + 1] == '>')
+			return (TOKEN_APPEND);
 		return (TOKEN_REDIR_OUT);
+	}
 	return (TOKEN_WORD);
 }
 
@@ -76,10 +70,8 @@ t_token	*tokenizer(char *input)
 	{
 		while (input[i] == ' ')
 			i++;
-//		if (input[i] == '\0')
-//			break ;
 		if (input[i] == '|' || input[i] == '<' || input[i] == '>')
-			token_addback(&tokens, token_new(ft_substr(input, i, 1), get_token_type(input[i])));
+			token_addback(&tokens, token_new(ft_substr(input, i, 1), get_token_type(input, i)));
 		else
 			token_addback(&tokens, create_word_token(input, &i));
 		i++;
