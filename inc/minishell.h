@@ -16,6 +16,8 @@
 #define TOKEN_PIPE 1
 #define TOKEN_REDIR_IN 2
 #define TOKEN_REDIR_OUT 3
+#define TOKEN_APPEND 4
+#define TOKEN_HEREDOC 5
 
 typedef struct s_token {
 	char	*value;
@@ -34,6 +36,24 @@ typedef struct s_cmd {
 	struct s_cmd	*next;
 } t_cmd;
 
+//lexer.c
+t_token	*token_new(char *value, int type);
+int	get_token_type(char *input, int i);
+t_token	*create_word_token(char *input, int *index);
+void    token_addback(t_token **tokens, t_token *new);
+t_token *tokenizer(char *input);
+
+//parser.c
+t_cmd   *cmd_new();
+void    add_arg_to_cmd(t_cmd *cmd, char *arg);
+t_cmd   *parse_tokens(t_token *tokens);
+
+//parser_utils.c
+void    handle_input_redirection(t_cmd *current_cmd, t_token **tokens);
+void    handle_output_redirection(t_cmd *current_cmd, t_token **tokens);
+void    handle_word(t_cmd *current_cmd, t_token *tokens);
+void    handle_pipe(t_cmd **current_cmd);
+
 // execute.c
 void	execute_cmd_lst(t_cmd **cmd_lst, char **envp);
 char    *get_exec_path(char *arg, t_cmd **cmd_lst);
@@ -43,7 +63,7 @@ void	exit_parsing(t_cmd **foo, char *fmt, ...); // TODO (Ava) Edit function in e
 void	exit_exec(t_cmd **head, char *fmt, ...);
 
 // free.c
-t_cmd	*free_cmd(t_cmd **cmd);
+t_cmd	*free_cmd(t_cmd **cmd); // TODO (Ava) Add free functions for lexer
 void	free_cmd_lst(t_cmd **cmd_lst);
 void	flush_fds(void);
 
