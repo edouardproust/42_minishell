@@ -6,7 +6,7 @@
 /*   By: eproust <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/13 12:55:09 by eproust           #+#    #+#             */
-/*   Updated: 2025/01/19 15:06:03 by eproust          ###   ########.fr       */
+/*   Updated: 2025/02/04 19:39:18 by eproust          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,9 +27,9 @@
 # define STDOUT_FILENO 1
 # define STDERR_FILENO 2
 
-/* Error */
-void	ft_error(char *error_msg);
-void	ft_perror(char *error_msg);
+/* Exit & Error */
+void	ft_exit(char *error_msg);
+void	ft_pexit(char *error_msg);
 
 /* Free */
 void	*ft_free_ptrs(int count, ...);
@@ -101,12 +101,15 @@ t_list	*ft_lstmap(t_list *lst, void *(*f)(void *), void (*del)(void *));
 
 /* ft_printf */
 ssize_t	ft_printf(const char *format, ...);
-ssize_t	ft_print_char(va_list arg_ptr);
-ssize_t	ft_print_str(va_list arg_ptr);
-ssize_t	ft_print_int(va_list arg_ptr);
-ssize_t	ft_print_uint(va_list arg_ptr);
-ssize_t	ft_print_hexa(va_list arg_ptr, char specifier);
-ssize_t	ft_print_ptr(va_list arg_ptr);
+ssize_t	ft_fprintf(int fd, const char *format, ...);
+ssize_t	ft_vprintf(const char *format, va_list arg_ptr);
+ssize_t	ft_vfprintf(int fd, const char *format, va_list arg_ptr);
+ssize_t	ft_print_char(va_list arg_ptr, int fd);
+ssize_t	ft_print_str(va_list arg_ptr, int fd);
+ssize_t	ft_print_int(va_list arg_ptr, int fd);
+ssize_t	ft_print_uint(va_list arg_ptr, int fd);
+ssize_t	ft_print_hexa(va_list arg_ptr, char specifier, int fd);
+ssize_t	ft_print_ptr(va_list arg_ptr, int fd);
 
 /* get_next_line */
 char	*get_next_line(int fd);

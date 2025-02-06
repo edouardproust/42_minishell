@@ -6,7 +6,7 @@
 /*   By: eproust <contact@edouardproust.dev>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/28 17:49:54 by eproust           #+#    #+#             */
-/*   Updated: 2024/12/20 16:31:09 by eproust          ###   ########.fr       */
+/*   Updated: 2025/02/01 21:03:39 by eproust          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,7 +21,7 @@
  * Uses a buffer allocated string to insure to print either all the number
  * or nothing in case of `write` fn failure at any point of the process.
  */
-ssize_t	ft_print_uint(va_list arg_ptr)
+ssize_t	ft_print_uint(va_list arg_ptr, int fd)
 {
 	unsigned int	nb;
 	char			*str;
@@ -29,7 +29,7 @@ ssize_t	ft_print_uint(va_list arg_ptr)
 
 	nb = va_arg(arg_ptr, unsigned int);
 	str = ft_lutoa_base(nb, "0123456789");
-	bytes = ft_putstr_fd(str, 1);
+	bytes = ft_putstr_fd(str, fd);
 	free(str);
 	return (bytes);
 }
