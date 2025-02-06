@@ -12,7 +12,7 @@ C_FILES = debug.c \
 	exit.c \
 	main.c \
 	execute.c \
-	execute_buildins.c \
+	execute_builtins.c \
 	execute_path.c \
 	builtins/builtin_cd.c \
 	builtins/builtin_echo.c \
