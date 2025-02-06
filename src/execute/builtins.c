@@ -9,17 +9,15 @@ t_builtin	*get_builtin(char *progname)
 		{"export", do_export, 1},
 		{"unset", do_unset, 1},
 		{"env", do_env, 0},
-		{"exit", do_exit, 1},
-		{NULL, NULL, 0}
+		{"exit", do_exit, 1}
 	};
-	//size_t				len;
+	size_t				len;
 	size_t				i;
 
-	//len = sizeof(builtins) / sizeof(builtins[0]);
+	len = sizeof(builtins) / sizeof(builtins[0]);
 	i = 0;
-	while (builtins[i].name)
+	while (i < len)
 	{
-		ft_printf("{%s, %s}\n", builtins[i].name, progname);
 		if (ft_strncmp(builtins[i].name, progname, ft_strlen(progname)) == 0)
 			return (&builtins[i]);
 		i++;
@@ -34,12 +32,10 @@ void	run_builtin(t_builtin *builtin, char** args, t_cmd **cmd_lst)
 	res = builtin->fn(args);
 	if (!builtin->affects_state)
 	{
-		ft_fprintf(STDERR_FILENO, "[NO affects_state]\n");
 		if (res != EXIT_SUCCESS)
 			exit_exec(cmd_lst, builtin->name);
 		exit(EXIT_SUCCESS);
 	}
 	else if (res != EXIT_SUCCESS)
 		exit_exec(cmd_lst, builtin->name);
-	ft_fprintf(STDERR_FILENO, "[affects_state]\n");
 }

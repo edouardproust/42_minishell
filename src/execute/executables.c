@@ -43,7 +43,6 @@ void	run_executable(t_builtin *builtin, t_cmd *cmd, char **envp,
 		exit(E_CMDNOTFOUND);
 	}
 	waitpid(pid, &status, 0);
-	ft_fprintf(STDERR_FILENO, "(STATUS: %d)\n", WEXITSTATUS(status));
 	if (WIFEXITED(status) && WEXITSTATUS(status) > E_CMDNOTEXEC)
 		exit_exec(cmd_lst, NULL);
 }
