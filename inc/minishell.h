@@ -42,7 +42,7 @@ typedef struct s_cmd
 typedef struct s_builtin
 {
 	char	*name;
-	void	(*fn)(char **args);
+	int		(*fn)(char **args);
 	int		affects_state;
 } t_builtin;
 
@@ -69,13 +69,14 @@ void	execute_cmd_lst(t_cmd **cmd_lst, char **envp);
 char    *get_exec_path(char *arg, t_cmd **cmd_lst);
 // execute_builtins.c
 t_builtin	*get_builtin(char *progname);
+void	execute_builtin(t_builtin *builtin, char** args, t_cmd **cmd_lst);
 // execute/builtins
-void exec_echo(char **args);
-void exec_cd(char **args);
-void exec_pwd(char **args);
-void exec_export(char **args);
-void exec_unset(char **args);
-void exec_env(char **args);
-void exec_exit(char **args);
+int	execute_echo(char **args);
+int	execute_cd(char **args);
+int	execute_pwd(char **args);
+int	execute_export(char **args);
+int	execute_unset(char **args);
+int	execute_env(char **args);
+int	execute_exit(char **args);
 
 #endif

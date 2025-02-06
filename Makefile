@@ -12,15 +12,15 @@ C_FILES = debug.c \
 	exit.c \
 	main.c \
 	execute.c \
-	execute_builtins.c \
 	execute_path.c \
-	builtins/builtin_cd.c \
-	builtins/builtin_echo.c \
-	builtins/builtin_env.c \
-	builtins/builtin_exit.c \
-	builtins/builtin_export.c \
-	builtins/builtin_pwd.c \
-	builtins/builtin_unset.c
+	execute_builtins.c \
+	builtins/execute_cd.c \
+	builtins/execute_echo.c \
+	builtins/execute_env.c \
+	builtins/execute_exit.c \
+	builtins/execute_export.c \
+	builtins/execute_pwd.c \
+	builtins/execute_unset.c
 
 SRCS = $(addprefix $(C_DIR)/,$(C_FILES))
 
