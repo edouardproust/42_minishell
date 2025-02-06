@@ -6,7 +6,7 @@
 /*   By: eproust <contact@edouardproust.dev>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/02 02:06:45 by eproust           #+#    #+#             */
-/*   Updated: 2024/12/20 16:30:01 by eproust          ###   ########.fr       */
+/*   Updated: 2025/02/01 21:01:20 by eproust          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,7 +21,7 @@
  * Uses a buffer allocated string to insure to print either all the number
  * or nothing in case of `write` fn failure at any point of the process.
  */
-ssize_t	ft_print_hexa(va_list arg_ptr, char specifier)
+ssize_t	ft_print_hexa(va_list arg_ptr, char specifier, int fd)
 {
 	unsigned int	nb;
 	char			*str;
@@ -33,7 +33,7 @@ ssize_t	ft_print_hexa(va_list arg_ptr, char specifier)
 		str = ft_lutoa_base(nb, "0123456789abcdef");
 	else
 		str = ft_lutoa_base(nb, "0123456789ABCDEF");
-	bytes = ft_putstr_fd(str, 1);
+	bytes = ft_putstr_fd(str, fd);
 	free(str);
 	return (bytes);
 }
