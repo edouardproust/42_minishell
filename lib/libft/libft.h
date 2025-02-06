@@ -6,7 +6,7 @@
 /*   By: eproust <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/13 12:55:09 by eproust           #+#    #+#             */
-/*   Updated: 2025/02/04 19:39:18 by eproust          ###   ########.fr       */
+/*   Updated: 2025/02/06 18:55:07 by eproust          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,10 +22,6 @@
 # ifndef BUFFER_SIZE
 #  define BUFFER_SIZE 1024
 # endif
-
-# define STDIN_FILENO 0
-# define STDOUT_FILENO 1
-# define STDERR_FILENO 2
 
 /* Exit & Error */
 void	ft_exit(char *error_msg);

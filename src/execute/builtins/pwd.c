@@ -1,6 +1,6 @@
 #include "minishell.h"
 
-int	execute_pwd(char **args)
+int	do_pwd(char **args)
 {
 	(void)args;
 	ft_fprintf(STDERR_FILENO, "[TODO: ft_pwd]\n");

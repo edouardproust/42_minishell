@@ -8,7 +8,7 @@ static t_cmd *cmd_new_addback(char *bash_cmd, char *infile, char *outfile, t_cmd
 
 t_cmd	*create_cmd_lst(void)
 {
-	t_cmd *cmd0 = cmd_new_addback("tail -n +4", "test/infile", NULL, NULL);
+	t_cmd *cmd0 = cmd_new_addback("exit -n +4", "test/infile", NULL, NULL);
 	t_cmd *cmd1 = cmd_new_addback("grep a", NULL, NULL, cmd0);
 	t_cmd *cmd2 = cmd_new_addback("sort", NULL, NULL, cmd1);
 	t_cmd *cmd3 = cmd_new_addback("uniq -c", NULL, NULL, cmd2);

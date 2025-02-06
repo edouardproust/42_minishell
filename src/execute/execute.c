@@ -37,49 +37,24 @@ static void	cleanup_io(t_cmd *cmd)
 		close(cmd->prev->pipe[0]); // we finished reading in previous pipe
 }
 
-static void	duplicate_io(int newfd, int oldfd, t_cmd **cmd_lst)
-{
-	if (dup2(newfd, oldfd) == -1)
-		exit_exec(cmd_lst, "dup2");
-	close(newfd);
-}
-
-static void	execute_cmd(t_cmd *cmd, char **envp, t_cmd **cmd_lst)
-{
-	pid_t	pid;
-	char	*exec_path;
-	int		status;
-
-	pid = fork();
-	if (pid < 0)
-		exit_exec(cmd_lst, "fork");
-	if (pid == 0)
-	{
-		if (cmd->fdin != STDIN_FILENO)
-			duplicate_io(cmd->fdin, STDIN_FILENO, cmd_lst);
-		if (cmd->fdout != STDOUT_FILENO)
-			duplicate_io(cmd->fdout, STDOUT_FILENO, cmd_lst);
-		if (ft_strncmp("cd", cmd->args[0], 3) == 0) // TODO DEBUG
-			exit(0);
-		exec_path = get_exec_path(cmd->args[0], cmd_lst);
-		execve(exec_path, cmd->args, envp);
-		exit_exec_code(127, cmd_lst, exec_path);
-	}
-	waitpid(pid, &status, 0);
-	if (WIFEXITED(status) && WEXITSTATUS(status) == 127)
-		exit_exec(cmd_lst, NULL);
-}
-
 void	execute_cmd_lst(t_cmd **cmd_lst, char **envp)
 {
-	t_cmd	*cmd;
+	t_cmd		*cmd;
+	t_builtin	*builtin;
 
 	cmd = *cmd_lst;
+	if (!cmd_lst || !*cmd_lst)
+		exit_exec(NULL, "Incorrect parsed command");
 	while (cmd)
 	{
-		debug_cmd(cmd, cmd->args[0]); // DEBUG
+		if (DEBUG)
+			debug_cmd(cmd, cmd->args[0]); // DEBUG
 		setup_io(cmd, cmd_lst);
-		execute_cmd(cmd, envp, cmd_lst);
+		builtin = get_builtin(cmd->args[0]);
+		if (builtin && builtin->affects_state)
+			run_builtin(builtin, cmd->args, cmd_lst);
+		else
+			run_executable(builtin, cmd, envp, cmd_lst);
 		cleanup_io(cmd);
 		cmd = cmd->next;
 	}

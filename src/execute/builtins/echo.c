@@ -1,6 +1,6 @@
 #include "minishell.h"
 
-int	execute_echo(char **args)
+int	do_echo(char **args)
 {
 	(void)args;
 	ft_fprintf(STDERR_FILENO, "[TODO: ft_echo]\n");

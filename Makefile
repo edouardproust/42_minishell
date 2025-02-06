@@ -11,16 +11,17 @@ C_FILES = debug.c \
 	free.c \
 	exit.c \
 	main.c \
-	execute.c \
-	execute_path.c \
-	execute_builtins.c \
-	builtins/execute_cd.c \
-	builtins/execute_echo.c \
-	builtins/execute_env.c \
-	builtins/execute_exit.c \
-	builtins/execute_export.c \
-	builtins/execute_pwd.c \
-	builtins/execute_unset.c
+	execute/execute.c \
+	execute/path.c \
+	execute/executables.c \
+	execute/builtins.c \
+	execute/builtins/cd.c \
+	execute/builtins/echo.c \
+	execute/builtins/env.c \
+	execute/builtins/exit.c \
+	execute/builtins/export.c \
+	execute/builtins/pwd.c \
+	execute/builtins/unset.c \
 
 SRCS = $(addprefix $(C_DIR)/,$(C_FILES))
 
@@ -29,7 +30,7 @@ SRCS = $(addprefix $(C_DIR)/,$(C_FILES))
 # Objects                            *
 # ************************************
 
-O_DIR = src/obj
+O_DIR = src/_obj
 
 OBJS = $(addprefix $(O_DIR)/,$(C_FILES:.c=.o))
 
@@ -98,9 +99,12 @@ re: fclean all
 libft:
 	$(MAKE) -C $(LIBFT_DIR)
 
+debug: CFLAGS += -DDEBUG -g
+debug: re
+
 
 # ************************************
 # Phony                              *
 # ************************************
 
-.PHONY: all clean fclean re libft
+.PHONY: all clean fclean re libft debug

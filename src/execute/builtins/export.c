@@ -1,6 +1,6 @@
 #include "minishell.h"
 
-int	execute_export(char **args)
+int	do_export(char **args)
 {
 	(void)args;
 	ft_fprintf(STDERR_FILENO, "[TODO: ft_export]\n");

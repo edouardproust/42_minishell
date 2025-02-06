@@ -51,36 +51,20 @@ void	exit_parsing(t_cmd **foo, char *fmt, ...)
 	exit(EXIT_FAILURE);
 }
 
-static void	exit_exec_va(int err_code, t_cmd **cmd_lst, char *fmt, va_list args)
-{
-	print_error(fmt, args);
-	free_cmd_lst(cmd_lst);
-	flush_fds();
-	exit(err_code);
-}
-
 /*
  * If an error occures during execution:
  * - prints an error message
  * - frees allocated data
  * - close any file descriptor above 2
- * - exits the program with a custom error code
- */
-void	exit_exec_code(int err_code, t_cmd **cmd_lst, char *fmt, ...)
-{
-	va_list	args;
-
-	va_start(args, fmt);
-	exit_exec_va(err_code, cmd_lst, fmt, args);
-}
-
-/*
- * Does the same as exit_exec_code but with error code EXIT_FAILURE.
+ * - exits the program with error code EXIT_FAILURE
  */
 void	exit_exec(t_cmd **cmd_lst, char *fmt, ...)
 {
 	va_list	args;
 
 	va_start(args, fmt);
-	exit_exec_va(EXIT_FAILURE, cmd_lst, fmt, args);
+	print_error(fmt, args);
+	free_cmd_lst(cmd_lst);
+	flush_fds();
+	exit(EXIT_FAILURE);
 }

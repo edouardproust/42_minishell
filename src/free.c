@@ -26,6 +26,8 @@ void	free_cmd_lst(t_cmd **cmd_lst)
 	t_cmd	*cur_cmd;
 	t_cmd	*nxt_cmd;
 
+	if (!cmd_lst || !*cmd_lst)
+		return ;
 	cur_cmd = *cmd_lst;
 	while (cur_cmd)
 	{
