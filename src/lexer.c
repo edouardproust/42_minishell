@@ -14,40 +14,44 @@ t_token	*token_new(char *value, int type)
 	return (token);
 }
 //added conditions for token types heredoc + append, TB implemented
-int	get_token_type(char c)
+int	get_token_type(char *input, int i)
 {
-	if (c == '|')
+	if (input[i] == '|')
 		return (TOKEN_PIPE);
-	if (c == '<')
+	if (input[i] == '<')
 	{
-		if (c + 1 == '<')
-		{
-			c++;
+		if (input[i + 1] == '<')
 			return (TOKEN_HEREDOC);
-		}
-	}
 		return (TOKEN_REDIR_IN);
-	if (c == '>')
-	{
-		if (c + 1 == '>')
-		{
-			c++;
-			return (TOKEN_APPEND);
-		}
 	}
+	if (input[i] == '>')
+	{
+		if (input[i + 1] == '>')
+			return (TOKEN_APPEND);
 		return (TOKEN_REDIR_OUT);
+	}
 	return (TOKEN_WORD);
 }
 
 t_token	*create_word_token(char *input, int *index)
 {
 	int	start;
+	char	*word;
 
 	start = *index;
 	while (input[*index] && input[*index] != ' ' &&
 			input[*index] != '|' && input[*index] != '<' && input[*index] != '>')
+	{
+		if (input[*index] == '\'' || input[*index] == '"')
+		{
+			if (!skip_quotes(input, index))
+				return (NULL);
+		}
 		(*index)++;
-	return token_new(ft_substr(input, start, *index - start), TOKEN_WORD);
+	}
+	word = ft_substr(input, start, *index - start);
+	word = remove_quotes(word);
+	return (token_new(word, TOKEN_WORD));
 }
 //adds a new token to the list
 void 	token_addback(t_token **tokens, t_token *new)
@@ -68,6 +72,7 @@ void 	token_addback(t_token **tokens, t_token *new)
 t_token	*tokenizer(char *input)
 {
 	t_token	*tokens;
+	t_token	*new_token;
 	int	i;
 
 	tokens  = NULL;
@@ -76,13 +81,23 @@ t_token	*tokenizer(char *input)
 	{
 		while (input[i] == ' ')
 			i++;
-//		if (input[i] == '\0')
-//			break ;
 		if (input[i] == '|' || input[i] == '<' || input[i] == '>')
-			token_addback(&tokens, token_new(ft_substr(input, i, 1), get_token_type(input[i])));
+		{
+			token_addback(&tokens, token_new(ft_substr(input, i, 1), get_token_type(input, i)));
+			if (input[i] == '<' && input[i + 1] == '<')
+				i = i + 2;
+			else if (input[i] == '>' && input[i + 1] == '>')
+				i = i + 2;
+			else
+				i++;
+		}
 		else
-			token_addback(&tokens, create_word_token(input, &i));
-		i++;
+		{
+			new_token = create_word_token(input, &i);
+			if (!new_token)
+				return (NULL);
+			token_addback(&tokens, new_token);
+		}
 	}
 	return (tokens);
 }
