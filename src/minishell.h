@@ -3,9 +3,14 @@
 
 # include "../lib/libft/libft.h"
 
+#include <errno.h>
 #include <stdio.h>
+#include <fcntl.h>
 #include <readline/readline.h>
 #include <readline/history.h>
+#include <sys/wait.h>
+
+#define FD_LIMIT 1024
 
 #define TOKEN_WORD 0
 #define	TOKEN_PIPE 1
@@ -25,16 +30,14 @@ typedef struct s_cmd {
     char	**args;
     char	*infile;
     char	*outfile;
-    int		pipe_after;
+    int				*pipe;
+    int				fdin;
+    int				fdout;
 //  int		append; (to be implemented later)
 //  char	*heredoc_del; (to be implemented later)
+    struct s_cmd *prev;
     struct s_cmd *next;
 } t_cmd;
-
-typedef struct s_node {
-    t_cmd           *cmd;
-    struct s_node   *next;
-} t_node;
 
 int		main(int argc, char **argv);
 t_token *token_new(char *value, int type);
@@ -49,11 +52,15 @@ void	add_arg_to_cmd(t_cmd *cmd, char *arg);
 void    handle_input_redirection(t_cmd *current_cmd, t_token **tokens);
 void    handle_output_redirection(t_cmd *current_cmd, t_token **tokens);
 void    handle_word(t_cmd *current_cmd, t_token *tokens);
-void    handle_pipe(t_cmd **current_cmd);
+void    handle_pipe(t_cmd **current_cmd, t_token **tokens);
 t_cmd	*parse_tokens(t_token *tokens);
 void 	print_cmds(t_cmd *cmd);
 void	print_tokens(t_token *tokens);
-void	free_tokens(t_token *tokens);
-void	free_cmds(t_cmd *cmds);
+void    exit_exec(t_cmd **cmd_lst, char *fmt, ...);
+void    exit_parsing(t_cmd **cmd_lst, char *fmt, ...);
+t_cmd   *free_cmd(t_cmd **cmd);
+void    free_cmd_lst(t_cmd **cmd_lst);
+void    free_token_lst(t_token **tokens);
+void	flush_fds(void);
 
 #endif

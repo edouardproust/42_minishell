@@ -36,18 +36,15 @@ static void	print_error(char *fmt, va_list args)
  *
  * TODO (Ava) Update function signature (foo) + add the freeing logic in the function
  */
-void	exit_parsing(t_cmd **foo, char *fmt, ...)
+void	exit_parsing(t_cmd **cmd_lst, char *fmt, ...)
 {
 	va_list	args;
 
 	va_start(args, fmt);
 	print_error(fmt, args);
 	va_end(args);
-
-	// Add freeing logic here
-	// (add functions in free.c and in header if necessary)
-	(void)foo;
-
+	if (cmd_lst)
+		free_cmd_lst(cmd_lst);
 	exit(EXIT_FAILURE);
 }
 

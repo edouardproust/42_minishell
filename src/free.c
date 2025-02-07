@@ -9,6 +9,8 @@ t_cmd	*free_cmd(t_cmd **cmd)
 	t_cmd	*cur_cmd;
 	t_cmd	*nxt_cmd;
 
+	if (!cmd || !*cmd)
+		return (NULL);
 	cur_cmd = *cmd;
 	ft_free_split(&cur_cmd->args);
 	ft_free_ptrs(3, &cur_cmd->infile, &cur_cmd->outfile,
@@ -19,6 +21,26 @@ t_cmd	*free_cmd(t_cmd **cmd)
 }
 
 /*
+ * Frees all the tokens' value and structure in the token list.
+ */
+void	free_token_lst(t_token **tokens)
+{
+	t_token *cur_token;
+	t_token *nxt_token;
+
+	if (!tokens || !*tokens)
+		return ;
+	cur_token = *tokens;
+	while (cur_token)
+	{
+		nxt_token = cur_token->next;
+		ft_free_ptrs(2, &cur_token->value, &cur_token);
+		cur_token = nxt_token;
+	}
+	*tokens = NULL;
+}
+
+/*
  * Frees all the commands in the list (starting by 'cmd_list' node).
  */
 void	free_cmd_lst(t_cmd **cmd_lst)
@@ -26,12 +48,15 @@ void	free_cmd_lst(t_cmd **cmd_lst)
 	t_cmd	*cur_cmd;
 	t_cmd	*nxt_cmd;
 
+	if (!cmd_lst || !*cmd_lst)
+		return ;
 	cur_cmd = *cmd_lst;
 	while (cur_cmd)
 	{
 		nxt_cmd = free_cmd(&cur_cmd);
 		cur_cmd = nxt_cmd;
 	}
+	*cmd_lst = NULL;
 }
 
 /*

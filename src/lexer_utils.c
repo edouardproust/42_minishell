@@ -10,7 +10,7 @@ int	skip_quotes(char *input, int *index)
 		(*index)++;
 	if (!input[*index])
 	{
-		 //TD : error message
+		 exit_parsing(NULL, "unexpected EOF while looking for matching `%c'", quote);
 		 return (0);
 	}
 	return (1);

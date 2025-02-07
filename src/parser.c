@@ -43,6 +43,8 @@ t_cmd	*parse_tokens(t_token *tokens)
 	t_cmd	*cmd_list;
 	t_cmd	*current_cmd;
 
+	if (!tokens)
+		 exit_parsing(NULL, "syntax error: empty command");
 	cmd_list = cmd_new();
 	current_cmd = cmd_list;
 	while (tokens)
@@ -54,7 +56,7 @@ t_cmd	*parse_tokens(t_token *tokens)
 		else if (tokens->type == TOKEN_WORD)
 			handle_word(current_cmd, tokens);
 		else if (tokens->type == TOKEN_PIPE)
-			handle_pipe(&current_cmd);
+			handle_pipe(&current_cmd, &tokens);
 		tokens = tokens->next;
 	}
 	return (cmd_list);

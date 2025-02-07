@@ -30,8 +30,9 @@ int	main(int argc, char **argv)
 		cmds = parse_tokens(tokens);
 		printf("\n---- Parsed Commands ----\n");
 		print_cmds(cmds);
-		free_tokens(tokens);
-		free_cmds(cmds); 
+		free_token_lst(&tokens);
+		free_cmd_lst(&cmds);
+		free(input);
 	}
 	return (EXIT_SUCCESS);
 }
@@ -42,37 +43,6 @@ void	print_tokens(t_token *tokens)
 	{
 		printf("Token: '%s' (Type: %d)\n", tokens->value, tokens->type);
 		tokens = tokens->next;
-	}
-}
-
-void	free_tokens(t_token *tokens)
-{
-	t_token	*tmp;
-
-	while (tokens)
-	{
-		tmp = tokens;
-		tokens = tokens->next;
-		free(tmp->value);
-		free(tmp);
-	}
-}
-
-void	free_cmds(t_cmd *cmds)
-{
-	t_cmd	*tmp;
-
-	while (cmds)
-	{
-		tmp = cmds->next;
-		if (cmds->args)
-			free(cmds->args);
-		if (cmds->infile)
-			 free(cmds->infile);
-		if (cmds->outfile)
-			free(cmds->outfile);
-		free(cmds);
-		cmds = tmp;
 	}
 }
 
