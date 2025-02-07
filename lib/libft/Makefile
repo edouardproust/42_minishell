@@ -1,10 +1,12 @@
 NAME = libft.a
 
-SRCS = ft_atoi.c \
+SRCS = get_next_line.c \
+	ft_atoi.c \
 	ft_atol.c \
 	ft_bzero.c \
 	ft_calloc.c \
-	ft_error.c \
+	ft_exit.c \
+	ft_fprintf.c \
 	ft_free_ptrs.c \
 	ft_free_split.c \
 	ft_isalnum.c \
@@ -20,14 +22,14 @@ SRCS = ft_atoi.c \
 	ft_memcpy.c \
 	ft_memmove.c \
 	ft_memset.c \
-	ft_perror.c \
+	ft_pexit.c \
 	ft_print_char.c \
-	ft_printf.c \
 	ft_print_hexa.c \
 	ft_print_int.c \
 	ft_print_ptr.c \
 	ft_print_str.c \
 	ft_print_uint.c \
+	ft_printf.c \
 	ft_putchar_fd.c \
 	ft_putendl_fd.c \
 	ft_putnbr_fd.c \
@@ -48,7 +50,8 @@ SRCS = ft_atoi.c \
 	ft_substr.c \
 	ft_tolower.c \
 	ft_toupper.c \
-	get_next_line.c
+	ft_vfprintf.c \
+	ft_vprintf.c \
 
 SRCS_BONUS = ft_lstnew_bonus.c \
 	ft_lstadd_front_bonus.c \

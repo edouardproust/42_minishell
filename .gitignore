@@ -6,4 +6,5 @@ src/obj
 *.out
 *.swp
 *.swo
+.vscode
 test/outfile
