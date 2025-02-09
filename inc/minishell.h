@@ -78,10 +78,11 @@ void		flush_fds(void);
 /* Execute */
 void		execute_cmd_lst(t_cmd **cmd_lst, char **envp);
 char		*get_exec_path(char *arg, t_cmd **cmd_lst);
+void		run_in_child_process(t_builtin *builtin, t_cmd *cmd, char **envp,
+				t_cmd **cmd_lst);
 
 /* Executables */
-void		run_executable(t_builtin *builtin, t_cmd *cmd, char **envp,
-				t_cmd **cmd_lst);
+void	run_executable(t_cmd *cmd, char **envp, t_cmd **cmd_lst);
 
 /* Builtins */
 t_builtin	*get_builtin(char *progname);

@@ -13,6 +13,7 @@ C_FILES = debug.c \
 	main.c \
 	execute/execute.c \
 	execute/path.c \
+	execute/child_process.c \
 	execute/executables.c \
 	execute/builtins.c \
 	execute/builtins/cd.c \

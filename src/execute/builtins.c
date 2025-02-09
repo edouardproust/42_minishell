@@ -1,5 +1,10 @@
 #include "minishell.h"
 
+/*
+ * Retrieve the t_builtin for the given builtin name
+ * 
+ * Return: ptr to the matching t_builtin, NULL if no match
+ */
 t_builtin	*get_builtin(char *progname)
 {
 	static t_builtin	builtins[] = {
@@ -25,6 +30,13 @@ t_builtin	*get_builtin(char *progname)
 	return (NULL);
 }
 
+/*
+ * Run the given t_builtin.
+ *
+ * Exit on:
+ * - In parent proc (affects_state): called fn error
+ * - In child proc: exit 0 if called fn success, exit 1 if fn error
+ */
 void	run_builtin(t_builtin *builtin, char** args, t_cmd **cmd_lst)
 {
 	int	res;
