@@ -11,7 +11,7 @@ static void	setup_io(t_cmd *cmd, t_cmd **cmd_lst)
 	if (cmd->next)
 	{
 		if (pipe(cmd->pipe) == -1)
-			exit_exec(cmd_lst, "pipe");
+			exit_exec(EXIT_FAILURE, cmd_lst, "pipe");
 	}
 	if (cmd->prev)
 		cmd->fdin = cmd->prev->pipe[0];
@@ -19,7 +19,7 @@ static void	setup_io(t_cmd *cmd, t_cmd **cmd_lst)
 	{
 		cmd->fdin = open(cmd->infile, O_RDONLY);
 		if (cmd->fdin == -1)
-			exit_exec(cmd_lst, cmd->infile);
+			exit_exec(EXIT_FAILURE, cmd_lst, cmd->infile);
 	}
 	if (cmd->next)
 		cmd->fdout = cmd->pipe[1];
@@ -27,7 +27,7 @@ static void	setup_io(t_cmd *cmd, t_cmd **cmd_lst)
 	{
 		cmd->fdout = open(cmd->outfile, O_WRONLY | O_CREAT | O_TRUNC, 0644);
 		if (cmd->fdout == -1)
-			exit_exec(cmd_lst, cmd->outfile);
+			exit_exec(EXIT_FAILURE, cmd_lst, cmd->outfile);
 	}
 }
 
@@ -64,7 +64,7 @@ void	execute_cmd_lst(t_cmd **cmd_lst, char **envp)
 
 	cmd = *cmd_lst;
 	if (!cmd_lst || !*cmd_lst)
-		exit_exec(NULL, "Incorrect parsed command");
+		exit_exec(EXIT_FAILURE, NULL, "Incorrect parsed command");
 	while (cmd)
 	{
 		if (DEBUG)

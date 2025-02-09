@@ -3,7 +3,7 @@
 /*
  * Duplicates a file descriptor.
  *
- * Return: bool on success / failure
+ * Return: exit code (success or failure)
  */
 static int	duplicate_fd(int oldfd, int newfd)
 {
@@ -22,15 +22,15 @@ static int	duplicate_fd(int oldfd, int newfd)
  */
 static void	redirect_io(t_cmd *cmd)
 {
-	int	res;
+	int	exit_code;
 
-	res = EXIT_SUCCESS;
+	exit_code = EXIT_SUCCESS;
 	if (cmd->fdin != STDIN_FILENO)
-		res = duplicate_fd(cmd->fdin, STDIN_FILENO);
+		exit_code = duplicate_fd(cmd->fdin, STDIN_FILENO);
 	if (cmd->fdout != STDOUT_FILENO)
-		res = duplicate_fd(cmd->fdout, STDOUT_FILENO);
-	if (res != EXIT_SUCCESS)
-		exit(E_CMDNOTEXEC);
+		exit_code = duplicate_fd(cmd->fdout, STDOUT_FILENO);
+	if (exit_code != EXIT_SUCCESS)
+		exit_exec(exit_code, NULL, "dup2"); // TODO: test exit
 }
 
 /*
@@ -46,7 +46,7 @@ void	run_in_child_process(t_builtin *builtin, t_cmd *cmd, char **envp,
 
 	pid = fork();
 	if (pid < 0)
-		exit_exec(cmd_lst, "fork");
+		exit_exec(EXIT_FAILURE, cmd_lst, "fork");
 	if (pid == 0)
 	{
 		redirect_io(cmd);
@@ -55,6 +55,7 @@ void	run_in_child_process(t_builtin *builtin, t_cmd *cmd, char **envp,
 		run_executable(cmd, envp, cmd_lst);
 	}
 	waitpid(pid, &status, 0);
-	if (WIFEXITED(status) && WEXITSTATUS(status) > E_CMDNOTEXEC)
-		exit_exec(cmd_lst, NULL);
+	ft_fprintf(STDERR_FILENO, "[%d]\n", WEXITSTATUS(status)); // TODO: debug to be removed
+	if (WIFEXITED(status) && WEXITSTATUS(status) >= E_CMDNOTEXEC)
+		exit_exec(WEXITSTATUS(status), cmd_lst, NULL); // TODO: update exit code dynamically
 }

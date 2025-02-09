@@ -39,15 +39,15 @@ t_builtin	*get_builtin(char *progname)
  */
 void	run_builtin(t_builtin *builtin, char** args, t_cmd **cmd_lst)
 {
-	int	res;
+	int	exit_code;
 
-	res = builtin->fn(args);
+	exit_code = builtin->fn(args);
 	if (!builtin->affects_state)
 	{
-		if (res != EXIT_SUCCESS)
-			exit_exec(cmd_lst, builtin->name);
+		if (exit_code != EXIT_SUCCESS)
+			exit_exec(exit_code, cmd_lst, builtin->name);
 		exit(EXIT_SUCCESS);
 	}
-	else if (res != EXIT_SUCCESS)
-		exit_exec(cmd_lst, builtin->name);
+	else if (exit_code != EXIT_SUCCESS)
+		exit_exec(exit_code, cmd_lst, builtin->name);
 }

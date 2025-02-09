@@ -20,9 +20,11 @@
 # define FD_LIMIT 1024
 
 /* Exit codes */
+# define E_CMDWRONGARG 2
 # define E_CMDNOTEXEC 126
 # define E_CMDNOTFOUND 127
-# define E_SIG 128
+# define E_SIGBASE 128
+# define E_ERRMAX 255
 
 /****************************************/
 /* Enums, Typedefs and Structs          */
@@ -68,7 +70,8 @@ typedef struct s_builtin
 
 /* Error handling and exit */
 void		exit_parsing(t_cmd **foo, char *fmt, ...); // TODO (Ava) Edit function in exit.c
-void		exit_exec(t_cmd **head, char *fmt, ...);
+void		exit_exec(int exit_code, t_cmd **head, char *fmt, ...);
+void		set_errno(int err_no);
 
 /* Memory */
 t_cmd		*free_cmd(t_cmd **cmd);

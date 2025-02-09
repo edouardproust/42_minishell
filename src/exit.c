@@ -56,9 +56,9 @@ void	exit_parsing(t_cmd **foo, char *fmt, ...)
  * - prints an error message
  * - frees allocated data
  * - close any file descriptor above 2
- * - exits the program with error code EXIT_FAILURE
+ * - exits the program with the given exit_code
  */
-void	exit_exec(t_cmd **cmd_lst, char *fmt, ...)
+void	exit_exec(int exit_code, t_cmd **cmd_lst, char *fmt, ...)
 {
 	va_list	args;
 
@@ -66,5 +66,13 @@ void	exit_exec(t_cmd **cmd_lst, char *fmt, ...)
 	print_error(fmt, args);
 	free_cmd_lst(cmd_lst);
 	flush_fds();
-	exit(EXIT_FAILURE);
+	exit(exit_code);
+}
+
+void	set_errno(int err_no)
+{
+	if (err_no > 0)
+		errno = err_no;
+	else if (DEBUG)
+		ft_fprintf(STDERR_FILENO, "Warning: set_errno: wrong value\n");
 }

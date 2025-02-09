@@ -6,10 +6,7 @@ static char	**split_env_path(void)
 
 	path_env = getenv("PATH");
 	if (path_env == NULL)
-	{
-		errno = ENOENT;
-		return (NULL);
-	}
+		return (set_errno(ENOENT), NULL);
 	return (ft_split(path_env, ':'));
 }
 
@@ -52,10 +49,7 @@ static char	*find_abspath(char **dirnames, char *progname)
 	{
 		abspath_tmp = join_abspath(dirnames[i], progname, dirnames);
 		if (abspath_tmp == NULL)
-		{
-			errno = ENOENT; // TODO adapt to errcode in bash
-			return (NULL);
-		}
+			return (set_errno(ENOENT), NULL); // TODO adapt to errcode in bash
 		if (access(abspath_tmp, X_OK) == 0)
 			return (abspath_tmp);
 		ft_free_ptrs(1, &abspath_tmp);
@@ -74,17 +68,17 @@ char	*get_exec_path(char *progname, t_cmd **cmd_lst)
 	{
 		abspath = check_duplicate_abspath(progname);
 		if (abspath == NULL)
-			exit_exec(cmd_lst, progname);
+			exit_exec(E_CMDNOTEXEC, cmd_lst, progname);
 	}
 	else
 	{
 		dirnames = split_env_path();
 		if (dirnames == NULL)
-			exit_exec(cmd_lst, progname);
+			exit_exec(E_CMDNOTFOUND, cmd_lst, progname);
 		abspath = find_abspath(dirnames, progname);
 		ft_free_split(&dirnames);
 		if (abspath == NULL)
-			exit_exec(cmd_lst, progname);
+			exit_exec(E_CMDNOTFOUND, cmd_lst, progname);
 	}
 	return (abspath);
 }
