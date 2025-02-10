@@ -14,9 +14,6 @@
 /* Macros                               */
 /****************************************/
 
-# ifndef DEBUG
-#  define DEBUG 0
-# endif
 # define FD_LIMIT 1024
 
 /* Exit codes */
@@ -53,6 +50,7 @@ typedef struct s_cmd
 	int				*pipe;
 	int				fdin;
 	int				fdout;
+	pid_t			pid;
 	struct s_cmd	*prev;
 	struct s_cmd	*next;
 }	t_cmd;
@@ -69,6 +67,7 @@ typedef struct s_builtin
 /****************************************/
 
 /* Error handling and exit */
+void		print_error(char *fmt, ...);
 void		exit_parsing(t_cmd **foo, char *fmt, ...); // TODO (Ava) Edit function in exit.c
 void		exit_exec(int exit_code, t_cmd **head, char *fmt, ...);
 void		set_errno(int err_no);
@@ -81,7 +80,7 @@ void		flush_fds(void);
 /* Execute */
 void		execute_cmd_lst(t_cmd **cmd_lst, char **envp);
 char		*get_exec_path(char *arg, t_cmd **cmd_lst);
-void		run_in_child_process(t_builtin *builtin, t_cmd *cmd, char **envp,
+pid_t		run_in_child_process(t_builtin *builtin, t_cmd *cmd, char **envp,
 				t_cmd **cmd_lst);
 
 /* Executables */
@@ -89,7 +88,8 @@ void	run_executable(t_cmd *cmd, char **envp, t_cmd **cmd_lst);
 
 /* Builtins */
 t_builtin	*get_builtin(char *progname);
-void		run_builtin(t_builtin *builtin, char **args, t_cmd **cmd_lst);
+void		run_builtin(int in_child_process, t_builtin *builtin, char **args,
+				t_cmd **cmd_lst);
 int			do_echo(char **args);
 int			do_cd(char **args);
 int			do_pwd(char **args);
@@ -97,12 +97,5 @@ int			do_export(char **args);
 int			do_unset(char **args);
 int			do_env(char **args);
 int			do_exit(char **args);
-
-/* Debug */
-t_cmd		*create_cmd_lst(void);
-void		debug_cmd_lst(t_cmd *cmd_lst);
-void		debug_cmd(t_cmd *cmd, char *title);
-void		debug_fd(char *label, int fd);
-void		debug_read_fd(char *label, int fd);
 
 #endif /* MINISHELL_H */

@@ -4,17 +4,33 @@
 #include "minishell.h"
 #include <sys/stat.h>
 
+int	g_logfd = -1;
+
 static t_cmd *cmd_new_addback(char *bash_cmd, char *infile, char *outfile, t_cmd *prev_cmd);
 
 t_cmd	*create_cmd_lst(void)
 {
-	//t_cmd *cmd0 = cmd_new_addback("tail -n +4", "test/infile", NULL, NULL);
-	t_cmd *cmd0 = cmd_new_addback("ls sdfg", "test/infile", NULL, NULL);
+	//t_cmd *cmd0 = cmd_new_addback("echo -n -n test -n dfg", NULL, "/dev/stdin", NULL);
+	t_cmd *cmd0 = cmd_new_addback("pwd", NULL, NULL, NULL);
+	cmd_new_addback("uniq -c", NULL, NULL, cmd0);
+	/*
+	t_cmd *cmd0 = cmd_new_addback("tail -n +4", "test/infile", NULL, NULL);
+	t_cmd *cmd1 = cmd_new_addback("grep a", NULL, NULL, cmd0);
+	t_cmd *cmd2 = cmd_new_addback("echo \"hello\"", NULL, NULL, cmd1);
+	t_cmd *cmd3 = cmd_new_addback("sort", NULL, NULL, cmd2);
+	t_cmd *cmd4 = cmd_new_addback("pwd", NULL, NULL, cmd3);
+	t_cmd *cmd5 = cmd_new_addback("uniq -c", NULL, NULL, cmd4);
+	t_cmd *cmd6 = cmd_new_addback("sort -nr", NULL, NULL, cmd5);
+	cmd_new_addback("head -n 3", NULL, "test/outfile", cmd6);
+	*//*
+	t_cmd *cmd0 = cmd_new_addback("tail -n +4", "test/infile", NULL, NULL);
 	t_cmd *cmd1 = cmd_new_addback("grep a", NULL, NULL, cmd0);
 	t_cmd *cmd2 = cmd_new_addback("sort", NULL, NULL, cmd1);
-	t_cmd *cmd3 = cmd_new_addback("uniq -c", NULL, NULL, cmd2);
-	t_cmd *cmd4 = cmd_new_addback("sort -nr", NULL, NULL, cmd3); 
-	cmd_new_addback("head -n 3", NULL, "test/outfile", cmd4);
+	t_cmd *cmd3 = cmd_new_addback("hello mamn 'test several words' bobo maison", NULL, NULL, cmd2);
+	t_cmd *cmd4 = cmd_new_addback("uniq -c", NULL, NULL, cmd3);
+	t_cmd *cmd5 = cmd_new_addback("sort -nr", NULL, NULL, cmd4);
+	cmd_new_addback("head -n 3", NULL, "test/outfile", cmd5);
+	*/
 	return (cmd0);
 }
 
@@ -29,6 +45,7 @@ static t_cmd *cmd_new_addback(char *bash_cmd, char *infile, char *outfile, t_cmd
 	cmd->fdout = STDOUT_FILENO;
 	cmd->prev = prev_cmd;
 	cmd->next = NULL;
+	cmd->pid = 0;
 
 	cmd->args = ft_split(bash_cmd, ' ');
 	if (infile != NULL)
@@ -44,9 +61,21 @@ static t_cmd *cmd_new_addback(char *bash_cmd, char *infile, char *outfile, t_cmd
 	return (cmd);
 }
 
+void	open_logfile(char *filepath)
+{
+	int tmp_fd;
+	
+	tmp_fd = open(filepath, O_WRONLY | O_CREAT | O_TRUNC, 0644);
+    if (tmp_fd != -1)
+		close(tmp_fd);
+	g_logfd = open(filepath, O_WRONLY | O_APPEND, 0644);
+	if (g_logfd == -1)
+		ft_pexit("DEBUG: Wrong logfile path");
+}
+
 void	debug_cmd(t_cmd *cmd, char *label)
 {
-	int	o = STDERR_FILENO;
+	int	o = g_logfd;
 	
 	if (label == NULL)
 		ft_fprintf(o, "╭─ cmd ─────────────────────────╮\n");
@@ -72,6 +101,7 @@ void	debug_cmd(t_cmd *cmd, char *label)
 	ft_fprintf(o, "%s", after);
 	ft_fprintf(o, "%sfdin: %d%s", before, cmd->fdin, after);
 	ft_fprintf(o, "%sfdout: %d%s", before, cmd->fdout, after);
+	ft_fprintf(o, "%spid: %d%s", before, cmd->pid, after);
 	if (label == NULL)
 		ft_fprintf(o, "╰───────────────────────────────╯\n");
 	else
@@ -107,8 +137,13 @@ void	debug_cmd_lst(t_cmd *cmd_lst)
 	}	
 }
 
+void	debug_process(int pid, int status)
+{
+	ft_fprintf(g_logfd, "[Process: pid=%d, status=%d]\n", pid, WEXITSTATUS(status));
+}
+
 void debug_fd(char *label, int fd) {
-	int	o = STDERR_FILENO;
+	int	o = g_logfd;
 	int flags = fcntl(fd, F_GETFL);
 
 	if (flags == -1) {
@@ -122,7 +157,7 @@ void debug_read_fd(char *label, int fd)
 {
     char buffer[1024];
     int bytes_read;
-    int o = STDERR_FILENO;
+    int o = g_logfd;
 
     ft_fprintf(o, "▶ ");
     if (label != NULL)

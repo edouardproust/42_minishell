@@ -49,7 +49,10 @@ static char	*find_abspath(char **dirnames, char *progname)
 	{
 		abspath_tmp = join_abspath(dirnames[i], progname, dirnames);
 		if (abspath_tmp == NULL)
+		{
+			ft_free_ptrs(1, &abspath_tmp);
 			return (set_errno(ENOENT), NULL); // TODO adapt to errcode in bash
+		}
 		if (access(abspath_tmp, X_OK) == 0)
 			return (abspath_tmp);
 		ft_free_ptrs(1, &abspath_tmp);

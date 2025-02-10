@@ -11,8 +11,7 @@ t_cmd	*free_cmd(t_cmd **cmd)
 
 	cur_cmd = *cmd;
 	ft_free_split(&cur_cmd->args);
-	ft_free_ptrs(3, &cur_cmd->infile, &cur_cmd->outfile,
-		&cur_cmd->pipe);
+	ft_free_ptrs(3, &cur_cmd->infile, &cur_cmd->outfile, &cur_cmd->pipe);
 	nxt_cmd = cur_cmd->next;
 	ft_free_ptrs(1, &cur_cmd);
 	return (nxt_cmd);
@@ -24,16 +23,13 @@ t_cmd	*free_cmd(t_cmd **cmd)
 void	free_cmd_lst(t_cmd **cmd_lst)
 {
 	t_cmd	*cur_cmd;
-	t_cmd	*nxt_cmd;
 
 	if (!cmd_lst || !*cmd_lst)
 		return ;
 	cur_cmd = *cmd_lst;
 	while (cur_cmd)
-	{
-		nxt_cmd = free_cmd(&cur_cmd);
-		cur_cmd = nxt_cmd;
-	}
+		cur_cmd = free_cmd(&cur_cmd);
+	*cmd_lst = NULL;
 }
 
 /*

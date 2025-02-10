@@ -1,7 +1,8 @@
 #include "minishell.h"
+# include "debug.h" // TODO: remove
 
 /*
- * Updates cmd->fdin and cmd->fdout if the current t_cmd contains an infile
+ * Update cmd->fdin and cmd->fdout if the current t_cmd contains an infile
  * or an outfile.
  * 
  * Exit on: pipe failure, open failure
@@ -31,14 +32,19 @@ static void	setup_io(t_cmd *cmd, t_cmd **cmd_lst)
 	}
 }
 
-/*
- * Closes the uncessary file descriptors for the current t_cmd:
- * - cmd->fdin if there is an infile
- * - cmd->outfile if there is an outfile
- * - pipe's write end if we created a pipe in this cmd
- * - pipe's read end if we created a pipe in the previous cmd
+/**
+ * Closes unnecessary file descriptors for the current command in the parent process.
  * 
- * Exit on: none
+ * This ensures that the reference count for each file descriptor is decremented,
+ * allowing EOF to be triggered when the child process closes its end of the pipe.
+ * 
+ * Closes:
+ * - cmd->fdin if an input file is specified
+ * - cmd->fdout if an output file is specified
+ * - The write end of the pipe if created for this command
+ * - The read end of the pipe if created for the previous command
+ * 
+ * Exit on: None
  */
 static void	cleanup_io(t_cmd *cmd)
 {
@@ -50,6 +56,31 @@ static void	cleanup_io(t_cmd *cmd)
 		close(cmd->pipe[1]);
 	if (cmd->prev)
 		close(cmd->prev->pipe[0]);
+}
+
+/*
+ * Wait for all processes to finish and handle exit codes. 
+ *
+ * Exit on: a process exits with code > 125
+ */
+static void	wait_for_processes(t_cmd **cmd_lst)
+{
+	t_cmd	*cmd;
+	int		status;
+	
+	cmd = *cmd_lst;
+	while (cmd)
+	{
+		if (cmd->pid > 0)
+		{
+			waitpid(cmd->pid, &status, 0);
+			if (DEBUG) // DEBUG
+				debug_process(cmd->pid, status);
+			if (WIFEXITED(status) && WEXITSTATUS(status) >= E_CMDNOTEXEC)
+				exit_exec(WEXITSTATUS(status), cmd_lst, NULL);
+		}
+		cmd = cmd->next;
+	}
 }
 
 /*
@@ -67,15 +98,16 @@ void	execute_cmd_lst(t_cmd **cmd_lst, char **envp)
 		exit_exec(EXIT_FAILURE, NULL, "Incorrect parsed command");
 	while (cmd)
 	{
-		if (DEBUG)
-			debug_cmd(cmd, cmd->args[0]); // DEBUG
 		setup_io(cmd, cmd_lst);
 		builtin = get_builtin(cmd->args[0]);
 		if (builtin && builtin->affects_state)
-			run_builtin(builtin, cmd->args, cmd_lst);
+			run_builtin(0, builtin, cmd->args, cmd_lst);
 		else
-			run_in_child_process(builtin, cmd, envp, cmd_lst);
+			cmd->pid = run_in_child_process(builtin, cmd, envp, cmd_lst);
+		if (DEBUG) // DEBUG
+			debug_cmd(cmd, cmd->args[0]);
 		cleanup_io(cmd);
 		cmd = cmd->next;
 	}
+	wait_for_processes(cmd_lst);
 }

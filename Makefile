@@ -11,9 +11,9 @@ C_FILES = debug.c \
 	free.c \
 	exit.c \
 	main.c \
-	execute/execute.c \
-	execute/path.c \
+	execute/parent_process.c \
 	execute/child_process.c \
+	execute/path.c \
 	execute/executables.c \
 	execute/builtins.c \
 	execute/builtins/cd.c \
@@ -42,7 +42,8 @@ OBJS = $(addprefix $(O_DIR)/,$(C_FILES:.c=.o))
 
 H_DIR = inc
 
-H_FILES = minishell.h
+H_FILES = debug.h \
+	minishell.h
 
 HEADERS = $(addprefix $(H_DIR)/,$(H_FILES))
 
@@ -100,12 +101,8 @@ re: fclean all
 libft:
 	$(MAKE) -C $(LIBFT_DIR)
 
-debug: CFLAGS += -DDEBUG -g
-debug: re
-
-
 # ************************************
 # Phony                              *
 # ************************************
 
-.PHONY: all clean fclean re libft debug
+.PHONY: all clean fclean re libft

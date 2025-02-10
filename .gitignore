@@ -8,3 +8,4 @@ src/obj
 *.swo
 .vscode
 test/outfile
+test/log

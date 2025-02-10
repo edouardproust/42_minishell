@@ -8,7 +8,7 @@
  * If 'errno' is on 'Success' (code 0), it is not printed,
  * else ': ' followed by the error string is printed
  */
-static void	print_error(char *fmt, va_list args)
+static void	print_error_va(char *fmt, va_list args)
 {
 	int		fdout;
 	int		chars_printed;
@@ -29,6 +29,17 @@ static void	print_error(char *fmt, va_list args)
 	va_end(args);
 }
 
+/*
+ * Wrapper for print_error_va that accepts a variadic argument.
+ */
+void	print_error(char *fmt, ...)
+{
+	va_list	args;
+
+	va_start(args, fmt);
+	print_error_va(fmt, args);
+}
+
 /* 
  * If an error occures during parsing:
  * - prints an error message
@@ -42,7 +53,7 @@ void	exit_parsing(t_cmd **foo, char *fmt, ...)
 	va_list	args;
 
 	va_start(args, fmt);
-	print_error(fmt, args);
+	print_error_va(fmt, args);
 
 	// Add freeing logic here
 	// (add functions in free.c and in header if necessary)
@@ -63,7 +74,7 @@ void	exit_exec(int exit_code, t_cmd **cmd_lst, char *fmt, ...)
 	va_list	args;
 
 	va_start(args, fmt);
-	print_error(fmt, args);
+	print_error_va(fmt, args);
 	free_cmd_lst(cmd_lst);
 	flush_fds();
 	exit(exit_code);
@@ -73,6 +84,4 @@ void	set_errno(int err_no)
 {
 	if (err_no > 0)
 		errno = err_no;
-	else if (DEBUG)
-		ft_fprintf(STDERR_FILENO, "Warning: set_errno: wrong value\n");
 }

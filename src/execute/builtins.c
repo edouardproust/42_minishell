@@ -33,21 +33,13 @@ t_builtin	*get_builtin(char *progname)
 /*
  * Run the given t_builtin.
  *
- * Exit on:
- * - In parent proc (affects_state): called fn error
- * - In child proc: exit 0 if called fn success, exit 1 if fn error
+ * Exit on: ran in chaild process, callback failure
  */
-void	run_builtin(t_builtin *builtin, char** args, t_cmd **cmd_lst)
+void	run_builtin(int in_child_proc, t_builtin *builtin, char** args, t_cmd **cmd_lst)
 {
 	int	exit_code;
 
 	exit_code = builtin->fn(args);
-	if (!builtin->affects_state)
-	{
-		if (exit_code != EXIT_SUCCESS)
-			exit_exec(exit_code, cmd_lst, builtin->name);
-		exit(EXIT_SUCCESS);
-	}
-	else if (exit_code != EXIT_SUCCESS)
-		exit_exec(exit_code, cmd_lst, builtin->name);
+	if (in_child_proc || exit_code != EXIT_SUCCESS)
+		exit_exec(exit_code, cmd_lst, NULL);
 }
