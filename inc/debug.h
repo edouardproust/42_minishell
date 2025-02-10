@@ -14,5 +14,6 @@ void		open_logfile(char *filepath);
 void		debug_fd(char *label, int fd);
 void		debug_process(int pid, int status);
 void		debug_read_fd(char *label, int fd);
+void		debug_envvars(t_envvar *lst);
 
 #endif

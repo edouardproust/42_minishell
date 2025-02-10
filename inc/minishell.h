@@ -35,6 +35,14 @@ enum e_token
 	TOKEN_REDIR_OUT
 };
 
+typedef struct s_envvar
+{
+	char*			name;
+	char*			value;
+	struct s_envvar	*prev;
+	struct s_envvar	*next;
+}	t_envvar;
+
 typedef struct s_token
 {
 	char			*value;
@@ -67,15 +75,21 @@ typedef struct s_builtin
 /****************************************/
 
 /* Error handling and exit */
-void		print_error(char *fmt, ...);
 void		exit_parsing(t_cmd **foo, char *fmt, ...); // TODO (Ava) Edit function in exit.c
 void		exit_exec(int exit_code, t_cmd **head, char *fmt, ...);
 void		set_errno(int err_no);
+int			builtin_error(char *err_msg, ...);
 
 /* Memory */
 t_cmd		*free_cmd(t_cmd **cmd);
 void		free_cmd_lst(t_cmd **cmd_lst);
 void		flush_fds(void);
+
+/* Env */
+t_envvar	*init_envvars(char **envp);
+void		envvar_addone(t_envvar **lst, t_envvar *new);
+void		envvar_removeone(t_envvar **lst, t_envvar *node);
+void		envvar_updateone(t_envvar **lst, t_envvar *node);
 
 /* Execute */
 void		execute_cmd_lst(t_cmd **cmd_lst, char **envp);
@@ -84,7 +98,7 @@ pid_t		run_in_child_process(t_builtin *builtin, t_cmd *cmd, char **envp,
 				t_cmd **cmd_lst);
 
 /* Executables */
-void	run_executable(t_cmd *cmd, char **envp, t_cmd **cmd_lst);
+void		run_executable(t_cmd *cmd, char **envp, t_cmd **cmd_lst);
 
 /* Builtins */
 t_builtin	*get_builtin(char *progname);

@@ -11,9 +11,11 @@ C_FILES = debug.c \
 	free.c \
 	exit.c \
 	main.c \
+	env/init.c \
+	env/ops.c \
+	env/path.c \
 	execute/parent_process.c \
 	execute/child_process.c \
-	execute/path.c \
 	execute/executables.c \
 	execute/builtins.c \
 	execute/builtins/cd.c \

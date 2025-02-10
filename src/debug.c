@@ -10,9 +10,13 @@ static t_cmd *cmd_new_addback(char *bash_cmd, char *infile, char *outfile, t_cmd
 
 t_cmd	*create_cmd_lst(void)
 {
-	t_cmd *cmd0 = cmd_new_addback("echo -n -n test -n dfg", NULL, "/dev/stdin", NULL);
+	t_cmd *cmd0 = cmd_new_addback("cd /test hello", NULL, NULL, NULL);
+	t_cmd *cmd1 = cmd_new_addback("pwd", NULL, NULL, cmd0);
+	cmd_new_addback("echo last", NULL, NULL, cmd1);
+	//cmd_new_addback("pwd", NULL, NULL, cmd1);
+	//t_cmd *cmd0 = cmd_new_addback("echo -n -n test -n dfg", NULL, "/dev/stdin", NULL);
 	//t_cmd *cmd0 = cmd_new_addback("pwd", NULL, NULL, NULL);
-	cmd_new_addback("uniq -c", NULL, NULL, cmd0);
+	//cmd_new_addback("uniq -c", NULL, NULL, cmd0);
 	/*
 	t_cmd *cmd0 = cmd_new_addback("tail -n +4", "test/infile", NULL, NULL);
 	t_cmd *cmd1 = cmd_new_addback("grep a", NULL, NULL, cmd0);
@@ -190,4 +194,18 @@ void debug_read_fd(char *label, int fd)
     }
 
     close(fd_copy);
+}
+
+void	debug_envvars(t_envvar *lst)
+{
+	int	fd = STDERR_FILENO;
+	ft_fprintf(fd, "╭────────────────────────────────╮\n");
+	ft_fprintf(fd, "│ env. variables                 │\n");
+	ft_fprintf(fd, "╰────────────────────────────────╯\n");
+	while (lst)
+	{
+		ft_fprintf(fd, "'%s': '%s'\n", lst->name, lst->value);
+		lst = lst->next;
+	}
+	ft_fprintf(fd, "────────────────────────────────────\n\n");
 }

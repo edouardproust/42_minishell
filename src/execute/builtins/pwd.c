@@ -13,11 +13,11 @@ int	do_pwd(char **args)
 	(void)args;
 	path = getcwd(NULL, 0);
 	if (!path)
-		return (print_error("pwd: getcwd"), EXIT_FAILURE);
+		return (builtin_error("pwd: getcwd"));
 	if (ft_printf("%s\n", path) < 0)
 	{
 		ft_free_ptrs(1, &path);
-		return (print_error("pwd: write error"), EXIT_FAILURE);
+		return (builtin_error("pwd: write error"));
 	}
 	ft_free_ptrs(1, &path);
 	return (EXIT_SUCCESS);

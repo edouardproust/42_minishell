@@ -3,14 +3,18 @@
 
 int	main(int ac, char **av, char **envp)
 {
-	t_cmd *cmd_lst;
+	t_envvar	*env;
+	t_cmd		*cmd_lst;
 
 	(void)av;
 	cmd_lst = NULL;
 	if (ac > 1)
 		return (EXIT_FAILURE); // TODO (Ed) Deal with non-interactive mode
+	env = init_envvars(envp);
+	//if (!env) TODO:
 	if (DEBUG) // DEBUG
 	{
+		debug_envvars(env);
 		open_logfile("test/log");
 		cmd_lst = create_cmd_lst();
 	}
