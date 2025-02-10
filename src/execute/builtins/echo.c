@@ -8,9 +8,11 @@
  */
 int	do_echo(char **args)
 {
-	int	n_flag;
-	int	i;
+	int		n_flag;
+	int		i;
+	char	*err_msg;
 
+	err_msg = "echo: write error";
 	n_flag = 0;
 	i = 1;
 	if (args[1] && ft_strncmp(args[1], "-n", 3) == 0)
@@ -22,12 +24,15 @@ int	do_echo(char **args)
 		i++;
 	while (args[i])
 	{
-		ft_printf("%s", args[i]);
+		if (ft_printf("%s", args[i]) < 0)
+			return (print_error(err_msg), EXIT_FAILURE);
 		if (args[i + 1])
-			ft_printf(" ");
+			if (ft_printf(" ") < 0)
+				return (print_error(err_msg), EXIT_FAILURE);
 		i++;
 	}
 	if (!n_flag)
-		ft_fprintf(STDOUT_FILENO, "\n");
+		if (ft_printf("\n") < 0)
+			return (print_error(err_msg), EXIT_FAILURE);
 	return (EXIT_SUCCESS);
 }

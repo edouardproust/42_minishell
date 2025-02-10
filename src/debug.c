@@ -10,8 +10,8 @@ static t_cmd *cmd_new_addback(char *bash_cmd, char *infile, char *outfile, t_cmd
 
 t_cmd	*create_cmd_lst(void)
 {
-	//t_cmd *cmd0 = cmd_new_addback("echo -n -n test -n dfg", NULL, "/dev/stdin", NULL);
-	t_cmd *cmd0 = cmd_new_addback("pwd", NULL, NULL, NULL);
+	t_cmd *cmd0 = cmd_new_addback("echo -n -n test -n dfg", NULL, "/dev/stdin", NULL);
+	//t_cmd *cmd0 = cmd_new_addback("pwd", NULL, NULL, NULL);
 	cmd_new_addback("uniq -c", NULL, NULL, cmd0);
 	/*
 	t_cmd *cmd0 = cmd_new_addback("tail -n +4", "test/infile", NULL, NULL);
