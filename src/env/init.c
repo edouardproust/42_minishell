@@ -50,7 +50,7 @@ t_envvar	*init_envvars(char **envp)
     while (*envp)
     {
 		node = envvar_new(*envp++);
-		envvar_addone(&lst, node); //TODO: check if failure?
+		envvar_addoneback(&lst, node); //TODO: check if failure?
     }
 	return (lst);
 }

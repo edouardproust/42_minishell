@@ -2,7 +2,7 @@
 
 /*
  * Retrieve the t_builtin for the given builtin name
- * 
+ *
  * Return: ptr to the matching t_builtin, NULL if no match
  */
 t_builtin	*get_builtin(char *progname)
@@ -16,14 +16,16 @@ t_builtin	*get_builtin(char *progname)
 		{"env", do_env, 0},
 		{"exit", do_exit, 1}
 	};
+	{">>", TOKEN_APPEND, handle_append, ...}
 	size_t				len;
 	size_t				i;
 
 	len = sizeof(builtins) / sizeof(builtins[0]);
 	i = 0;
+	// TODO: name_len = ft_strlen(progname)
 	while (i < len)
 	{
-		if (ft_strncmp(builtins[i].name, progname, ft_strlen(progname)) == 0)
+		if (ft_strncmp(builtins[i].name, progname, ft_strlen(progname)) == 0) // TODO: update above
 			return (&builtins[i]);
 		i++;
 	}

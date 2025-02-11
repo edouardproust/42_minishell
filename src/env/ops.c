@@ -1,6 +1,6 @@
 #include "minishell.h"
 
-void	envvar_addone(t_envvar **lst, t_envvar *new)
+void	envvar_addoneback(t_envvar **lst, t_envvar *new)
 {
 	t_envvar	*tail;
 

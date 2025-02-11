@@ -9,7 +9,7 @@ int	main(int ac, char **av, char **envp)
 	(void)av;
 	cmd_lst = NULL;
 	if (ac > 1)
-		return (EXIT_FAILURE); // TODO (Ed) Deal with non-interactive mode
+		return (EXIT_FAILURE); // TODO: (Ed) Deal with non-interactive mode
 	env = init_envvars(envp);
 	//if (!env) TODO:
 	if (DEBUG) // DEBUG
@@ -19,7 +19,7 @@ int	main(int ac, char **av, char **envp)
 		cmd_lst = create_cmd_lst();
 	}
 	else
-		ft_printf("[TODO: Parsing]\n"); // TODO	
+		ft_printf("[TODO: Parsing]\n"); // TODO:
 	execute_cmd_lst(&cmd_lst, envp);
 	free_cmd_lst(&cmd_lst);
 	if (DEBUG) // DEBUG
