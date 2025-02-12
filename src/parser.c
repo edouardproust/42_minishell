@@ -43,6 +43,8 @@ t_cmd	*parse_tokens(t_token *tokens)
 	t_cmd	*cmd_list;
 	t_cmd	*current_cmd;
 
+	if (!tokens)
+		exit_parsing(NULL, "syntax error: empty command");
 	cmd_list = cmd_new();
 	current_cmd = cmd_list;
 	while (tokens)

@@ -22,8 +22,8 @@ int	get_token_type(char *input, int i)
 	{
 		if (input[i + 1] == '<')
 			return (TOKEN_HEREDOC);
-		return (TOKEN_REDIR_IN);
 	}
+		return (TOKEN_REDIR_IN);
 	if (input[i] == '>')
 	{
 		if (input[i + 1] == '>')
@@ -36,12 +36,14 @@ int	get_token_type(char *input, int i)
 t_token	*create_word_token(char *input, int *index)
 {
 	int	start;
+	char	*word;
 
 	start = *index;
 	while (input[*index] && input[*index] != ' ' &&
 			input[*index] != '|' && input[*index] != '<' && input[*index] != '>')
 		(*index)++;
-	return token_new(ft_substr(input, start, *index - start), TOKEN_WORD);
+	word = ft_substr(input, start, *index - start);
+	return (token_new(word, TOKEN_WORD));
 }
 //adds a new token to the list
 void 	token_addback(t_token **tokens, t_token *new)
@@ -62,6 +64,7 @@ void 	token_addback(t_token **tokens, t_token *new)
 t_token	*tokenizer(char *input)
 {
 	t_token	*tokens;
+	t_token	*new_tokens;
 	int	i;
 
 	tokens  = NULL;
@@ -71,10 +74,17 @@ t_token	*tokenizer(char *input)
 		while (input[i] == ' ')
 			i++;
 		if (input[i] == '|' || input[i] == '<' || input[i] == '>')
+		{
 			token_addback(&tokens, token_new(ft_substr(input, i, 1), get_token_type(input, i)));
+			i++;
+		}
 		else
-			token_addback(&tokens, create_word_token(input, &i));
-		i++;
+		{
+			new_token = create_word_token(input, &i);
+			if (!new_token)
+				return (NULL):
+			token_addback(&tokens, new_token);
+		}
 	}
 	return (tokens);
 }
