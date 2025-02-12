@@ -1,4 +1,4 @@
-fndef MINISHELL_H
+#ifndef MINISHELL_H
 # define MINISHELL_H
 
 # include "../lib/libft/libft.h"
@@ -41,6 +41,7 @@ typedef struct s_cmd {
 
 int		main(int argc, char **argv);
 t_token *token_new(char *value, int type);
+int     is_word_char(char c);
 int		get_token_type(char *input, int i);
 t_token *create_word_token(char *input, int *index);
 char    *remove_quotes(char *str);

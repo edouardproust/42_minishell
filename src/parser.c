@@ -56,7 +56,7 @@ t_cmd	*parse_tokens(t_token *tokens)
 		else if (tokens->type == TOKEN_WORD)
 			handle_word(current_cmd, tokens);
 		else if (tokens->type == TOKEN_PIPE)
-			handle_pipe(&current_cmd);
+			handle_pipe(&current_cmd, &tokens);
 		tokens = tokens->next;
 	}
 	return (cmd_list);
