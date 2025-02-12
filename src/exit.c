@@ -34,7 +34,6 @@ static void	print_error(char *fmt, va_list args)
  * - frees allocated data
  * - exits the program (error code 1)
  *
- * TODO (Ava) Update function signature (foo) + add the freeing logic in the function
  */
 void	exit_parsing(t_cmd **cmd_lst, char *fmt, ...)
 {

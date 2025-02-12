@@ -8,7 +8,7 @@ t_cmd	*free_cmd(t_cmd **cmd)
 {
 	t_cmd	*cur_cmd;
 	t_cmd	*nxt_cmd;
-
+	
 	if (!cmd || !*cmd)
 		return (NULL);
 	cur_cmd = *cmd;
@@ -21,12 +21,12 @@ t_cmd	*free_cmd(t_cmd **cmd)
 }
 
 /*
- * Frees all the tokens' value and structure in the token list.
+ *  Frees all the tokens' value and structure in the token list.
  */
 void	free_token_lst(t_token **tokens)
 {
-	t_token *cur_token;
-	t_token *nxt_token;
+	t_token	*cur_token;
+	t_token	*nxt_token;
 
 	if (!tokens || !*tokens)
 		return ;
@@ -47,7 +47,7 @@ void	free_cmd_lst(t_cmd **cmd_lst)
 {
 	t_cmd	*cur_cmd;
 	t_cmd	*nxt_cmd;
-
+	
 	if (!cmd_lst || !*cmd_lst)
 		return ;
 	cur_cmd = *cmd_lst;
