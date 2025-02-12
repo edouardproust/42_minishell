@@ -16,7 +16,6 @@ t_builtin	*get_builtin(char *progname)
 		{"env", do_env, 0},
 		{"exit", do_exit, 1}
 	};
-	{">>", TOKEN_APPEND, handle_append, ...}
 	size_t				len;
 	size_t				i;
 

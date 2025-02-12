@@ -35,7 +35,7 @@ t_cmd	*create_cmd_lst(void)
 	t_cmd *cmd5 = cmd_new_addback("sort -nr", NULL, NULL, cmd4);
 	cmd_new_addback("head -n 3", NULL, "test/outfile", cmd5);
 	*/
-	return (cmd0);
+	return(cmd0);
 }
 
 static t_cmd *cmd_new_addback(char *bash_cmd, char *infile, char *outfile, t_cmd *prev_cmd)

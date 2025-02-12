@@ -81,15 +81,18 @@ void		set_errno(int err_no);
 int			builtin_error(char *err_msg, ...);
 
 /* Memory */
-t_cmd		*free_cmd(t_cmd **cmd);
+t_envvar	*free_envvar_node(t_envvar **node);
+void		free_envvar_lst(t_envvar **var_lst);
 void		free_cmd_lst(t_cmd **cmd_lst);
 void		flush_fds(void);
 
 /* Env */
 t_envvar	*init_envvars(char **envp);
-void		envvar_addone(t_envvar **lst, t_envvar *new);
-void		envvar_removeone(t_envvar **lst, t_envvar *node);
-void		envvar_updateone(t_envvar **lst, t_envvar *node);
+t_envvar	*envvar_new(char *var);
+int			envvar_addoneback(t_envvar **lst, t_envvar *new);
+int			envvar_deleteone(t_envvar **lst, t_envvar *node);
+int			envvar_updateone(t_envvar *node, char *new_value);
+t_envvar	*envvar_findbyname(t_envvar *lst, char *name);
 
 /* Execute */
 void		execute_cmd_lst(t_cmd **cmd_lst, char **envp);
