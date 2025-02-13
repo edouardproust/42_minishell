@@ -25,14 +25,14 @@ int	do_echo(char **args)
 	while (args[i])
 	{
 		if (ft_printf("%s", args[i]) < 0)
-			return (builtin_error(err_msg));
+			return (put_error(err_msg), EXIT_FAILURE);
 		if (args[i + 1])
 			if (ft_printf(" ") < 0)
-				return (builtin_error(err_msg));
+				return (put_error(err_msg), EXIT_FAILURE);
 		i++;
 	}
 	if (!n_flag)
 		if (ft_printf("\n") < 0)
-			return (builtin_error(err_msg));
+			return (put_error(err_msg), EXIT_FAILURE);
 	return (EXIT_SUCCESS);
 }

@@ -1,5 +1,13 @@
 #include "minishell.h"
 
+/**
+ * Initialize environment variables list from envp.
+ * 
+ * @param envp Array of environment variable strings.
+ * @return Pointer to the head of the initialized list.
+ * 
+ * @note Exits program on memory allocation failure.
+ */
 t_envvar	*init_envvars(char **envp)
 {
 	t_envvar	*envvar_lst;
@@ -15,10 +23,10 @@ t_envvar	*init_envvars(char **envp)
 			if (errno == EINVAL)
 				continue;
 			else
-				return (free_envvar_lst(&envvar_lst), NULL);
+				exit_envvar(1, &envvar_lst, "malloc");
 		}
 		if (envvar_addoneback(&envvar_lst, node) == EXIT_FAILURE)
-				return (free_envvar_lst(&envvar_lst), NULL);
+			exit_envvar(1, &envvar_lst, "envvar_addoneback");
     }
 	return (envvar_lst);
 }

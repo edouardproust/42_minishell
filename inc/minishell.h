@@ -74,11 +74,14 @@ typedef struct s_builtin
 /* Functions                            */
 /****************************************/
 
-/* Error handling and exit */
-void		exit_parsing(t_cmd **foo, char *fmt, ...); // TODO (Ava) Edit function in exit.c
-void		exit_exec(int exit_code, t_cmd **head, char *fmt, ...);
+/* Exit */
+void		exit_envvar(int exit_code, t_envvar **envvar_lst, char *fmt, ...);
+void		exit_exec(int exit_code, t_cmd **cmd_lst, char *fmt, ...);
+
+/* Error handling */
 void		set_errno(int err_no);
-int			builtin_error(char *err_msg, ...);
+void		put_error_va(char *fmt, va_list args);
+void		put_error(char *fmt, ...);
 
 /* Memory */
 t_envvar	*free_envvar_node(t_envvar **node);

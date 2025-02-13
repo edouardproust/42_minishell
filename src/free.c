@@ -61,7 +61,7 @@ void	flush_fds(void)
 {
 	int	fd;
 
-	fd = 3;
+	fd = STDERR_FILENO + 1;
 	while (fd < FD_LIMIT)
 		close(fd++);
 }

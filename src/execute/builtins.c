@@ -16,15 +16,16 @@ t_builtin	*get_builtin(char *progname)
 		{"env", do_env, 0},
 		{"exit", do_exit, 1}
 	};
-	size_t				len;
-	size_t				i;
+	size_t	lst_size;
+	size_t	progname_len;
+	size_t	i;
 
-	len = sizeof(builtins) / sizeof(builtins[0]);
+	lst_size = sizeof(builtins) / sizeof(builtins[0]);
+	progname_len = ft_strlen(progname);
 	i = 0;
-	// TODO: name_len = ft_strlen(progname)
-	while (i < len)
+	while (i < lst_size)
 	{
-		if (ft_strncmp(builtins[i].name, progname, ft_strlen(progname)) == 0) // TODO: update above
+		if (ft_strncmp(builtins[i].name, progname, progname_len) == 0)
 			return (&builtins[i]);
 		i++;
 	}

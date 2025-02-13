@@ -10,31 +10,14 @@ static t_cmd *cmd_new_addback(char *bash_cmd, char *infile, char *outfile, t_cmd
 
 t_cmd	*create_cmd_lst(void)
 {
-	t_cmd *cmd0 = cmd_new_addback("cd /test hello", NULL, NULL, NULL);
-	t_cmd *cmd1 = cmd_new_addback("pwd", NULL, NULL, cmd0);
-	cmd_new_addback("echo last", NULL, NULL, cmd1);
-	//cmd_new_addback("pwd", NULL, NULL, cmd1);
-	//t_cmd *cmd0 = cmd_new_addback("echo -n -n test -n dfg", NULL, "/dev/stdin", NULL);
-	//t_cmd *cmd0 = cmd_new_addback("pwd", NULL, NULL, NULL);
-	//cmd_new_addback("uniq -c", NULL, NULL, cmd0);
-	/*
-	t_cmd *cmd0 = cmd_new_addback("tail -n +4", "test/infile", NULL, NULL);
-	t_cmd *cmd1 = cmd_new_addback("grep a", NULL, NULL, cmd0);
-	t_cmd *cmd2 = cmd_new_addback("echo \"hello\"", NULL, NULL, cmd1);
-	t_cmd *cmd3 = cmd_new_addback("sort", NULL, NULL, cmd2);
-	t_cmd *cmd4 = cmd_new_addback("pwd", NULL, NULL, cmd3);
-	t_cmd *cmd5 = cmd_new_addback("uniq -c", NULL, NULL, cmd4);
-	t_cmd *cmd6 = cmd_new_addback("sort -nr", NULL, NULL, cmd5);
-	cmd_new_addback("head -n 3", NULL, "test/outfile", cmd6);
-	*//*
 	t_cmd *cmd0 = cmd_new_addback("tail -n +4", "test/infile", NULL, NULL);
 	t_cmd *cmd1 = cmd_new_addback("grep a", NULL, NULL, cmd0);
 	t_cmd *cmd2 = cmd_new_addback("sort", NULL, NULL, cmd1);
-	t_cmd *cmd3 = cmd_new_addback("hello mamn 'test several words' bobo maison", NULL, NULL, cmd2);
-	t_cmd *cmd4 = cmd_new_addback("uniq -c", NULL, NULL, cmd3);
-	t_cmd *cmd5 = cmd_new_addback("sort -nr", NULL, NULL, cmd4);
+	t_cmd *cmd3 = cmd_new_addback("uniq -c", NULL, NULL, cmd2);
+	t_cmd *cmd4 = cmd_new_addback("sort -nr", NULL, NULL, cmd3);
+	t_cmd *cmd5 = cmd_new_addback("cd ..", NULL, NULL, cmd4);
 	cmd_new_addback("head -n 3", NULL, "test/outfile", cmd5);
-	*/
+	
 	return(cmd0);
 }
 

@@ -8,9 +8,10 @@ NAME = ./minishell
 C_DIR = src
 
 C_FILES = debug.c \
+	main.c \
 	free.c \
 	exit.c \
-	main.c \
+	error.c \
 	env/init.c \
 	env/ops.c \
 	env/path.c \
