@@ -40,6 +40,14 @@ typedef struct s_cmd {
 } t_cmd;
 
 int		main(int argc, char **argv);
+//int     main(int ac, char **av, char **envp);
+t_cmd *create_cmd_lst(char *input);
+void    debug_tokens(t_token *tokens);
+void    debug_cmds(t_cmd *cmd);
+void    debug_cmd(t_cmd *cmd, char *label);
+void    debug_cmd_lst(t_cmd *cmd_lst);
+void debug_fd(char *label, int fd);
+void debug_read_fd(char *label, int fd);
 t_token *token_new(char *value, int type);
 int     is_word_char(char c);
 int		get_token_type(char *input, int i);
@@ -63,5 +71,7 @@ t_cmd   *free_cmd(t_cmd **cmd);
 void    free_cmd_lst(t_cmd **cmd_lst);
 void    free_token_lst(t_token **tokens);
 void	flush_fds(void);
+void    execute_cmd_lst(t_cmd **cmd_lst, char **envp);
+char    *get_exec_path(char *progname, t_cmd **cmd_lst);
 
 #endif

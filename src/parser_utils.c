@@ -29,8 +29,10 @@ void	handle_pipe(t_cmd **current_cmd, t_token **tokens)
 {
 	if (!(*tokens)->next || (*tokens)->next->type == TOKEN_PIPE)
 		exit_parsing(NULL, "syntax error near unexpected token `|'");
-	if (!(*current_cmd)->args || !(*current_cmd)->args[0])
-			return ;
-	(*current_cmd)->next = cmd_new();
-	*current_cmd = (*current_cmd)->next;
+	if ((*current_cmd)->args || (*current_cmd)->args[0])
+	{
+		(*current_cmd)->next = cmd_new();
+		*current_cmd = (*current_cmd)->next;
+	}
+	*tokens = (*tokens)->next;
 }

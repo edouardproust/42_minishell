@@ -21,8 +21,8 @@ int	get_token_type(char *input, int i)
 	{
 		if (input[i + 1] == '<')
 			return (TOKEN_HEREDOC);
+		return (TOKEN_REDIR_IN);
 	}
-	return (TOKEN_REDIR_IN);
 	if (input[i] == '>')
 	{
 		if (input[i + 1] == '>')

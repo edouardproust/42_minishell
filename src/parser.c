@@ -49,6 +49,7 @@ t_cmd	*parse_tokens(t_token *tokens)
 	current_cmd = cmd_list;
 	while (tokens)
 	{
+		printf("Parsing token: '%s' (Type: %d)\n", tokens->value, tokens->type);
 		if (tokens->type == TOKEN_REDIR_IN)
 			handle_input_redirection(current_cmd, &tokens);
 		else if (tokens->type == TOKEN_REDIR_OUT)

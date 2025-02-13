@@ -4,20 +4,34 @@
 #include "minishell.h"
 #include <sys/stat.h>
 
-static t_cmd *cmd_new_addback(char *bash_cmd, char *infile, char *outfile, t_cmd *prev_cmd);
+//static t_cmd *cmd_new_addback(char *bash_cmd, char *infile, char *outfile, t_cmd *prev_cmd);
 
-t_cmd	*create_cmd_lst(void)
+t_cmd	*create_cmd_lst(char *input)
 {
-	t_cmd *cmd0 = cmd_new_addback("tail -n +4", "test/infile", NULL, NULL);
+/*	t_cmd *cmd0 = cmd_new_addback("tail -n +4", "test/infile", NULL, NULL);
 	t_cmd *cmd1 = cmd_new_addback("grep a", NULL, NULL, cmd0);
 	t_cmd *cmd2 = cmd_new_addback("sort", NULL, NULL, cmd1);
 	t_cmd *cmd3 = cmd_new_addback("uniq -c", NULL, NULL, cmd2);
 	t_cmd *cmd4 = cmd_new_addback("sort -nr", NULL, NULL, cmd3); 
 	cmd_new_addback("head -n 3", NULL, "test/outfile", cmd4);
 	return (cmd0);
+}*/
+	t_token *tokens;
+	t_cmd	*cmd_lst;
+
+	tokens = tokenizer(input);
+	if (!tokens)
+		return (NULL);
+	debug_tokens(tokens);
+	cmd_lst = parse_tokens(tokens);
+	free_token_lst(&tokens);
+	if (!cmd_lst)
+		return (NULL);
+	debug_cmds(cmd_lst);
+	return (cmd_lst);
 }
 
-static t_cmd *cmd_new_addback(char *bash_cmd, char *infile, char *outfile, t_cmd *prev_cmd)
+/*static t_cmd *cmd_new_addback(char *bash_cmd, char *infile, char *outfile, t_cmd *prev_cmd)
 {
     t_cmd *cmd = malloc(sizeof(t_cmd));
 	cmd->args = NULL;
@@ -41,6 +55,39 @@ static t_cmd *cmd_new_addback(char *bash_cmd, char *infile, char *outfile, t_cmd
 	cmd->pipe[1] = -1;
 
 	return (cmd);
+}*/
+
+
+void	debug_tokens(t_token *tokens)
+{
+	while (tokens)
+	{
+		printf("Token: '%s' (Type: %d)\n", tokens->value, tokens->type);
+		tokens = tokens->next;
+	}
+}
+
+void	debug_cmds(t_cmd *cmd)
+{
+	int     i;
+
+	while (cmd)
+	{
+		printf("Command: ");
+		if (cmd->args)
+		{
+			i = 0;
+			while (cmd->args[i])
+			{
+				printf("%s ", cmd->args[i]);
+				i++;
+			}
+		}
+		printf("\nInfile: %s\n", cmd->infile ? cmd->infile : "(none)");
+		printf("Outfile: %s\n", cmd->outfile ? cmd->outfile : "(none)");
+		printf("----------------\n");
+		cmd = cmd->next;
+	}
 }
 
 void	debug_cmd(t_cmd *cmd, char *label)
@@ -103,7 +150,7 @@ void	debug_cmd_lst(t_cmd *cmd_lst)
 		if (cmd->next)
 			ft_printf("\t\t▼\n");
 	 	cmd = cmd->next;
-	}	
+	}
 }
 
 void debug_fd(char *label, int fd) {
