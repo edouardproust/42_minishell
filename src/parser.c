@@ -32,7 +32,7 @@ void	add_arg_to_cmd(t_cmd *cmd, char *arg)
 		new_args[i] = cmd->args[i];
 		i++;
 	}
-	new_args[i] = arg; // add new arg
+	new_args[i] = ft_strdup(arg); // add new arg
 	new_args[i + 1] = NULL;
 	free(cmd->args);
 	cmd->args = new_args;
@@ -57,7 +57,10 @@ t_cmd	*parse_tokens(t_token *tokens)
 		else if (tokens->type == TOKEN_WORD)
 			handle_word(current_cmd, tokens);
 		else if (tokens->type == TOKEN_PIPE)
+		{
 			handle_pipe(&current_cmd, &tokens);
+			continue ;
+		}
 		tokens = tokens->next;
 	}
 	return (cmd_list);
