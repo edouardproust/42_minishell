@@ -34,7 +34,7 @@ static void	print_error(char *fmt, va_list args)
  * - frees allocated data
  * - exits the program (error code 1)
  */
-void	exit_parsing(t_cmd **cmd_lst, char *fmt, ...)
+void	exit_parsing(t_cmd **cmd_lst, t_token **tokens, char *fmt, ...)
 {
 	va_list	args;
 
@@ -43,6 +43,8 @@ void	exit_parsing(t_cmd **cmd_lst, char *fmt, ...)
 	va_end(args);
 	if (cmd_lst)
 		free_cmd_lst(cmd_lst);
+	if (tokens)
+		free_token_lst(tokens);
 	exit(EXIT_FAILURE);
 }
 

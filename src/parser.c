@@ -10,6 +10,17 @@ t_cmd	*cmd_new()
 	cmd->args = NULL;
 	cmd->infile = NULL;
 	cmd->outfile = NULL;
+	cmd->pipe = malloc(sizeof(int) * 2);
+	if (!cmd->pipe)
+	{
+		free(cmd);
+		return (NULL);
+	}
+	cmd->pipe[0] = -1;
+	cmd->pipe[1] = -1;
+	cmd->fdin = STDIN_FILENO;
+	cmd->fdout = STDOUT_FILENO;
+	cmd->prev = NULL;
 	cmd->next = NULL;
 	return (cmd);
 }
@@ -21,47 +32,39 @@ void	add_arg_to_cmd(t_cmd *cmd, char *arg)
 	char	**new_args;
 	
 	count = 0;
-	while (cmd->args && cmd->args[count]) //we count existing args
+	while (cmd->args && cmd->args[count])
 		count++;
-	new_args = malloc(sizeof(char *) * (count + 2)); // 1 for existing args, 1 for NULL
+	new_args = malloc(sizeof(char *) * (count + 2));
 	if (!new_args)
 		return ;
 	i = 0;
-	while (i < count) //copy the old arguments
+	while (i < count)
 	{
 		new_args[i] = cmd->args[i];
 		i++;
 	}
-	new_args[i] = ft_strdup(arg); // add new arg
+	new_args[i] = ft_strdup(arg);
+	if (!new_args[i])
+	{
+		free(new_args);
+		return ;
+	}
 	new_args[i + 1] = NULL;
 	free(cmd->args);
 	cmd->args = new_args;
 }
-//Parse tokens into commands
+//Parse tokens into commands. TODO (A) Implement append and heredoc logic
 t_cmd	*parse_tokens(t_token *tokens)
 {
 	t_cmd	*cmd_list;
 	t_cmd	*current_cmd;
 
 	if (!tokens)
-		exit_parsing(NULL, "syntax error: empty command");
+		exit_parsing(NULL, &tokens,"syntax error: empty command");
 	cmd_list = cmd_new();
+	if (!cmd_list)
+		return (NULL);
 	current_cmd = cmd_list;
-	while (tokens)
-	{
-		printf("Parsing token: '%s' (Type: %d)\n", tokens->value, tokens->type);
-		if (tokens->type == TOKEN_REDIR_IN)
-			handle_input_redirection(current_cmd, &tokens);
-		else if (tokens->type == TOKEN_REDIR_OUT)
-			handle_output_redirection(current_cmd, &tokens);
-		else if (tokens->type == TOKEN_WORD)
-			handle_word(current_cmd, tokens);
-		else if (tokens->type == TOKEN_PIPE)
-		{
-			handle_pipe(&current_cmd, &tokens);
-			continue ;
-		}
-		tokens = tokens->next;
-	}
+	handle_token_type(current_cmd, &tokens);
 	return (cmd_list);
 }

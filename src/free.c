@@ -34,7 +34,9 @@ void	free_token_lst(t_token **tokens)
 	while (cur_token)
 	{
 		nxt_token = cur_token->next;
-		ft_free_ptrs(2, &cur_token->value, &cur_token);
+		if (cur_token->value)
+			ft_free_ptrs(1, &cur_token->value);
+		free(cur_token);
 		cur_token = nxt_token;
 	}
 	*tokens = NULL;
@@ -52,7 +54,8 @@ void	free_cmd_lst(t_cmd **cmd_lst)
 	cur_cmd = *cmd_lst;
 	while (cur_cmd)
 	{
-		nxt_cmd = free_cmd(&cur_cmd);
+		nxt_cmd = cur_cmd->next;
+		free_cmd(&cur_cmd);
 		cur_cmd = nxt_cmd;
 	}
 	*cmd_lst = NULL;

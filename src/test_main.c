@@ -25,7 +25,11 @@ int	main(int argc, char **argv)
 			add_history(input);
 		cmd_lst = create_cmd_lst(input);
 		if (cmd_lst)
+		{
+			free_cmd_lst(&cmd_lst);
+			free(input);
 			return (EXIT_FAILURE);
+		}
 		free(input);
 	}
 	return (EXIT_SUCCESS);

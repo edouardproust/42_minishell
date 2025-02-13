@@ -12,7 +12,9 @@ t_token	*token_new(char *value, int type)
         token->next = NULL;
         return (token);
 }
-//added conditions for token types heredoc + append, TB implemented
+
+// TODO :(A) implement heredoc and append logic
+
 int	get_token_type(char *input, int i)
 {
 	if (input[i] == '|')
@@ -32,11 +34,6 @@ int	get_token_type(char *input, int i)
 	return (TOKEN_WORD);
 }
 
-int	is_word_char(char c)
-{
-	return (c != ' ' && c != '|' && c != '<' && c != '>');
-}
-
 t_token	*create_word_token(char *input, int *index)
 {
 	int     start;
@@ -46,6 +43,8 @@ t_token	*create_word_token(char *input, int *index)
 	while (input[*index] && is_word_char(input[*index]))
 		(*index)++;
 	word = ft_substr(input, start, *index - start);
+	if (!word)
+		return (NULL);
 	return (token_new(word, TOKEN_WORD));
 }
 //adds a new token to the list
