@@ -54,6 +54,19 @@ void	free_cmd_lst(t_cmd **cmd_lst)
 	*cmd_lst = NULL;
 }
 
+/**
+ * Free minishell at any point during the program execution.
+ */
+void	free_minishell(t_minishell **minishell)
+{
+	if ((*minishell)->envvar_lst)
+		free_envvar_lst(&(*minishell)->envvar_lst);
+	if ((*minishell)->cmd_lst)
+		free_cmd_lst(&(*minishell)->cmd_lst);
+	ft_free_split(&(*minishell)->envp);
+	ft_free_ptrs(1, minishell);
+}
+
 /*
  * Close any fd up to FD_LIMIT, except standard ones.
  */

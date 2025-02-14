@@ -7,12 +7,12 @@
  * 
  * Exit on: pipe failure, open failure
  */
-static void	setup_io(t_cmd *cmd, t_cmd **cmd_lst)
+static void	setup_io(t_cmd *cmd, t_minishell **minishell)
 {
 	if (cmd->next)
 	{
 		if (pipe(cmd->pipe) == -1)
-			exit_exec(EXIT_FAILURE, cmd_lst, "pipe");
+			exit_minishell(EXIT_FAILURE, minishell, "pipe");
 	}
 	if (cmd->prev)
 		cmd->fdin = cmd->prev->pipe[0];
@@ -20,7 +20,7 @@ static void	setup_io(t_cmd *cmd, t_cmd **cmd_lst)
 	{
 		cmd->fdin = open(cmd->infile, O_RDONLY);
 		if (cmd->fdin == -1)
-			exit_exec(EXIT_FAILURE, cmd_lst, cmd->infile);
+			exit_minishell(EXIT_FAILURE, minishell, cmd->infile);
 	}
 	if (cmd->next)
 		cmd->fdout = cmd->pipe[1];
@@ -28,7 +28,7 @@ static void	setup_io(t_cmd *cmd, t_cmd **cmd_lst)
 	{
 		cmd->fdout = open(cmd->outfile, O_WRONLY | O_CREAT | O_TRUNC, 0644);
 		if (cmd->fdout == -1)
-			exit_exec(EXIT_FAILURE, cmd_lst, cmd->outfile);
+			exit_minishell(EXIT_FAILURE, minishell, cmd->outfile);
 	}
 }
 
@@ -63,12 +63,12 @@ static void	cleanup_io(t_cmd *cmd)
  *
  * Exit on: a process exits with code > 125
  */
-static void	wait_for_processes(t_cmd **cmd_lst)
+static void	wait_for_processes(t_minishell **minishell)
 {
 	t_cmd	*cmd;
 	int		status;
 	
-	cmd = *cmd_lst;
+	cmd = (*minishell)->cmd_lst;
 	while (cmd)
 	{
 		if (cmd->pid > 0)
@@ -77,7 +77,7 @@ static void	wait_for_processes(t_cmd **cmd_lst)
 			if (DEBUG) // DEBUG
 				debug_process(cmd->pid, status);
 			if (WIFEXITED(status) && WEXITSTATUS(status) >= E_CMDNOTEXEC)
-				exit_exec(WEXITSTATUS(status), cmd_lst, NULL);
+				exit_minishell(WEXITSTATUS(status), minishell, NULL);
 		}
 		cmd = cmd->next;
 	}
@@ -88,26 +88,26 @@ static void	wait_for_processes(t_cmd **cmd_lst)
  *
  * Exit on: incorrect input, function call exit
  */
-void	execute_cmd_lst(t_cmd **cmd_lst, char **envp)
+void	execute_cmd_lst(t_minishell **minishell)
 {
 	t_cmd		*cmd;
 	t_builtin	*builtin;
 
-	cmd = *cmd_lst;
-	if (!cmd_lst || !*cmd_lst)
-		exit_exec(EXIT_FAILURE, NULL, "Incorrect parsed command");
+	if (!minishell || !*minishell || !(*minishell)->cmd_lst)
+		exit_minishell(EXIT_FAILURE, NULL, "Incorrect parsed command");
+	cmd = (*minishell)->cmd_lst;
 	while (cmd)
 	{
-		setup_io(cmd, cmd_lst);
+		setup_io(cmd, minishell);
 		builtin = get_builtin(cmd->args[0]);
 		if (builtin && builtin->affects_state && !cmd->next && !cmd->prev)
-			run_builtin(0, builtin, cmd->args, cmd_lst);
+			run_builtin(0, builtin, cmd->args, minishell);
 		else
-			cmd->pid = run_in_child_process(builtin, cmd, envp, cmd_lst);
+			cmd->pid = run_in_child_process(builtin, cmd, minishell);
 		if (DEBUG) // DEBUG
 			debug_cmd(cmd, cmd->args[0]);
 		cleanup_io(cmd);
 		cmd = cmd->next;
 	}
-	wait_for_processes(cmd_lst);
+	wait_for_processes(minishell);
 }

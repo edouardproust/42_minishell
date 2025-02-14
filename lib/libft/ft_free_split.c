@@ -22,7 +22,7 @@ void	ft_free_split(char ***array)
 
 	if (!array || !*array)
 		return ;
-	element =  *array;
+	element = *array;
 	while (*element)
 	{
 		free(*element);
@@ -33,9 +33,12 @@ void	ft_free_split(char ***array)
 	*array = NULL;
 }
 
+/**
+ * To compile:
+ * `cc -Werror -Wextra -Wall ft_free_split.c ft_split.c ft_substr.c
+ * ft_strdup.c ft_strlcpy.c ft_strlen.c ft_memcpy.c && valgrind ./a.out`
+ */
 /*
-//cc -Werror -Wextra -Wall ft_free_split.c ft_split.c ft_substr.c ft_strdup.c ft_strlcpy.c ft_strlen.c ft_memcpy.c && ./a.out
-
 #include <stdio.h>
 
 int	main(void)

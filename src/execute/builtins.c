@@ -37,11 +37,11 @@ t_builtin	*get_builtin(char *progname)
  *
  * Exit on: ran in chaild process, callback failure
  */
-void	run_builtin(int in_child_proc, t_builtin *builtin, char** args, t_cmd **cmd_lst)
+void	run_builtin(int in_child_proc, t_builtin *builtin, char** args, t_minishell **minishell)
 {
 	int	exit_code;
 
 	exit_code = builtin->fn(args);
 	if (in_child_proc || exit_code != EXIT_SUCCESS)
-		exit_exec(exit_code, cmd_lst, NULL);
+		exit_minishell(exit_code, minishell, NULL);
 }

@@ -17,6 +17,7 @@ SRCS = get_next_line.c \
 	ft_isspace.c \
 	ft_itoa.c \
 	ft_lutoa_base.c \
+	ft_matrix_dup.c \
 	ft_memchr.c \
 	ft_memcmp.c \
 	ft_memcpy.c \
@@ -38,6 +39,7 @@ SRCS = get_next_line.c \
 	ft_strchr.c \
 	ft_strchri.c \
 	ft_strdup.c \
+	ft_strglue.c \
 	ft_striteri.c \
 	ft_strjoin.c \
 	ft_strlcat.c \

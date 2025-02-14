@@ -81,7 +81,7 @@ char	**ft_split(char const *s, char sep)
 		part_len = ft_partlen(s, i, sep);
 		split[part] = ft_substr(s, i, part_len);
 		if (!split[part])
-			return (ft_free(split, i));
+			return (ft_free(split, part));
 		part++;
 		i += part_len;
 	}

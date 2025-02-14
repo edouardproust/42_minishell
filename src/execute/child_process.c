@@ -20,7 +20,7 @@ static int	duplicate_fd(int oldfd, int newfd)
  *
  * Exit on: duplication failure
  */
-static void	redirect_io(t_cmd *cmd, t_cmd **cmd_lst)
+static void	redirect_io(t_cmd *cmd, t_minishell **minishell)
 {
 	int	exit_code;
 
@@ -30,7 +30,7 @@ static void	redirect_io(t_cmd *cmd, t_cmd **cmd_lst)
 	if (cmd->fdout != STDOUT_FILENO)
 		exit_code = duplicate_fd(cmd->fdout, STDOUT_FILENO);
 	if (exit_code != EXIT_SUCCESS)
-		exit_exec(exit_code, cmd_lst, "dup2");
+		exit_minishell(exit_code, minishell, "dup2");
 }
 
 /*
@@ -38,20 +38,19 @@ static void	redirect_io(t_cmd *cmd, t_cmd **cmd_lst)
  *
  * Exit on: fork failure, child process exit code > 125
  */
-pid_t	run_in_child_process(t_builtin *builtin, t_cmd *cmd, char **envp,
-	t_cmd **cmd_lst)
+pid_t	run_in_child_process(t_builtin *builtin, t_cmd *cmd, t_minishell **minishell)
 {
 	pid_t	pid;
 
 	pid = fork();
 	if (pid < 0)
-		exit_exec(EXIT_FAILURE, cmd_lst, "fork");
+		exit_minishell(EXIT_FAILURE, minishell, "fork");
 	if (pid == 0)
 	{
-		redirect_io(cmd, cmd_lst);
+		redirect_io(cmd, minishell);
 		if (builtin)
-			run_builtin(1, builtin, cmd->args, cmd_lst);
-		run_executable(cmd, envp, cmd_lst);
+			run_builtin(1, builtin, cmd->args, minishell);
+		run_executable(cmd, minishell);
 	}
 	return (pid);
 }

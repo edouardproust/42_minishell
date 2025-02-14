@@ -8,12 +8,14 @@
  * 
  * @note Exits program on memory allocation failure.
  */
-t_envvar	*init_envvars(char **envp)
+t_envvar	*init_envvars(t_minishell *minishell)
 {
-	t_envvar	*envvar_lst;
+	char		**envp;
+	t_envvar	*lst;
     t_envvar	*node;
 
-	envvar_lst = NULL;
+	envp = minishell->envp;
+	lst = NULL;
 	node = NULL;
     while (*envp)
     {
@@ -23,10 +25,9 @@ t_envvar	*init_envvars(char **envp)
 			if (errno == EINVAL)
 				continue;
 			else
-				exit_envvar(1, &envvar_lst, "malloc");
+				return (free_envvar_lst(&lst), NULL);
 		}
-		if (envvar_addoneback(&envvar_lst, node) == EXIT_FAILURE)
-			exit_envvar(1, &envvar_lst, "envvar_addoneback");
+		envvar_addoneback(&lst, node);
     }
-	return (envvar_lst);
+	return (lst);
 }
