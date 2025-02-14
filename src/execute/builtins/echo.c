@@ -6,12 +6,13 @@
  * @param args Array of arguments passed to echo.
  * @return EXIT_SUCCESS on success.
  */
-int	do_echo(char **args)
+int	do_echo(char **args, t_minishell *minishell)
 {
 	int		n_flag;
 	int		i;
 	char	*err_msg;
 
+	(void)minishell;
 	err_msg = "echo: write error";
 	n_flag = 0;
 	i = 1;

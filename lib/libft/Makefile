@@ -9,6 +9,7 @@ SRCS = get_next_line.c \
 	ft_fprintf.c \
 	ft_free_ptrs.c \
 	ft_free_split.c \
+	ft_free_splitn.c \
 	ft_isalnum.c \
 	ft_isalpha.c \
 	ft_isascii.c \

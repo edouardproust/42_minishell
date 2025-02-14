@@ -37,11 +37,7 @@ char	**ft_matrix_dup(char **matrix)
 	{
 		dup[i] = ft_strdup(matrix[i]);
 		if (!dup[i])
-		{
-			while (--i >= 0)
-				ft_free_ptrs(1, &dup[i]);
-			return (ft_free_ptrs(1, &dup), NULL);
-		}
+			return (ft_free_splitn(&dup, i), NULL);
 		i++;
 	}
 	dup[i] = NULL;
@@ -50,8 +46,9 @@ char	**ft_matrix_dup(char **matrix)
 
 /**
  * To compile: 
- * `cc -Werror -Wextra -Wall ft_memcpy.c ft_strdup.c ft_free_ptrs.c
- * ft_strlen.c ft_free_split.c ft_matrix_dup.c && valgrind ./a.out`
+ * `cc -Werror -Wextra -Wall ft_memcpy.c ft_free_splitn.c ft_strlen.c
+ * ft_strdup.c ft_free_ptrs.c ft_free_splitn.c ft_matrix_dup.c && valgrind
+ * ./a.out`
  */
 /*
 #include <stdio.h>
@@ -71,7 +68,7 @@ int	main(void)
 	int	i = 0;
 	while (dup[i])
 		printf("%s\n", dup[i++]);
-	ft_free_split(&dup);
+	ft_free_splitn(&dup, i);
 	return (EXIT_SUCCESS);
 }
 */

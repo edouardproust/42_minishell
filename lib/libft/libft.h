@@ -30,6 +30,7 @@ void	ft_pexit(char *error_msg);
 /* Free */
 void	*ft_free_ptrs(int count, ...);
 void	ft_free_split(char ***array);
+void	ft_free_splitn(char ***matrix, int n);
 
 /* Character */
 int		ft_isalpha(int c);

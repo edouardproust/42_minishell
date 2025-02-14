@@ -73,7 +73,7 @@ typedef struct	s_minishell
 typedef struct	s_builtin
 {
 	char	*name;
-	int		(*fn)(char **args);
+	int		(*fn)(char **args, t_minishell *minishell);
 	int		affects_state;
 }	t_builtin;
 
@@ -95,11 +95,10 @@ void		flush_fds(void);
 
 /* Exit */
 void		exit_minishell(int exit_code, t_minishell **minishell, char *fmt, ...);
-//void		exit_envvar(int exit_code, t_envvar **envvar_lst, char *fmt, ...);
-//void		exit_exec(int exit_code, t_cmd **cmd_lst, char *fmt, ...);
 
 /* Env */
-t_envvar	*init_envvars(t_minishell **minishell);
+t_envvar	*init_envvars(t_minishell *minishell);
+int			update_envp(t_minishell **minishell);
 t_envvar	*envvar_new(char *var);
 int			envvar_addoneback(t_envvar **lst, t_envvar *new);
 int			envvar_deleteone(t_envvar **lst, t_envvar *node);
@@ -119,12 +118,12 @@ void		run_executable(t_cmd *cmd, t_minishell **minishell);
 t_builtin	*get_builtin(char *progname);
 void		run_builtin(int in_child_process, t_builtin *builtin, char **args,
 				t_minishell **minishell);
-int			do_echo(char **args);
-int			do_cd(char **args);
-int			do_pwd(char **args);
-int			do_export(char **args);
-int			do_unset(char **args);
-int			do_env(char **args);
-int			do_exit(char **args);
+int			do_echo(char **args, t_minishell *minishell);
+int			do_cd(char **args, t_minishell *minishell);
+int			do_pwd(char **args, t_minishell *minishell);
+int			do_export(char **args, t_minishell *minishell);
+int			do_unset(char **args, t_minishell *minishell);
+int			do_env(char **args, t_minishell *minishell);
+int			do_exit(char **args, t_minishell *minishell);
 
 #endif /* MINISHELL_H */

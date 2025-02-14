@@ -1,9 +1,10 @@
 #include "minishell.h"
 
-int	do_cd(char **args)
+int	do_cd(char **args, t_minishell *minishell)
 {
 	char	*dir;
 
+	(void)minishell;
 	if (args[2])
 		return (put_error("cd: too many arguments"), EXIT_FAILURE);
 	if (args[1])

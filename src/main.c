@@ -12,7 +12,7 @@ static	t_minishell	*init_minishell(char **envp)
 	minishell->envp = ft_matrix_dup(envp);
 	if (!minishell->envp)
 		exit_minishell(EXIT_FAILURE, &minishell, "failed to copy environment");
-	minishell->envvar_lst = init_envvars(&minishell);
+	minishell->envvar_lst = init_envvars(minishell);
 	if (!minishell->envvar_lst)
 		exit_minishell(EXIT_FAILURE, &minishell,
 			"failed to initialize environment variables");
