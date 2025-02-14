@@ -39,8 +39,8 @@ typedef struct s_cmd {
     struct s_cmd *next;
 } t_cmd;
 
-int		main(int argc, char **argv);
-//int     main(int ac, char **av, char **envp);
+//int		main(int argc, char **argv);
+int     main(int ac, char **av, char **envp);
 t_cmd *create_cmd_lst(char *input);
 void    debug_tokens(t_token *tokens);
 void    debug_cmds(t_cmd *cmd);
@@ -57,7 +57,7 @@ char    *remove_quotes(char *str);
 int skip_quotes(char *input, int *index);
 void	token_addback(t_token **tokens, t_token *new);
 t_token *tokenizer(char *input);
-t_cmd	*cmd_new();
+t_cmd	*cmd_new(t_cmd *prev_cmd);
 void	add_arg_to_cmd(t_cmd *cmd, char *arg);
 void    handle_input_redirection(t_cmd *current_cmd, t_token **tokens);
 void    handle_output_redirection(t_cmd *current_cmd, t_token **tokens);

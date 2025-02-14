@@ -26,10 +26,7 @@ t_cmd	*create_cmd_lst(char *input)
 	cmd_lst = parse_tokens(tokens);
 	free_token_lst(&tokens);
 	if (!cmd_lst)
-	{
-		free_cmd_lst(&cmd_lst);
 		return (NULL);
-	}
 	debug_cmds(cmd_lst);
 	return (cmd_lst);
 }

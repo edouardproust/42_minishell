@@ -1,6 +1,6 @@
 #include "minishell.h"
 
-t_cmd	*cmd_new()
+t_cmd	*cmd_new(t_cmd *prev_cmd)
 {
 	t_cmd *cmd;
 
@@ -12,16 +12,15 @@ t_cmd	*cmd_new()
 	cmd->outfile = NULL;
 	cmd->pipe = malloc(sizeof(int) * 2);
 	if (!cmd->pipe)
-	{
-		free(cmd);
-		return (NULL);
-	}
+		return(free(cmd), NULL);
 	cmd->pipe[0] = -1;
 	cmd->pipe[1] = -1;
 	cmd->fdin = STDIN_FILENO;
 	cmd->fdout = STDOUT_FILENO;
-	cmd->prev = NULL;
+	cmd->prev = prev_cmd;
 	cmd->next = NULL;
+	if (cmd->prev)
+		cmd->prev->next = cmd;
 	return (cmd);
 }
 //adds an argument to the args list
@@ -46,6 +45,7 @@ void	add_arg_to_cmd(t_cmd *cmd, char *arg)
 	new_args[i] = ft_strdup(arg);
 	if (!new_args[i])
 	{
+		free(cmd->args); 
 		free(new_args);
 		return ;
 	}
@@ -61,9 +61,9 @@ t_cmd	*parse_tokens(t_token *tokens)
 
 	if (!tokens)
 		exit_parsing(NULL, &tokens,"syntax error: empty command");
-	cmd_list = cmd_new();
+	cmd_list = cmd_new(NULL);
 	if (!cmd_list)
-		return (NULL);
+		return(free_token_lst(&tokens), NULL);
 	current_cmd = cmd_list;
 	handle_token_type(current_cmd, &tokens);
 	return (cmd_list);
