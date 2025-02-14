@@ -37,3 +37,4 @@ void	handle_pipe(t_cmd **current_cmd, t_token **tokens)
 	(*current_cmd)->next = cmd_new(*current_cmd);
 	*current_cmd = (*current_cmd)->next;
 }
+

@@ -12,7 +12,7 @@ t_cmd	*cmd_new(t_cmd *prev_cmd)
 	cmd->outfile = NULL;
 	cmd->pipe = malloc(sizeof(int) * 2);
 	if (!cmd->pipe)
-		return(free(cmd), NULL);
+		return (free(cmd), NULL);
 	cmd->pipe[0] = -1;
 	cmd->pipe[1] = -1;
 	cmd->fdin = STDIN_FILENO;
@@ -45,12 +45,12 @@ void	add_arg_to_cmd(t_cmd *cmd, char *arg)
 	new_args[i] = ft_strdup(arg);
 	if (!new_args[i])
 	{
-		free(cmd->args); 
 		free(new_args);
 		return ;
 	}
 	new_args[i + 1] = NULL;
-	free(cmd->args);
+	if (cmd->args)
+		free(cmd->args);
 	cmd->args = new_args;
 }
 //Parse tokens into commands. TODO (A) Implement append and heredoc logic

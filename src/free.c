@@ -55,15 +55,7 @@ void	free_cmd_lst(t_cmd **cmd_lst)
 	while (cur_cmd)
 	{
 		nxt_cmd = cur_cmd->next;
-		if (cur_cmd->pipe)
-			free(cur_cmd->pipe);
-		if (cur_cmd->args)
-			free(cur_cmd->args);
-		if (cur_cmd->infile)
-			free(cur_cmd->infile);
-		if (cur_cmd->outfile)
-			free(cur_cmd->outfile);
-		free(cur_cmd);
+		free_cmd(&cur_cmd);
 		cur_cmd = nxt_cmd;
 	}
 	*cmd_lst = NULL;
