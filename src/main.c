@@ -8,7 +8,7 @@ int	main(int ac, char **av, char **envp)
 	if (ac > 1)
 		return (EXIT_FAILURE); // TODO (Ed) Deal with non-interactive mode
 	
-	char	*input = "|";
+	char	*input = "echo hello | cat | wc -l";
 	cmd_lst = create_cmd_lst(input);
 	if (!cmd_lst)
 		return (EXIT_FAILURE);

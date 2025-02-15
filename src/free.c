@@ -34,8 +34,7 @@ void	free_token_lst(t_token **tokens)
 	while (cur_token)
 	{
 		nxt_token = cur_token->next;
-		if (cur_token->value)
-			ft_free_ptrs(1, &cur_token->value);
+		ft_free_ptrs(1, &cur_token->value);
 		free(cur_token);
 		cur_token = nxt_token;
 	}

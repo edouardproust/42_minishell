@@ -36,35 +36,29 @@ void	add_arg_to_cmd(t_cmd *cmd, char *arg)
 	new_args = malloc(sizeof(char *) * (count + 2));
 	if (!new_args)
 		return ;
-	i = 0;
-	while (i < count)
-	{
+	i = -1;
+	while (++i < count)
 		new_args[i] = cmd->args[i];
-		i++;
-	}
-	new_args[i] = ft_strdup(arg);
-	if (!new_args[i])
-	{
-		free(new_args);
-		return ;
-	}
-	new_args[i + 1] = NULL;
-	if (cmd->args)
-		free(cmd->args);
+	new_args[count] = arg;
+	new_args[count + 1] = NULL;
+	free(cmd->args);
 	cmd->args = new_args;
 }
 //Parse tokens into commands. TODO (A) Implement append and heredoc logic
-t_cmd	*parse_tokens(t_token *tokens)
+t_cmd	*parse_tokens(t_token *tokens_head)
 {
 	t_cmd	*cmd_list;
 	t_cmd	*current_cmd;
+	t_token	*current_token;
 
-	if (!tokens)
-		exit_parsing(NULL, &tokens,"syntax error: empty command");
+	cmd_list = NULL;
+	current_token = tokens_head;
+	if (!current_token)
+		exit_parsing(&cmd_list, &tokens_head, "syntax error: empty command");
 	cmd_list = cmd_new(NULL);
 	if (!cmd_list)
-		return(free_token_lst(&tokens), NULL);
+		exit_parsing(&cmd_list, &tokens_head, "malloc error");
 	current_cmd = cmd_list;
-	handle_token_type(current_cmd, &tokens);
+	handle_token_type(&cmd_list, &current_cmd, &tokens_head, &current_token);
 	return (cmd_list);
 }

@@ -38,6 +38,7 @@ t_token	*create_word_token(char *input, int *index)
 {
 	int     start;
 	char    *word;
+	t_token	*token;
 
 	start = *index;
 	while (input[*index] && is_word_char(input[*index]))
@@ -45,7 +46,10 @@ t_token	*create_word_token(char *input, int *index)
 	word = ft_substr(input, start, *index - start);
 	if (!word)
 		return (NULL);
-	return (token_new(word, TOKEN_WORD));
+	token = token_new(word, TOKEN_WORD);
+	if (!token)
+		free(word);
+	return (token);
 }
 //adds a new token to the list
 void	token_addback(t_token **tokens, t_token *new)

@@ -32,7 +32,7 @@ t_token	*tokenizer(char *input)
 		{
 			new_token = create_word_token(input, &i);
 			if (!new_token)
-				return(free(substr), free_token_lst(&tokens), NULL);
+				return(free_token_lst(&tokens), NULL);
 			token_addback(&tokens, new_token);
 		}
 	}

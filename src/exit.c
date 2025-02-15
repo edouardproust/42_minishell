@@ -34,17 +34,18 @@ static void	print_error(char *fmt, va_list args)
  * - frees allocated data
  * - exits the program (error code 1)
  */
-void	exit_parsing(t_cmd **cmd_lst, t_token **tokens, char *fmt, ...)
+void	exit_parsing(t_cmd **cmd_lst, t_token **tokens_head, char *fmt, ...)
 {
 	va_list	args;
 
 	va_start(args, fmt);
-	print_error(fmt, args);
+	if (ft_strncmp(fmt, "malloc error", 12) != 0)
+		print_error(fmt, args);
 	va_end(args);
-	if (cmd_lst)
+	if (cmd_lst && *cmd_lst)
 		free_cmd_lst(cmd_lst);
-	if (tokens)
-		free_token_lst(tokens);
+	if (tokens_head && *tokens_head)
+		free_token_lst(tokens_head);
 	exit(EXIT_FAILURE);
 }
 
