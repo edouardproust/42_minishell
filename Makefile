@@ -11,6 +11,13 @@ C_FILES = debug.c \
 	free.c \
 	exit.c \
 	main.c \
+	cmd_list.c \
+	tokenize.c \
+	general_utils.c \
+	tokens_utils.c \
+	parser.c \
+	parser_utils.c \
+	token_handlers.c \
 	execute.c \
 	execute_path.c \
 

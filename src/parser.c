@@ -1,6 +1,9 @@
 #include "minishell.h"
-
-t_cmd	*cmd_new()
+/* 
+ * Creates a new command structure with default values.
+ * Returns: A new t_cmd structure or NULL if malloc fails.
+ */
+t_cmd	*cmd_new(t_cmd *prev_cmd)
 {
 	t_cmd *cmd;
 
@@ -10,10 +13,22 @@ t_cmd	*cmd_new()
 	cmd->args = NULL;
 	cmd->infile = NULL;
 	cmd->outfile = NULL;
+	cmd->pipe = malloc(sizeof(int) * 2);
+	if (!cmd->pipe)
+		return (free(cmd), NULL);
+	cmd->pipe[0] = -1;
+	cmd->pipe[1] = -1;
+	cmd->fdin = STDIN_FILENO;
+	cmd->fdout = STDOUT_FILENO;
+	cmd->prev = prev_cmd;
 	cmd->next = NULL;
+	if (cmd->prev)
+		cmd->prev->next = cmd;
 	return (cmd);
 }
-//adds an argument to the args list
+/* 
+ * Adds an argument to the command's arguments list.
+ */
 void	add_arg_to_cmd(t_cmd *cmd, char *arg)
 {
 	int	i;
@@ -21,43 +36,43 @@ void	add_arg_to_cmd(t_cmd *cmd, char *arg)
 	char	**new_args;
 	
 	count = 0;
-	while (cmd->args && cmd->args[count]) //we count existing args
+	while (cmd->args && cmd->args[count])
 		count++;
-	new_args = malloc(sizeof(char *) * (count + 2)); // 1 for existing args, 1 for NULL
+	new_args = malloc(sizeof(char *) * (count + 2));
 	if (!new_args)
 		return ;
-	i = 0;
-	while (i < count) //copy the old arguments
-	{
+	i = -1;
+	while (++i < count)
 		new_args[i] = cmd->args[i];
-		i++;
-	}
-	new_args[i] = arg; // add new arg
-	new_args[i + 1] = NULL;
+	new_args[count] = arg;
+	new_args[count + 1] = NULL;
 	free(cmd->args);
 	cmd->args = new_args;
 }
-//Parse tokens into commands
-t_cmd	*parse_tokens(t_token *tokens)
+/* 
+ * Parses a list of tokens and converts them into a linked list of commands.
+ *
+ * - Initializes the parsing process by setting up the necessary variables.
+ * - Creates a new command structure to hold the parsed tokens.
+ * - Iterates over the tokens, processing them according to their type.
+ * - Links the new commands to the command list.
+ * 
+ * Returns: A linked list of parsed t_cmd structures, or NULL if parsing fails.
+ */
+//TODO (A) Implement append and heredoc logic types.
+t_cmd	*parse_tokens(t_token *tokens_head)
 {
+	t_parse	parse;
 	t_cmd	*cmd_list;
-	t_cmd	*current_cmd;
 
-	if (!tokens)
-		 exit_parsing(NULL, "syntax error: empty command");
-	cmd_list = cmd_new();
-	current_cmd = cmd_list;
-	while (tokens)
-	{
-		if (tokens->type == TOKEN_REDIR_IN)
-			handle_input_redirection(current_cmd, &tokens);
-		else if (tokens->type == TOKEN_REDIR_OUT)
-			handle_output_redirection(current_cmd, &tokens);
-		else if (tokens->type == TOKEN_WORD)
-			handle_word(current_cmd, tokens);
-		else if (tokens->type == TOKEN_PIPE)
-			handle_pipe(&current_cmd, &tokens);
-		tokens = tokens->next;
-	}
+	cmd_list = NULL;
+	parse = (t_parse){&cmd_list, NULL, tokens_head, tokens_head};
+	if (!parse.current_token)
+		exit_parsing(&parse, "syntax error: empty command");
+	*parse.cmd_list_head = cmd_new(NULL);
+	parse.current_cmd = *parse.cmd_list_head;
+	if (!parse.current_cmd)
+		exit_parsing(&parse, "malloc error");
+	handle_token_type(&parse);
 	return (cmd_list);
 }
