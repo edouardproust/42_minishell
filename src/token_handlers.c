@@ -1,12 +1,8 @@
 #include "minishell.h"
-
-/*Hndles the '|' (pipe) token by creating a new command.
- *
- * If the pipe is followed by another pipe or is at the end of the input,
- * an error is triggered.
- *
- * - Advances the current token to the next valid command.
- * - Links the new command to the existing list.
+/* 
+ * Handles the pipe (`|`) token by creating a new command.
+ * - Checks for syntax errors like consecutive pipes.
+ * - Creates a new command for the next part of the pipeline.
  */
 void	handle_pipe(t_parse *parse)
 {
@@ -18,7 +14,11 @@ void	handle_pipe(t_parse *parse)
 		exit_parsing(parse, "malloc error");
 	parse->current_cmd = parse->current_cmd->next;
 }
-
+/* 
+ * Handles input redirection (`<`) token by setting the infile for the current command.
+ * - Ensures that the next token is a valid file name (word token).
+ * - Copies the file name to the current command's infile field.
+ */
 void	handle_input_redirection(t_parse *parse)
 {
 	if (!parse->current_token->next || parse->current_token->next->type != TOKEN_WORD)
@@ -29,7 +29,11 @@ void	handle_input_redirection(t_parse *parse)
 		exit_parsing(parse, "malloc error");
 	parse->current_token = parse->current_token->next;
 }
-
+/* 
+ * Handles output redirection (`>`) token by setting the outfile for the current command.
+ * - Ensures that the next token is a valid file name (word token).
+ * - Copies the file name to the current command's outfile field.
+ */
 void	handle_output_redirection(t_parse *parse)
 {
 	if (!parse->current_token->next || parse->current_token->next->type != TOKEN_WORD)
@@ -40,7 +44,10 @@ void	handle_output_redirection(t_parse *parse)
 		exit_parsing(parse, "malloc error");
 	parse->current_token = parse->current_token->next;
 }
-
+/* 
+ * Handles a word token by copying its value and adding it to the current command's arguments.
+ * - Duplicates the word and adds it to the args list of the current command.
+ */
 void	handle_word(t_parse *parse)
 {
 	char	*arg_copy;

@@ -1,5 +1,8 @@
 #include "minishell.h"
-
+/* 
+ * Creates a new token with the given value and type.
+ * Returns: A new token or NULL if allocation fails.
+ */
 t_token	*token_new(char *value, int type)
 {
 	t_token *token;
@@ -12,9 +15,11 @@ t_token	*token_new(char *value, int type)
         token->next = NULL;
         return (token);
 }
-
-// TODO :(A) implement heredoc and append logic
-
+/* 
+ * Determines the token type based on the character at position `i`.
+ * Returns: The token type (e.g., TOKEN_PIPE, TOKEN_REDIR_IN).
+ */
+// TODO (A): implement heredoc and append logic
 int	get_token_type(char *input, int i)
 {
 	if (input[i] == '|')
@@ -33,7 +38,10 @@ int	get_token_type(char *input, int i)
 	}
 	return (TOKEN_WORD);
 }
-
+/* 
+ * Creates a word token from the input string starting at `index`.
+ * Returns: A new word token or NULL if allocation fails.
+ */
 t_token	*create_word_token(char *input, int *index)
 {
 	int     start;
@@ -51,7 +59,9 @@ t_token	*create_word_token(char *input, int *index)
 		free(word);
 	return (token);
 }
-//adds a new token to the list
+/* 
+ * Adds a new token to the end of the token list.
+ */
 void	token_addback(t_token **tokens, t_token *new)
 {
 	t_token *tmp;

@@ -1,5 +1,8 @@
 #include "minishell.h"
-
+/* 
+ * Creates a new command structure with default values.
+ * Returns: A new t_cmd structure or NULL if malloc fails.
+ */
 t_cmd	*cmd_new(t_cmd *prev_cmd)
 {
 	t_cmd *cmd;
@@ -23,7 +26,9 @@ t_cmd	*cmd_new(t_cmd *prev_cmd)
 		cmd->prev->next = cmd;
 	return (cmd);
 }
-//adds an argument to the args list
+/* 
+ * Adds an argument to the command's arguments list.
+ */
 void	add_arg_to_cmd(t_cmd *cmd, char *arg)
 {
 	int	i;
@@ -44,7 +49,17 @@ void	add_arg_to_cmd(t_cmd *cmd, char *arg)
 	free(cmd->args);
 	cmd->args = new_args;
 }
-//Parse tokens into commands. TODO (A) Implement append and heredoc logic
+/* 
+ * Parses a list of tokens and converts them into a linked list of commands.
+ *
+ * - Initializes the parsing process by setting up the necessary variables.
+ * - Creates a new command structure to hold the parsed tokens.
+ * - Iterates over the tokens, processing them according to their type.
+ * - Links the new commands to the command list.
+ * 
+ * Returns: A linked list of parsed t_cmd structures, or NULL if parsing fails.
+ */
+//TODO (A) Implement append and heredoc logic types.
 t_cmd	*parse_tokens(t_token *tokens_head)
 {
 	t_parse	parse;
@@ -58,6 +73,6 @@ t_cmd	*parse_tokens(t_token *tokens_head)
 	parse.current_cmd = *parse.cmd_list_head;
 	if (!parse.current_cmd)
 		exit_parsing(&parse, "malloc error");
-	 handle_token_type(&parse);
-	 return (cmd_list);
+	handle_token_type(&parse);
+	return (cmd_list);
 }

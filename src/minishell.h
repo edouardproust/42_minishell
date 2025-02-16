@@ -48,7 +48,7 @@ t_token *current_token;
 }t_parse;
 
 int     main(int ac, char **av, char **envp);
-t_cmd *create_cmd_lst(char *input);
+t_cmd *init_cmd_lst(char *input);
 void    debug_tokens(t_token *tokens);
 void    debug_cmds(t_cmd *cmd);
 void    debug_cmd(t_cmd *cmd, char *label);

@@ -1,5 +1,10 @@
 #include "minishell.h"
-
+/* 
+ * Iterates through tokens and handles each token based on its type.
+ * For each token type (input redirection, output redirection, word, or pipe),
+ * the appropriate handler function is called.
+ * - Handles redirections (input/output), pipes, and arguments.
+ */
 void	handle_token_type(t_parse *parse)
 {
 	while (parse->current_token)
