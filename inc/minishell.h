@@ -43,6 +43,9 @@ typedef struct	s_parse	{
 	t_token	*current_token;
 } t_parse;
 
+//main.c
+int	main(int ac, char **av, char **envp);
+
 //cmd_list.c
 t_cmd	*init_cmd_lst(char *input);
 

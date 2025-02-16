@@ -11,7 +11,7 @@ C_FILES = debug.c \
 	free.c \
 	exit.c \
 	main.c \
-	cmd_lst.c \
+	cmd_list.c \
 	tokenize.c \
 	general_utils.c \
 	tokens_utils.c \
