@@ -47,18 +47,17 @@ void	add_arg_to_cmd(t_cmd *cmd, char *arg)
 //Parse tokens into commands. TODO (A) Implement append and heredoc logic
 t_cmd	*parse_tokens(t_token *tokens_head)
 {
+	t_parse	parse;
 	t_cmd	*cmd_list;
-	t_cmd	*current_cmd;
-	t_token	*current_token;
 
 	cmd_list = NULL;
-	current_token = tokens_head;
-	if (!current_token)
-		exit_parsing(&cmd_list, &tokens_head, "syntax error: empty command");
-	cmd_list = cmd_new(NULL);
-	if (!cmd_list)
-		exit_parsing(&cmd_list, &tokens_head, "malloc error");
-	current_cmd = cmd_list;
-	handle_token_type(&cmd_list, &current_cmd, &tokens_head, &current_token);
-	return (cmd_list);
+	parse = (t_parse){&cmd_list, NULL, tokens_head, tokens_head};
+	if (!parse.current_token)
+		exit_parsing(&parse, "syntax error: empty command");
+	*parse.cmd_list_head = cmd_new(NULL);
+	parse.current_cmd = *parse.cmd_list_head;
+	if (!parse.current_cmd)
+		exit_parsing(&parse, "malloc error");
+	 handle_token_type(&parse);
+	 return (cmd_list);
 }

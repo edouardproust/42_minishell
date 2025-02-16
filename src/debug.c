@@ -6,33 +6,18 @@
 
 //static t_cmd *cmd_new_addback(char *bash_cmd, char *infile, char *outfile, t_cmd *prev_cmd);
 
-t_cmd	*create_cmd_lst(char *input)
+/*t_cmd	*create_cmd_lst(char *input)
 {
-/*	t_cmd *cmd0 = cmd_new_addback("tail -n +4", "test/infile", NULL, NULL);
+	t_cmd *cmd0 = cmd_new_addback("tail -n +4", "test/infile", NULL, NULL);
 	t_cmd *cmd1 = cmd_new_addback("grep a", NULL, NULL, cmd0);
 	t_cmd *cmd2 = cmd_new_addback("sort", NULL, NULL, cmd1);
 	t_cmd *cmd3 = cmd_new_addback("uniq -c", NULL, NULL, cmd2);
 	t_cmd *cmd4 = cmd_new_addback("sort -nr", NULL, NULL, cmd3); 
 	cmd_new_addback("head -n 3", NULL, "test/outfile", cmd4);
 	return (cmd0);
-}*/
-	t_token *tokens;
-	t_token	*tokens_head;
-	t_cmd	*cmd_lst;
-
-	tokens = tokenizer(input);
-	tokens_head = tokens;
-	cmd_lst = NULL;
-	if (!tokens)
-		return (NULL);
-	debug_tokens(tokens);
-	cmd_lst = parse_tokens(tokens_head);
-	free_token_lst(&tokens_head);
-	debug_cmds(cmd_lst);
-	return (cmd_lst);
 }
 
-/*static t_cmd *cmd_new_addback(char *bash_cmd, char *infile, char *outfile, t_cmd *prev_cmd)
+static t_cmd *cmd_new_addback(char *bash_cmd, char *infile, char *outfile, t_cmd *prev_cmd)
 {
     t_cmd *cmd = malloc(sizeof(t_cmd));
 	cmd->args = NULL;

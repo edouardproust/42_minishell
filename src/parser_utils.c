@@ -1,20 +1,20 @@
 #include "minishell.h"
 
-void handle_token_type(t_cmd **cmd_list_head, t_cmd **current_cmd, t_token **tokens_head, t_token **current_token)
+void	handle_token_type(t_parse *parse)
 {
-	while (*current_token)
+	while (parse->current_token)
 	{
-		if ((*current_token)->type == TOKEN_REDIR_IN)
-			handle_input_redirection(cmd_list_head, tokens_head, *current_cmd, current_token);
-		else if ((*current_token)->type == TOKEN_REDIR_OUT)
-			handle_output_redirection(cmd_list_head, tokens_head, *current_cmd, current_token);
-		else if ((*current_token)->type == TOKEN_WORD)
-			handle_word(cmd_list_head, tokens_head, *current_cmd, *current_token);
-		else if ((*current_token)->type == TOKEN_PIPE)
+		if (parse->current_token->type == TOKEN_REDIR_IN)
+			handle_input_redirection(parse);
+		else if (parse->current_token->type == TOKEN_REDIR_OUT)
+			handle_output_redirection(parse);
+		else if (parse->current_token->type == TOKEN_WORD)
+			handle_word(parse);
+		else if (parse->current_token->type == TOKEN_PIPE)
 		{
-			handle_pipe(cmd_list_head, current_cmd, tokens_head, current_token);
+			handle_pipe(parse);
 			continue ;
 		}
-		*current_token = (*current_token)->next;
+		parse->current_token = parse->current_token->next;
 	}
 }

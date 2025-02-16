@@ -1,45 +1,52 @@
 #include "minishell.h"
-//TODO (A) add fucntions for heredoc and append
 
-void	handle_pipe(t_cmd **cmd_list_head, t_cmd **current_cmd, t_token **tokens_head, t_token **current_token)
+/*Hndles the '|' (pipe) token by creating a new command.
+ *
+ * If the pipe is followed by another pipe or is at the end of the input,
+ * an error is triggered.
+ *
+ * - Advances the current token to the next valid command.
+ * - Links the new command to the existing list.
+ */
+void	handle_pipe(t_parse *parse)
 {
-	if (!(*current_token)->next || (*current_token)->next->type == TOKEN_PIPE)
-		exit_parsing(cmd_list_head, tokens_head, "syntax error near unexpected token `|'");
-	*current_token = (*current_token)->next;
-	(*current_cmd)->next = cmd_new(*current_cmd);
-	if (!(*current_cmd)->next)
-		exit_parsing(cmd_list_head, tokens_head, "malloc error");
-	*current_cmd = (*current_cmd)->next;
+	if (!parse->current_token->next || parse->current_token->next->type == TOKEN_PIPE)
+		exit_parsing(parse, "syntax error near unexpected token `|'");
+	parse->current_token = parse->current_token->next;
+	parse->current_cmd->next = cmd_new(parse->current_cmd);
+	if (!parse->current_cmd->next)
+		exit_parsing(parse, "malloc error");
+	parse->current_cmd = parse->current_cmd->next;
 }
 
-void	handle_input_redirection(t_cmd **cmd_list_head, t_token **tokens_head, t_cmd *current_cmd, t_token **current_token)
+void	handle_input_redirection(t_parse *parse)
 {
-	if (!(*current_token)->next || (*current_token)->next->type != TOKEN_WORD)
-		exit_parsing(cmd_list_head, tokens_head, "syntax error near unexpected token `newline'");
-	ft_free_ptrs(1, &current_cmd->infile);
-	current_cmd->infile = ft_strdup((*current_token)->next->value);
-	if (!current_cmd->infile)
-		exit_parsing(cmd_list_head, tokens_head, "malloc error");
-	*current_token = (*current_token)->next;
+	if (!parse->current_token->next || parse->current_token->next->type != TOKEN_WORD)
+		exit_parsing(parse, "syntax error near unexpected token `newline'");
+	ft_free_ptrs(1, &parse->current_cmd->infile);
+	parse->current_cmd->infile = ft_strdup(parse->current_token->next->value);
+	if (!parse->current_cmd->infile)
+		exit_parsing(parse, "malloc error");
+	parse->current_token = parse->current_token->next;
 }
 
-void	handle_output_redirection(t_cmd **cmd_list_head, t_token **tokens_head, t_cmd *current_cmd, t_token **current_token)
+void	handle_output_redirection(t_parse *parse)
 {
-	if (!(*current_token)->next || (*current_token)->next->type != TOKEN_WORD)
-		exit_parsing(cmd_list_head, tokens_head, "syntax error near unexpected token `newline'");
-	ft_free_ptrs(1, &current_cmd->outfile);
-	current_cmd->outfile = ft_strdup((*current_token)->next->value);
-	if (!current_cmd->outfile)
-		exit_parsing(cmd_list_head, tokens_head, "malloc error");
-	*current_token = (*current_token)->next;
+	if (!parse->current_token->next || parse->current_token->next->type != TOKEN_WORD)
+		exit_parsing(parse, "syntax error near unexpected token `newline'");
+	ft_free_ptrs(1, &parse->current_cmd->outfile);
+	parse->current_cmd->outfile = ft_strdup(parse->current_token->next->value);
+	if (!parse->current_cmd->outfile)
+		exit_parsing(parse, "malloc error");
+	parse->current_token = parse->current_token->next;
 }
 
-void	handle_word(t_cmd **cmd_list_head, t_token **tokens_head, t_cmd *current_cmd, t_token *token)
+void	handle_word(t_parse *parse)
 {
 	char	*arg_copy;
 
-	arg_copy = ft_strdup(token->value);
+	arg_copy = ft_strdup(parse->current_token->value);
 	if (!arg_copy)
-		exit_parsing(cmd_list_head, tokens_head, "malloc error"); 
-	add_arg_to_cmd(current_cmd, arg_copy);
+		exit_parsing(parse, "malloc error"); 
+	add_arg_to_cmd(parse->current_cmd, arg_copy);
 }

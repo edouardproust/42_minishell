@@ -39,7 +39,14 @@ typedef struct s_cmd {
     struct s_cmd *next;
 } t_cmd;
 
-//int		main(int argc, char **argv);
+typedef struct s_parse
+{
+	t_cmd   **cmd_list_head;
+	t_cmd   *current_cmd;
+	t_token *tokens_head;
+t_token *current_token;
+}t_parse;
+
 int     main(int ac, char **av, char **envp);
 t_cmd *create_cmd_lst(char *input);
 void    debug_tokens(t_token *tokens);
@@ -59,16 +66,16 @@ void	token_addback(t_token **tokens, t_token *new);
 t_token *tokenizer(char *input);
 t_cmd	*cmd_new(t_cmd *prev_cmd);
 void	add_arg_to_cmd(t_cmd *cmd, char *arg);
-void handle_input_redirection(t_cmd **cmd_list_head, t_token **tokens_head, t_cmd *current_cmd, t_token **current_token);
-void handle_output_redirection(t_cmd **cmd_list_head, t_token **tokens_head, t_cmd *current_cmd, t_token **current_token);
-void    handle_word(t_cmd **cmd_list_head, t_token **tokens_head, t_cmd *current_cmd, t_token *token);
-void handle_pipe(t_cmd **cmd_list_head, t_cmd **current_cmd, t_token **tokens_head, t_token **current_token);
-void handle_token_type(t_cmd **cmd_list_head, t_cmd **current_cmd, t_token **tokens_head, t_token **current_token);
-t_cmd	*parse_tokens(t_token *tokens_head);
+void    handle_input_redirection(t_parse *parse);
+void    handle_output_redirection(t_parse *parse);
+void    handle_word(t_parse *parse);
+void    handle_pipe(t_parse *parse);
+void handle_token_type(t_parse *parse);
+t_cmd   *parse_tokens(t_token *tokens_head);
 void 	print_cmds(t_cmd *cmd);
 void	print_tokens(t_token *tokens);
 void    exit_exec(t_cmd **cmd_lst, char *fmt, ...);
-void    exit_parsing(t_cmd **cmd_lst, t_token **tokens_head, char *fmt, ...);
+void exit_parsing(t_parse *parse, char *fmt, ...);
 t_cmd   *free_cmd(t_cmd **cmd);
 void    free_cmd_lst(t_cmd **cmd_lst);
 void    free_token_lst(t_token **tokens);
