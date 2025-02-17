@@ -15,6 +15,7 @@ C_FILES = debug.c \
 	tokenize.c \
 	general_utils.c \
 	tokens_utils.c \
+	quote_handler.c \
 	parser.c \
 	parser_utils.c \
 	token_handlers.c \

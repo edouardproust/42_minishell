@@ -15,3 +15,11 @@ int	is_word_char(char c)
 {
 	return (c != ' ' && c != '|' && c != '<' && c != '>');
 }
+/*
+ * Checks if the character is a quote symbol.
+ * Returns: 1 if quote char, 0 otherwise.
+ */
+int	is_quote_char(char c)
+{	
+	return (c == '\'' || c == '"');
+}

@@ -40,6 +40,7 @@ int	get_token_type(char *input, int i)
 }
 /* 
  * Creates a word token from the input string starting at `index`.
+ * Loops inside the input string and checks for quote chars.
  * Returns: A new word token or NULL if allocation fails.
  */
 t_token	*create_word_token(char *input, int *index)
@@ -50,8 +51,16 @@ t_token	*create_word_token(char *input, int *index)
 
 	start = *index;
 	while (input[*index] && is_word_char(input[*index]))
+	{
+		if (is_quote_char(input[*index]))
+		{
+			if(!skip_quotes(input, index))
+				return (NULL);
+		}
 		(*index)++;
+	}
 	word = ft_substr(input, start, *index - start);
+	word = remove_quotes(word);
 	if (!word)
 		return (NULL);
 	token = token_new(word, TOKEN_WORD);

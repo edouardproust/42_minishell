@@ -52,6 +52,7 @@ t_cmd	*init_cmd_lst(char *input);
 //general_utils.c
 int	is_special_char(char c);
 int	is_word_char(char c);
+int	is_quote_char(char c);
 
 //tokenize.c
 t_token *tokenizer(char *input);
@@ -61,6 +62,10 @@ t_token	*token_new(char *value, int type);
 int	get_token_type(char *input, int i);
 t_token	*create_word_token(char *input, int *index);
 void	token_addback(t_token **tokens, t_token *new);
+
+//quote_handler.c
+int	skip_quotes(char *input, int *index);
+char	*remove_quotes(char *str);
 
 //parser.c
 t_cmd   *cmd_new();

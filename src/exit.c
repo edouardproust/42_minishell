@@ -42,10 +42,13 @@ void	exit_parsing(t_parse *parse, char *fmt, ...)
 	if (ft_strncmp(fmt, "malloc error", 12) != 0)
 		print_error(fmt, args);
 	va_end(args);
-	if (parse->cmd_list_head && *parse->cmd_list_head)
-		free_cmd_lst(parse->cmd_list_head);
-	if (parse->tokens_head)
-		free_token_lst(&parse->tokens_head);
+	if (parse)
+	{
+		if (parse->cmd_list_head && *parse->cmd_list_head)
+			free_cmd_lst(parse->cmd_list_head);
+		if (parse->tokens_head)
+			free_token_lst(&parse->tokens_head);
+	}
 	exit(EXIT_FAILURE);
 }
 
