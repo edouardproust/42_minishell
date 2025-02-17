@@ -68,7 +68,7 @@ t_cmd	*parse_tokens(t_token *tokens_head)
 	cmd_list = NULL;
 	parse = (t_parse){&cmd_list, NULL, tokens_head, tokens_head};
 	if (!parse.current_token)
-		exit_parsing(&parse, "syntax error: empty command");
+		return (NULL);
 	*parse.cmd_list_head = cmd_new(NULL);
 	parse.current_cmd = *parse.cmd_list_head;
 	if (!parse.current_cmd)
