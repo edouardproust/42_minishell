@@ -23,18 +23,18 @@ char	*remove_quotes(char *str)
 	char	quote;
 	char	*cleaned;
 
-	cleaned = malloc(sizeof(char *) * (ft_strlen(str) + 1));
+	cleaned = malloc(sizeof(char) * (ft_strlen(str) + 1));
 	if (!cleaned)
 		return (NULL);
 	i = 0;
 	j = 0;
 	while (str[i])
 	{
-		if (str[i] == '\'' || str[i] == '"')
+		if (is_quote_char(str[i]))
 		{
 			quote = str[i];
 			i++;
-			while (str[i] && str[i] !=quote)
+			while (str[i] && str[i] != quote)
 				cleaned[j++] = str[i++];
 			if (str[i] == quote)
 				i++;

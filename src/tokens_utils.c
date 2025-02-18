@@ -54,8 +54,8 @@ t_token	*create_word_token(char *input, int *index)
 	{
 		if (is_quote_char(input[*index]))
 		{
-			if(!skip_quotes(input, index))
-				return (NULL);
+			if (!skip_quotes(input, index))
+			return (NULL);
 		}
 		(*index)++;
 	}
