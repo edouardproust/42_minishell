@@ -1,6 +1,6 @@
 #include "minishell.h"
 
-int	skip_quotes(char *input, int *index)
+int	skip_quotes(char *input, int *index, char *unmatched_quote)
 {
 	char	quote;
 
@@ -10,7 +10,7 @@ int	skip_quotes(char *input, int *index)
 		(*index)++;
 	if (!input[*index])
 	{
-		 exit_parsing(NULL, "unexpected EOF while looking for matching `%c'", quote);
+		*unmatched_quote = quote;
 		 return (0);
 	}
 	return (1);
@@ -32,8 +32,7 @@ char	*remove_quotes(char *str)
 	{
 		if (is_quote_char(str[i]))
 		{
-			quote = str[i];
-			i++;
+			quote = str[i++];
 			while (str[i] && str[i] != quote)
 				cleaned[j++] = str[i++];
 			if (str[i] == quote)

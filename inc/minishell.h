@@ -53,6 +53,7 @@ t_cmd	*init_cmd_lst(char *input);
 int	is_special_char(char c);
 int	is_word_char(char c);
 int	is_quote_char(char c);
+void	skip_whitespaces(char *input, int *i);
 
 //tokenize.c
 t_token *tokenizer(char *input);
@@ -60,11 +61,15 @@ t_token *tokenizer(char *input);
 //tokens_utils.c
 t_token	*token_new(char *value, int type);
 int	get_token_type(char *input, int i);
-t_token	*create_word_token(char *input, int *index);
+t_token	*create_word_token(char *input, int *index, char *unmatched_quote);
 void	token_addback(t_token **tokens, t_token *new);
 
+//tokenize_utils.c
+t_token	*handle_special_char(char *input, int *i);
+t_token	*handle_word_token(char *input, int *i, char *unmatched_quote);
+
 //quote_handler.c
-int	skip_quotes(char *input, int *index);
+int	skip_quotes(char *input, int *index, char *unmatched_quote);
 char	*remove_quotes(char *str);
 
 //parser.c

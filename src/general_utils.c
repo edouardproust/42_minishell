@@ -23,3 +23,9 @@ int	is_quote_char(char c)
 {	
 	return (c == '\'' || c == '"');
 }
+
+void	skip_whitespaces(char *input, int *i)
+{
+	while (input[*i] == ' ')
+		(*i)++;
+}

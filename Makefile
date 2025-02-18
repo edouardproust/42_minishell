@@ -12,8 +12,9 @@ C_FILES = debug.c \
 	exit.c \
 	main.c \
 	cmd_list.c \
-	tokenize.c \
 	general_utils.c \
+	tokenize.c \
+	tokenize_utils.c \
 	tokens_utils.c \
 	quote_handler.c \
 	parser.c \

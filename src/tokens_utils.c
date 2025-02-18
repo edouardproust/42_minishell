@@ -43,7 +43,7 @@ int	get_token_type(char *input, int i)
  * Loops inside the input string and checks for quote chars.
  * Returns: A new word token or NULL if allocation fails.
  */
-t_token	*create_word_token(char *input, int *index)
+t_token	*create_word_token(char *input, int *index, char *unmatched_quote)
 {
 	int     start;
 	char    *word;
@@ -54,7 +54,7 @@ t_token	*create_word_token(char *input, int *index)
 	{
 		if (is_quote_char(input[*index]))
 		{
-			if (!skip_quotes(input, index))
+			if (!skip_quotes(input, index, unmatched_quote))
 			return (NULL);
 		}
 		(*index)++;
