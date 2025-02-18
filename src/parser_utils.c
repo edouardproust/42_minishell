@@ -16,10 +16,7 @@ void	handle_token_type(t_parse *parse)
 		else if (parse->current_token->type == TOKEN_WORD)
 			handle_word(parse);
 		else if (parse->current_token->type == TOKEN_PIPE)
-		{
 			handle_pipe(parse);
-			continue ;
-		}
 		parse->current_token = parse->current_token->next;
 	}
 }

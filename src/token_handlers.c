@@ -8,7 +8,6 @@ void	handle_pipe(t_parse *parse)
 {
 	if (!parse->current_token->next || parse->current_token->next->type == TOKEN_PIPE)
 		exit_parsing(parse, "syntax error near unexpected token `|'");
-	parse->current_token = parse->current_token->next;
 	parse->current_cmd->next = cmd_new(parse->current_cmd);
 	if (!parse->current_cmd->next)
 		exit_parsing(parse, "malloc error");
