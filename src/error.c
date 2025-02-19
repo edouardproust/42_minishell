@@ -2,6 +2,9 @@
 
 /**
  * Set errno to the given value.
+ * 
+ * @param err_no Value for errno
+ * @return void
  */
 void	set_errno(int err_no)
 {
@@ -16,6 +19,10 @@ void	set_errno(int err_no)
  * If 'fmt' is NULL, then nothing is printed.
  * If 'errno' is on 'Success' (code 0), it is not printed,
  * else ': ' followed by the error string is printed
+ * 
+ * @param fmt Format for the error message to print in stderr
+ * @param args va_list of args to expend in fmt
+ * @return void
  */
 void	put_error_va(char *fmt, va_list args)
 {
@@ -40,6 +47,9 @@ void	put_error_va(char *fmt, va_list args)
 
 /**
  * Print an error in stderr. Takes a variadic argument.
+ * 
+ * @param fmt Format for the error message to print in stderr
+ * @param ... Variadic list of values to expend in fmt
  */
 void	put_error(char *fmt, ...)
 {
