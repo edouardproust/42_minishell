@@ -1,11 +1,11 @@
 #include "minishell.h"
 
-/*
+/**
  * Implementation of the env builtin, with no option or argument.
  * 
  * @param args Array of arguments passed to env.
  * @param minishell Struct containing global Minishell data, including the 
- * 	environment variables list (`envvar_lst`) and the environment array (`envp`).
+ * 	environment variables list (`envvar_lst`).
  * @return EXIT_SUCCESS on success. EXIT_FAILURE on failure.
  * @note The quotes around args are removed during tokenization.
  * eg. `$"exit" '1234' "'"test"'"` -> args: {"exit","1234", "\'test\'"} // TODO

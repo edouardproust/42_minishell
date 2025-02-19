@@ -1,9 +1,9 @@
 #include "minishell.h"
 
-/*
+/**
  * Retrieve the t_builtin for the given builtin name
  *
- * Return: ptr to the matching t_builtin, NULL if no match
+ * @return ptr to the matching t_builtin, NULL if no match
  */
 t_builtin	*get_builtin(char *progname)
 {
@@ -32,10 +32,10 @@ t_builtin	*get_builtin(char *progname)
 	return (NULL);
 }
 
-/*
+/**
  * Run the given t_builtin.
  *
- * Exit on: ran in chaild process, callback failure
+ * @note Exit on: ran in chaild process, callback failure
  */
 void	run_builtin(int in_child_proc, t_builtin *builtin, char **args,
 	t_minishell **minishell)

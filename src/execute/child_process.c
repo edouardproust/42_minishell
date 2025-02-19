@@ -1,9 +1,11 @@
 #include "minishell.h"
 
-/*
+/**
  * Duplicate a file descriptor and close it once duplicated.
  *
- * Return: exit code (success or failure)
+ * @param oldfd File descriptor to duplicate
+ * @param newfd Destination file descriptor
+ * @return: EXIT_FAILURE if dup2 fails. EXIT_SUCCESS otherwise.
  */
 static int	duplicate_fd(int oldfd, int newfd)
 {
@@ -15,10 +17,12 @@ static int	duplicate_fd(int oldfd, int newfd)
 	return (EXIT_SUCCESS);
 }
 
-/*
+/**
  * Redirect input and output for the current command if necessary.
  *
- * Exit on: duplication failure
+ * @note Exit on: duplication failure
+ * @return void
+ * @note Exit on: a call to duplicate_fd fails
  */
 static void	redirect_io(t_cmd *cmd, t_minishell **minishell)
 {
@@ -33,10 +37,15 @@ static void	redirect_io(t_cmd *cmd, t_minishell **minishell)
 		exit_minishell(exit_code, minishell, "dup2");
 }
 
-/*
- * Create a child process and run a builtin or an executable in it.:w
+/**
+ * Create a child process and run a builtin or an executable in it.
  *
- * Exit on: fork failure, child process exit code > 125
+ * @param builtin Struct containing data on the builtin to be executed.
+ *  NULL if an executable must be executed instead.
+ * @param cmd Struct of the command to be executed. NULL if a builtin 
+ *  must be executed instead.
+ * @return Child process PID
+ * @note Exit on: fork failure, child process exit code > E_ERRMAX
  */
 pid_t	run_in_child_process(t_builtin *builtin, t_cmd *cmd,
 	t_minishell **minishell)

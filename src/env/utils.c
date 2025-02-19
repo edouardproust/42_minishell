@@ -1,5 +1,16 @@
 #include "minishell.h"
 
+/**
+ * Get the value of an environment variable from its name.
+ * 
+ * This function is searching through the member
+ * t_envvar_lst of t_minishell.
+ * 
+ * @param var_name Name of the searched environment variable
+ * @param minishell Struct containing global Minishell data, including the 
+ * 	environment variables list (`envvar_lst`).
+ * @return The value if node t_envvar node found. NULL otherwise.
+ */
 char	*get_env_value(char *var_name, t_minishell *minishell)
 {
 	t_envvar	*var;
@@ -10,6 +21,12 @@ char	*get_env_value(char *var_name, t_minishell *minishell)
 	return (var->value);
 }
 
+/**
+ * Count the number of nodes in a t_envvar list.
+ * 
+ * @param head Head node of the list
+ * @return Count of nodes in the list.
+ */
 static int	envvar_lstsize(t_envvar *head)
 {
 	int			count;
@@ -27,6 +44,14 @@ static int	envvar_lstsize(t_envvar *head)
 	return (count);
 }
 
+/**
+ * Parse back minishell->envvar_lst into an array of strings (null-terminated)
+ * and store it in minishell->envp.
+ * 
+ * @param minishell Struct containing global Minishell data, including the 
+ * 	environment variables list (`envvar_lst`) and the environment array (`envp`).
+ * @return EXIT_SUCCESS on success. EXIT_FAILURE otherwise.
+ */
 int	update_envp(t_minishell *minishell)
 {
 	t_envvar	*current;

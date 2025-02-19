@@ -1,9 +1,13 @@
 #include "minishell.h"
 
-/*
+/**
  * Finds the executable path and runs it.
  *
- * Exit on: invalid path, execution failure
+ * @param cmd Struct of the command to be executed
+ * @param minishell Struct containing global Minishell data, including
+ * the environment array (`envp`)
+ * @return void
+ * @note Exit on: invalid path, execution failure
  */
 void	run_executable(t_cmd *cmd, t_minishell **minishell)
 {

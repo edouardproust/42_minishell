@@ -3,9 +3,8 @@
 /**
  * Implementation of the pwd builtin, with no option.
  * 
- * @param args Array of arguments passed to pwd.
- * @param minishell Struct containing global Minishell data, including the 
- * 	environment variables list (`envvar_lst`) and the environment array (`envp`).
+ * @param args (not used) Array of arguments passed to pwd.
+ * @param minishell (not used) Struct containing global Minishell data.
  * @return EXIT_SUCCESS on success. EXIT_FAILURE on failure.
  * @note The quotes around args are removed during tokenization.
  * eg. `$"pwd" 'wrong_arg'` -> args: {"pwd","wrong_arg"} // TODO

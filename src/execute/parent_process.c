@@ -1,10 +1,14 @@
 #include "minishell.h"
 
-/*
+/**
  * Update cmd->fdin and cmd->fdout if the current t_cmd contains an infile
  * or an outfile.
  * 
- * Exit on: pipe failure, open failure
+ * @param cmd Struct of the command to execute
+ * @param minishell Struct containing global Minishell data (to be freed
+ *  in case of failure)
+ * @return void
+ * @note Exit on: pipe failure, open failure
  */
 static void	setup_io(t_cmd *cmd, t_minishell **minishell)
 {
@@ -45,7 +49,9 @@ static void	setup_io(t_cmd *cmd, t_minishell **minishell)
  * - The write end of the pipe if created for this command
  * - The read end of the pipe if created for the previous command
  * 
- * Exit on: None
+ * @param cmd Struct of the command to execute
+ * @return void
+ * @note Exit on: None
  */
 static void	cleanup_io(t_cmd *cmd)
 {
@@ -59,10 +65,13 @@ static void	cleanup_io(t_cmd *cmd)
 		close(cmd->prev->pipe[0]);
 }
 
-/*
+/**
  * Wait for all processes to finish and handle exit codes. 
  *
- * Exit on: a process exits with code > 125
+ * @param minishell Struct containing global Minishell data (to be 
+ *  freed in case of failure)
+ * @return void
+ * @note Exit on: a process exits with code > E_ERRMAX
  */
 static void	wait_for_processes(t_minishell **minishell)
 {
@@ -82,10 +91,13 @@ static void	wait_for_processes(t_minishell **minishell)
 	}
 }
 
-/*
+/**
  * Execute each t_cmd of the list one by one.
- *
- * Exit on: incorrect input, function call exit
+ * 
+ * @param minishell Struct containing global Minishell data (to be 
+ *  freed in case of failure)
+ * @return void
+ * @note Exit on: incorrect input, function call exit
  */
 void	execute_cmd_lst(t_minishell **minishell)
 {

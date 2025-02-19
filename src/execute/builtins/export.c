@@ -1,5 +1,12 @@
 #include "minishell.h"
 
+/**
+ * Print in stdout the list of export environment variables
+ * for the command `export`.
+ * 
+ * @param lst Head node of t_envvar list
+ * @return FAILURE if ft_printf fails. EXIT_SUCCESS otherwise.
+ */
 static int	put_export_vars(t_envvar *lst)
 {
 	while (lst)
@@ -12,7 +19,7 @@ static int	put_export_vars(t_envvar *lst)
 }
 
 /**
- *  Implementation of the export builtin, with no options.
+ * Implementation of the export builtin, with no options.
  * 
  * @param args Array of arguments passed to export.
  * @param minishell Struct containing global Minishell data, including the 
