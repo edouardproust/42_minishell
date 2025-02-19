@@ -38,7 +38,6 @@ void	put_error_va(char *fmt, va_list args)
 	va_end(args);
 }
 
-
 /**
  * Print an error in stderr. Takes a variadic argument.
  */

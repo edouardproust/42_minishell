@@ -12,16 +12,6 @@
 
 #include "libft.h"
 
-static size_t	ft_matrix_size(char **matrix)
-{
-	int	count;
-
-	count = 0;
-	while (matrix[count])
-		count++;
-	return (count);
-}
-
 char	**ft_matrix_dup(char **matrix)
 {
 	char	**dup;

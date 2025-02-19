@@ -19,6 +19,7 @@ SRCS = get_next_line.c \
 	ft_itoa.c \
 	ft_lutoa_base.c \
 	ft_matrix_dup.c \
+	ft_matrix_size.c \
 	ft_memchr.c \
 	ft_memcmp.c \
 	ft_memcpy.c \

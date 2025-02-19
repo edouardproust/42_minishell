@@ -1,6 +1,6 @@
 #include "minishell.h"
 
-/*
+/**
  * Free one t_envvar node
  */
 t_envvar	*free_envvar_node(t_envvar **var)
@@ -17,8 +17,9 @@ t_envvar	*free_envvar_node(t_envvar **var)
 	return (nxt_var);
 }
 
-/*
- * Free all the nodes in the list of t_envvar (starting by the 'envvar_list' node).
+/**
+ * Free all the nodes in the list of t_envvar (starting by the 
+ * 'envvar_list' node).
  */
 void	free_envvar_lst(t_envvar **var_lst)
 {
@@ -29,7 +30,7 @@ void	free_envvar_lst(t_envvar **var_lst)
 	*var_lst = NULL;
 }
 
-/*
+/**
  * Free all the node in the list of t_cmd (starting by the 'cmd_lst' node).
  */
 void	free_cmd_lst(t_cmd **cmd_lst)
@@ -44,7 +45,7 @@ void	free_cmd_lst(t_cmd **cmd_lst)
 	{
 		ft_free_split(&cur_cmd->args);
 		nxt_cmd = cur_cmd->next;
-		ft_free_ptrs(4, 
+		ft_free_ptrs(4,
 			&cur_cmd->infile,
 			&cur_cmd->outfile,
 			&cur_cmd->pipe,
@@ -67,7 +68,7 @@ void	free_minishell(t_minishell **minishell)
 	ft_free_ptrs(1, minishell);
 }
 
-/*
+/**
  * Close any fd up to FD_LIMIT, except standard ones.
  */
 void	flush_fds(void)

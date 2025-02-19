@@ -10,6 +10,7 @@ static t_cmd *cmd_new_addback(char *bash_cmd, char *infile, char *outfile, t_cmd
 
 t_cmd	*create_cmd_lst(void)
 {
+	/*
 	t_cmd *cmd0 = cmd_new_addback("tail -n +4", "test/infile", NULL, NULL);
 	t_cmd *cmd1 = cmd_new_addback("grep a", NULL, NULL, cmd0);
 	t_cmd *cmd2 = cmd_new_addback("sort", NULL, NULL, cmd1);
@@ -17,6 +18,14 @@ t_cmd	*create_cmd_lst(void)
 	t_cmd *cmd4 = cmd_new_addback("sort -nr", NULL, NULL, cmd3);
 	//t_cmd *cmd5 = cmd_new_addback("cd ..", NULL, NULL, cmd4);
 	cmd_new_addback("head -n 3", NULL, "test/outfile", cmd4);
+	*/
+	t_cmd *cmd0 = cmd_new_addback("echo -n -n -n hello -n", NULL, NULL, NULL);
+	//t_cmd *cmd0 = cmd_new_addback("cd test", NULL, NULL, NULL);
+	//t_cmd *cmd0 = cmd_new_addback("unset USERNAME LANG ZZZZ HOME", NULL, NULL, NULL);
+	//t_cmd *cmd0 = cmd_new_addback("env ZZZ", NULL, NULL, NULL);
+	//t_cmd *cmd0 = cmd_new_addback("export", NULL, NULL, NULL);
+	//t_cmd *cmd0 = cmd_new_addback("export HOME='hello world!'", NULL, NULL, NULL);
+	//t_cmd *cmd0 = cmd_new_addback("exit wrong_exit_code", NULL, NULL, NULL);
 	
 	return(cmd0);
 }
@@ -140,45 +149,6 @@ void debug_fd(char *label, int fd) {
 	}
 }
 
-void debug_read_fd(char *label, int fd)
-{
-    char buffer[1024];
-    int bytes_read;
-    int o = g_logfd;
-
-    ft_fprintf(o, "▶ ");
-    if (label != NULL)
-        ft_fprintf(o, "Read %s", label);
-    else
-        ft_fprintf(o, "Read fd");
-    ft_fprintf(o, ":\n");
-
-    int fd_copy = dup(fd);
-    if (fd_copy == -1) {
-        ft_fprintf(o, "Error: dup failed\n");
-        return;
-    }
-    bytes_read = read(fd_copy, buffer, 1023);
-    if (bytes_read == -1) {
-        ft_fprintf(o, "Error: read failed\n");
-        close(fd_copy);
-        return;
-    }
-    buffer[bytes_read] = '\0';
-
-    if (bytes_read == 0) {
-        ft_fprintf(o, "(null)\n");
-    } else {
-        ft_fprintf(o, "%s\n", buffer);
-    }
-    struct stat st;
-    if (fstat(fd, &st) == 0 && S_ISREG(st.st_mode)) {
-        lseek(fd, 0, SEEK_SET);
-    }
-
-    close(fd_copy);
-}
-
 void	debug_envvars(t_envvar *lst)
 {
 	int	fd = STDERR_FILENO;
@@ -189,6 +159,20 @@ void	debug_envvars(t_envvar *lst)
 	{
 		ft_fprintf(fd, "'%s': '%s'\n", lst->name, lst->value);
 		lst = lst->next;
+	}
+	ft_fprintf(fd, "────────────────────────────────────\n\n");
+}
+
+void	debug_envp(char **envp)
+{
+	int	fd = STDERR_FILENO;
+	ft_fprintf(fd, "╭────────────────────────────────╮\n");
+	ft_fprintf(fd, "│ envp                           │\n");
+	ft_fprintf(fd, "╰────────────────────────────────╯\n");
+	while (*envp)
+	{
+		ft_fprintf(fd, "%s\n", *envp);
+		envp++;
 	}
 	ft_fprintf(fd, "────────────────────────────────────\n\n");
 }

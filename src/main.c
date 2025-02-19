@@ -1,10 +1,10 @@
 #include "minishell.h"
-# include "debug.h" // TODO: remove
+#include "debug.h" // DEBUG
 
 static	t_minishell	*init_minishell(char **envp)
 {
-	t_minishell *minishell;
-	
+	t_minishell	*minishell;
+
 	minishell = malloc(sizeof(t_minishell));
 	if (!minishell)
 		exit_minishell(EXIT_FAILURE, NULL, "failed to initialize");
@@ -21,23 +21,14 @@ static	t_minishell	*init_minishell(char **envp)
 
 int	main(int ac, char **av, char **envp)
 {
-	t_minishell *minishell;
+	t_minishell	*minishell;
 
 	(void)av;
 	if (ac > 1)
-		return (EXIT_FAILURE); // TODO: (Ed) Deal with non-interactive mode
+		return (EXIT_FAILURE); // TODO: Deal with non-interactive mode
 	minishell = init_minishell(envp);
-	if (DEBUG) // DEBUG
-	{
-		debug_envvars(minishell->envvar_lst);
-		open_logfile("test/log");
-		minishell->cmd_lst = create_cmd_lst();
-	}
-	else
-		ft_printf("[TODO: Parsing]\n"); // TODO:
+	minishell->cmd_lst = create_cmd_lst(); // DEBUG
 	execute_cmd_lst(&minishell);
 	free_minishell(&minishell);
-	if (DEBUG) // DEBUG
-		close(g_logfd);
 	return (EXIT_SUCCESS);
 }

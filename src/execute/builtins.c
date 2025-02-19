@@ -8,17 +8,17 @@
 t_builtin	*get_builtin(char *progname)
 {
 	static t_builtin	builtins[] = {
-		{"echo", do_echo, 0},
-		{"cd", do_cd, 1},
-		{"pwd", do_pwd, 0},
-		{"export", do_export, 1},
-		{"unset", do_unset, 1},
-		{"env", do_env, 0},
-		{"exit", do_exit, 1}
+	{"echo", do_echo, 0},
+	{"cd", do_cd, 1},
+	{"pwd", do_pwd, 0},
+	{"export", do_export, 1},
+	{"unset", do_unset, 1},
+	{"env", do_env, 0},
+	{"exit", do_exit, 1}
 	};
-	size_t	lst_size;
-	size_t	progname_len;
-	size_t	i;
+	size_t				lst_size;
+	size_t				progname_len;
+	size_t				i;
 
 	lst_size = sizeof(builtins) / sizeof(builtins[0]);
 	progname_len = ft_strlen(progname);
@@ -37,7 +37,8 @@ t_builtin	*get_builtin(char *progname)
  *
  * Exit on: ran in chaild process, callback failure
  */
-void	run_builtin(int in_child_proc, t_builtin *builtin, char** args, t_minishell **minishell)
+void	run_builtin(int in_child_proc, t_builtin *builtin, char **args,
+	t_minishell **minishell)
 {
 	int		exit_code;
 

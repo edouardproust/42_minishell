@@ -1,8 +1,18 @@
 #include "minishell.h"
 
+char	*get_env_value(char *var_name, t_minishell *minishell)
+{
+	t_envvar	*var;
+
+	var = envvar_findbyname(minishell->envvar_lst, var_name);
+	if (!var)
+		return (NULL);
+	return (var->value);
+}
+
 static int	envvar_lstsize(t_envvar *head)
 {
-	int		count;
+	int			count;
 	t_envvar	*current;
 
 	if (!head)
@@ -17,18 +27,17 @@ static int	envvar_lstsize(t_envvar *head)
 	return (count);
 }
 
-int	update_envp(t_minishell **minishell)
+int	update_envp(t_minishell *minishell)
 {
 	t_envvar	*current;
 	char		**envp;
 	int			i;
-	char		*err_msg = "failed to update environment";
 
-	ft_free_split(&(*minishell)->envp);
-	current = (*minishell)->envvar_lst;
+	ft_free_split(&minishell->envp);
+	current = minishell->envvar_lst;
 	envp = malloc(sizeof(char *) * (envvar_lstsize(current) + 1));
 	if (!envp)
-		exit_minishell(EXIT_FAILURE, minishell, err_msg);
+		return (EXIT_FAILURE);
 	i = 0;
 	while (current)
 	{
@@ -39,6 +48,6 @@ int	update_envp(t_minishell **minishell)
 		i++;
 	}
 	envp[i] = NULL;
-	(*minishell)->envp = envp;
-	return (EXIT_FAILURE);
+	minishell->envp = envp;
+	return (EXIT_SUCCESS);
 }

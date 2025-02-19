@@ -1,38 +1,52 @@
 #include "minishell.h"
 
+t_bool	handle_option_n(char **args, int *i)
+{
+	t_bool	option_n;
+
+	option_n = FALSE;
+	if (args[*i] && ft_strncmp(args[*i], "-n", 3) == 0)
+	{
+		option_n = TRUE;
+		(*i)++;
+		while (args[*i] && ft_strncmp(args[*i], "-n", 3) == 0)
+			(*i)++;
+	}
+	return (option_n);
+}
+
 /**
- * Implementation of the echo builtin.
+ * Implementation of the echo builtin, with option -n.
  * 
  * @param args Array of arguments passed to echo.
- * @return EXIT_SUCCESS on success.
+ * @param minishell Struct containing global Minishell data, including the 
+ * 	environment variables list (`envvar_lst`) and the environment array (`envp`).
+ * @return EXIT_SUCCESS on success. EXIT_FAILURE on failure.
+ * @note The quotes around args are removed during tokenization.
+ * eg. `$"echo" 'Hello world'` -> args: {"echo","Hello world"} // TODO
  */
 int	do_echo(char **args, t_minishell *minishell)
 {
-	int		n_flag;
+	t_bool	option_n;
 	int		i;
 	char	*err_msg;
 
 	(void)minishell;
-	err_msg = "echo: write error";
-	n_flag = 0;
+	err_msg = "echo: ft_printf";
 	i = 1;
-	if (args[1] && ft_strncmp(args[1], "-n", 3) == 0)
-	{
-		n_flag = 1;
-		i = 2;
-	}
-	while (args[i] && ft_strncmp(args[i], "-n", 3) == 0)
-		i++;
+	option_n = handle_option_n(args, &i);
 	while (args[i])
 	{
 		if (ft_printf("%s", args[i]) < 0)
 			return (put_error(err_msg), EXIT_FAILURE);
 		if (args[i + 1])
+		{
 			if (ft_printf(" ") < 0)
 				return (put_error(err_msg), EXIT_FAILURE);
+		}
 		i++;
 	}
-	if (!n_flag)
+	if (option_n == FALSE)
 		if (ft_printf("\n") < 0)
 			return (put_error(err_msg), EXIT_FAILURE);
 	return (EXIT_SUCCESS);

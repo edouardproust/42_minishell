@@ -10,8 +10,8 @@ static int	duplicate_fd(int oldfd, int newfd)
 	if (oldfd == newfd)
 		return (EXIT_SUCCESS);
 	if (dup2(oldfd, newfd) == -1)
-			return (EXIT_FAILURE);
-		close(oldfd);
+		return (EXIT_FAILURE);
+	close(oldfd);
 	return (EXIT_SUCCESS);
 }
 
@@ -38,7 +38,8 @@ static void	redirect_io(t_cmd *cmd, t_minishell **minishell)
  *
  * Exit on: fork failure, child process exit code > 125
  */
-pid_t	run_in_child_process(t_builtin *builtin, t_cmd *cmd, t_minishell **minishell)
+pid_t	run_in_child_process(t_builtin *builtin, t_cmd *cmd,
+	t_minishell **minishell)
 {
 	pid_t	pid;
 

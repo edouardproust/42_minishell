@@ -62,6 +62,7 @@ void	ft_striteri(char *s, void (*f)(unsigned int, char*));
 /* Matrix */
 char	**ft_split(char const *s, char sep);
 char	**ft_matrix_dup(char **matrix);
+size_t	ft_matrix_size(char **matrix);
 
 /* Memory */
 void	ft_bzero(void *s, size_t n);

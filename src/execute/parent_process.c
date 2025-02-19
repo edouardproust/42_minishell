@@ -1,5 +1,4 @@
 #include "minishell.h"
-# include "debug.h" // TODO: remove
 
 /*
  * Update cmd->fdin and cmd->fdout if the current t_cmd contains an infile
@@ -33,10 +32,12 @@ static void	setup_io(t_cmd *cmd, t_minishell **minishell)
 }
 
 /**
- * Closes unnecessary file descriptors for the current command in the parent process.
+ * Closes unnecessary file descriptors for the current command in the
+ * parent process.
  * 
- * This ensures that the reference count for each file descriptor is decremented,
- * allowing EOF to be triggered when the child process closes its end of the pipe.
+ * This ensures that the reference count for each file descriptor is
+ * decremented, allowing EOF to be triggered when the child process closes 
+ * its end of the pipe.
  * 
  * Closes:
  * - cmd->fdin if an input file is specified
@@ -67,15 +68,13 @@ static void	wait_for_processes(t_minishell **minishell)
 {
 	t_cmd	*cmd;
 	int		status;
-	
+
 	cmd = (*minishell)->cmd_lst;
 	while (cmd)
 	{
 		if (cmd->pid > 0)
 		{
 			waitpid(cmd->pid, &status, 0);
-			if (DEBUG) // DEBUG
-				debug_process(cmd->pid, status);
 			if (WIFEXITED(status) && WEXITSTATUS(status) >= E_CMDNOTEXEC)
 				exit_minishell(WEXITSTATUS(status), minishell, NULL);
 		}
@@ -104,8 +103,6 @@ void	execute_cmd_lst(t_minishell **minishell)
 			run_builtin(0, builtin, cmd->args, minishell);
 		else
 			cmd->pid = run_in_child_process(builtin, cmd, minishell);
-		if (DEBUG) // DEBUG
-			debug_cmd(cmd, cmd->args[0]);
 		cleanup_io(cmd);
 		cmd = cmd->next;
 	}

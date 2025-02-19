@@ -13,7 +13,7 @@ C_FILES = debug.c \
 	exit.c \
 	error.c \
 	env/init.c \
-	env/update.c \
+	env/utils.c \
 	env/ops.c \
 	env/path.c \
 	execute/parent_process.c \
