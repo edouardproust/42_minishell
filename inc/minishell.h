@@ -123,7 +123,7 @@ void		run_executable(t_cmd *cmd, t_minishell **minishell);
 
 /* Builtins */
 t_builtin	*get_builtin(char *progname);
-void		run_builtin(int in_child_process, t_builtin *builtin, char **args,
+void		run_builtin(t_bool in_child_process, t_builtin *builtin, char **args,
 				t_minishell **minishell);
 int			do_echo(char **args, t_minishell *minishell);
 int			do_cd(char **args, t_minishell *minishell);
