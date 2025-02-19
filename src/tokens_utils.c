@@ -15,6 +15,7 @@ t_token	*token_new(char *value, int type)
         token->next = NULL;
         return (token);
 }
+
 /* 
  * Determines the token type based on the character at position `i`.
  * Returns: The token type (e.g., TOKEN_PIPE, TOKEN_REDIR_IN).
@@ -37,7 +38,9 @@ int	get_token_type(char *input, int i)
 		return (TOKEN_REDIR_OUT);
 	}
 	return (TOKEN_WORD);
+
 }
+
 /* 
  * Creates a word token from the input string starting at `index`.
  * Loops inside the input string and checks for quote chars.
@@ -50,7 +53,7 @@ t_token	*create_word_token(char *input, int *index, char *unmatched_quote)
 	t_token	*token;
 
 	start = *index;
-	while (input[*index] && is_word_char(input[*index]))
+	while (input[*index] && !is_special_char(input[*index]))
 	{
 		if (is_quote_char(input[*index]))
 		{
@@ -69,6 +72,7 @@ t_token	*create_word_token(char *input, int *index, char *unmatched_quote)
 		free(word);
 	return (token);
 }
+
 /* 
  * Adds a new token to the end of the token list.
  */

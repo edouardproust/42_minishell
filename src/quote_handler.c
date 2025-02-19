@@ -3,10 +3,8 @@
 int	skip_quotes(char *input, int *index, char *unmatched_quote)
 {
 	char	quote;
-	int	start;
 
 	quote = input[*index];
-	start = *index;
 	(*index)++;
 	while (input[*index] && input[*index] != quote)
 		(*index)++;
@@ -16,8 +14,6 @@ int	skip_quotes(char *input, int *index, char *unmatched_quote)
 		return (0);
 	}
 	(*index)++;
-	if (start == 0 && input[*index] == '\0') 
-		return (1);
 	return (1);
 }
 
@@ -35,8 +31,6 @@ char	*remove_quotes(char *str)
 		return (str);
 	if ((first == '\'' || first == '"') && first == last)
 	{
-		if (ft_strchr(str + 1, first))
-			return (str);
 		cleaned = ft_substr(str, 1, len - 2);
 		free(str);
 		return (cleaned);
