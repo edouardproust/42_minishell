@@ -28,7 +28,7 @@ enum e_token
 	TOKEN_REDIR_OUT,
 	TOKEN_APPEND,
 	TOKEN_HEREDOC,
-}
+};
 
 /* Exit codes */
 # define E_CMDWRONGARG 2
@@ -64,19 +64,17 @@ typedef struct s_cmd {
 	int				*pipe;
 	int				fdin;
 	int				fdout;
+	pid_t			pid;
 	struct s_cmd	*prev;
 	struct s_cmd	*next;
 }	t_cmd;
 
-typedef struct	s_parse	{
-	t_cmd	**cmd_list_head;
-	t_cmd	*current_cmd;
-	t_token	*tokens_head;
-	t_token	*current_token;
-}	t_parse;
-
 typedef struct s_minishell
 {
+	t_cmd		**cmd_list_head; //TODO check why double pointer while token_head is not
+	t_cmd		*current_cmd;
+	t_token		*tokens_head; //TODO above
+	t_token		*current_token;
 	t_cmd		*cmd_lst;
 	char		**envp;
 	t_envvar	*envvar_lst;
@@ -100,6 +98,7 @@ void		put_error(char *fmt, ...);
 
 /* Memory */
 void		free_minishell(t_minishell **minishell);
+void		free_token_lst(t_token **tokens);
 t_envvar	*free_envvar_node(t_envvar **node);
 void		free_envvar_lst(t_envvar **var_lst);
 void		free_cmd_lst(t_cmd **cmd_lst);
@@ -108,12 +107,23 @@ void		flush_fds(void);
 /* Exit */
 void		exit_minishell(int exit_code, t_minishell **minishell,
 				char *fmt, ...);
+//void		exit_parsing(t_parse *parse, char *fmt, ...); //TODO
+
+/* Env */
+char		*get_env_value(char *var_name, t_minishell *minishell);
+t_envvar	*init_envvars(t_minishell *minishell);
+int			update_envp(t_minishell *minishell);
+t_envvar	*envvar_new(char *var);
+int			envvar_addoneback(t_envvar **lst, t_envvar *new);
+int			envvar_deleteone(t_envvar **lst, t_envvar *node);
+int			envvar_updateone(t_envvar *node, char *new_value);
+t_envvar	*envvar_findbyname(t_envvar *lst, char *name);
 
 /* Parsing */
 t_cmd		*init_cmd_lst(char *input);
 void		add_arg_to_cmd(t_cmd *cmd, char *arg);
 t_cmd		*parse_tokens(t_token *tokens_head);
-void		handle_token_type(t_parse *parse);
+void		handle_token_type(t_minishell **minishell);
 
 /* Tokenization */
 t_token		*tokenizer(char *input);
@@ -121,24 +131,14 @@ t_token		*token_new(char *value, int type);
 int			get_token_type(char *input, int i);
 t_token		*create_word_token(char *input, int *index);
 void		token_addback(t_token **tokens, t_token *new);
-void		handle_input_redirection(t_parse *parse);
-void		handle_output_redirection(t_parse *parse);
-void		handle_word(t_parse *parse);
-void		handle_pipe(t_parse *parse);
+void		handle_input_redirection(t_minishell **minishell);
+void		handle_output_redirection(t_minishell **minishell);
+void		handle_word(t_minishell **minishell);
+void		handle_pipe(t_minishell **minishell);
 
 /* Execute */
-void		execute_cmd_lst(t_cmd **cmd_lst, char **envp);
-char		*get_exec_path(char *arg, t_cmd **cmd_lst);
-
-// exit.c
-void		exit_parsing(t_parse *parse, char *fmt, ...);
-void		exit_exec(t_cmd **head, char *fmt, ...);
-
-// free.c
-t_cmd		*free_cmd(t_cmd **cmd);
-void		free_cmd_lst(t_cmd **cmd_lst);
-void		free_token_lst(t_token **tokens);
-void		flush_fds(void);
+void		execute_cmd_lst(t_minishell **minishell);
+char		*get_exec_path(char *arg, t_minishell **minishell);
 
 /* Utils */
 int			is_special_char(char c);

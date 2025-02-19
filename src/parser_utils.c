@@ -5,18 +5,18 @@
  * the appropriate handler function is called.
  * - Handles redirections (input/output), pipes, and arguments.
  */
-void	handle_token_type(t_parse *parse)
+void	handle_token_type(t_minishell **minishell)
 {
-	while (parse->current_token)
+	while ((*minishell)->current_token)
 	{
-		if (parse->current_token->type == TOKEN_REDIR_IN)
-			handle_input_redirection(parse);
-		else if (parse->current_token->type == TOKEN_REDIR_OUT)
-			handle_output_redirection(parse);
-		else if (parse->current_token->type == TOKEN_WORD)
-			handle_word(parse);
-		else if (parse->current_token->type == TOKEN_PIPE)
-			handle_pipe(parse);
-		parse->current_token = parse->current_token->next;
+		if ((*minishell)->current_token->type == TOKEN_REDIR_IN)
+			handle_input_redirection(minishell);
+		else if ((*minishell)->current_token->type == TOKEN_REDIR_OUT)
+			handle_output_redirection(minishell);
+		else if ((*minishell)->current_token->type == TOKEN_WORD)
+			handle_word(minishell);
+		else if ((*minishell)->current_token->type == TOKEN_PIPE)
+			handle_pipe(minishell);
+		(*minishell)->current_token = (*minishell)->current_token->next;
 	}
 }

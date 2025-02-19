@@ -68,15 +68,15 @@ static void	execute_cmd(t_cmd *cmd, char **envp, t_cmd **cmd_lst)
 		exit_exec(cmd_lst, NULL);
 }
 
-void	execute_cmd_lst(t_cmd **cmd_lst, char **envp)
+void	execute_cmd_lst(t_minishell **minishell)
 {
 	t_cmd	*cmd;
 
-	cmd = *cmd_lst;
+	cmd = (*minishell)->cmd_lst;
 	while (cmd)
 	{
-		setup_io(cmd, cmd_lst);
-		execute_cmd(cmd, envp, cmd_lst);
+		setup_io(cmd, &(*minishell)->cmd_lst);
+		execute_cmd(cmd, (*minishell)->envp, &(*minishell)->cmd_lst);
 		cleanup_io(cmd);
 		cmd = cmd->next;
 	}
