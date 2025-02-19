@@ -1,8 +1,9 @@
 #include "minishell.h"
 
 /**
- * Retrieve the t_builtin for the given builtin name
+ * Retrieve the t_builtin of the given builtin name.
  *
+ * @param progname Name of the builtin
  * @return ptr to the matching t_builtin, NULL if no match
  */
 t_builtin	*get_builtin(char *progname)
@@ -35,9 +36,14 @@ t_builtin	*get_builtin(char *progname)
 /**
  * Run the given t_builtin.
  *
- * @note Exit on: ran in chaild process, callback failure
+ * @param in_child_proc Is the builtin ran inside a child process?
+ * @param builtin Struct containing data on the builtin
+ * @param args The args of the command to execute
+ * @param minishell Struct containing global Minishell data, including the 
+ * 	environment variables list (`envvar_lst`) and the environment array (`envp`).
+ * @note Exit on: ran in child process, callback failure
  */
-void	run_builtin(int in_child_proc, t_builtin *builtin, char **args,
+void	run_builtin(t_bool in_child_proc, t_builtin *builtin, char **args,
 	t_minishell **minishell)
 {
 	int		exit_code;

@@ -112,7 +112,7 @@ void	execute_cmd_lst(t_minishell **minishell)
 		setup_io(cmd, minishell);
 		builtin = get_builtin(cmd->args[0]);
 		if (builtin && builtin->affects_state && !cmd->next && !cmd->prev)
-			run_builtin(0, builtin, cmd->args, minishell);
+			run_builtin(FALSE, builtin, cmd->args, minishell);
 		else
 			cmd->pid = run_in_child_process(builtin, cmd, minishell);
 		cleanup_io(cmd);

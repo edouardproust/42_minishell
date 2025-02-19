@@ -59,7 +59,7 @@ pid_t	run_in_child_process(t_builtin *builtin, t_cmd *cmd,
 	{
 		redirect_io(cmd, minishell);
 		if (builtin)
-			run_builtin(1, builtin, cmd->args, minishell);
+			run_builtin(TRUE, builtin, cmd->args, minishell);
 		run_executable(cmd, minishell);
 	}
 	return (pid);
