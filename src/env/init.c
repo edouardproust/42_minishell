@@ -6,7 +6,7 @@
  * @param envp Array of environment variable strings.
  * @return Pointer to the head of the initialized list.
  * 
- * @note Exits program on memory allocation failure.
+ * @note Exit program on memory allocation failure.
  */
 t_envvar	*init_envvars(t_minishell *minishell)
 {

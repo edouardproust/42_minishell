@@ -1,7 +1,7 @@
 #include "minishell.h"
 
 /**
- *  Implementation of the exit builtin, with no option.
+ * Implementation of the exit builtin, with no option.
  * 
  * @param args Array of arguments passed to exit.
  * @param minishell Struct containing global Minishell data.

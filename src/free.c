@@ -2,6 +2,9 @@
 
 /**
  * Free one t_envvar node
+ * 
+ * @param var Pointer to the node to delete (by reference)
+ * @return Pointer to the next node in the list
  */
 t_envvar	*free_envvar_node(t_envvar **var)
 {
@@ -20,6 +23,9 @@ t_envvar	*free_envvar_node(t_envvar **var)
 /**
  * Free all the nodes in the list of t_envvar (starting by the 
  * 'envvar_list' node).
+ * 
+ * @param var_lst Pointer to the head of the list (by reference)
+ * @return void
  */
 void	free_envvar_lst(t_envvar **var_lst)
 {
@@ -32,6 +38,9 @@ void	free_envvar_lst(t_envvar **var_lst)
 
 /**
  * Free all the node in the list of t_cmd (starting by the 'cmd_lst' node).
+ * 
+ * @param cmd_lst Pointer to the head of the list (by reference)
+ * @return void
  */
 void	free_cmd_lst(t_cmd **cmd_lst)
 {
@@ -57,6 +66,10 @@ void	free_cmd_lst(t_cmd **cmd_lst)
 
 /**
  * Free minishell at any point during the program execution.
+ * 
+ * @param minishell Struct containing global data on the program,
+ * 	including lists of t_cmd, t_envvar, etc.
+ * @return void
  */
 void	free_minishell(t_minishell **minishell)
 {
@@ -70,6 +83,8 @@ void	free_minishell(t_minishell **minishell)
 
 /**
  * Close any fd up to FD_LIMIT, except standard ones.
+ * 
+ * @return void
  */
 void	flush_fds(void)
 {

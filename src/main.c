@@ -1,6 +1,13 @@
 #include "minishell.h"
 #include "debug.h" // DEBUG
 
+/**
+ * Inititalize the t_minishell struct containing global data on the program.
+ * 
+ * @param envp Array containing the env. variables on program startup
+ * @return the t_minishell struct
+ * @note Exit program on memory allocation failure.
+ */
 static	t_minishell	*init_minishell(char **envp)
 {
 	t_minishell	*minishell;
@@ -19,6 +26,14 @@ static	t_minishell	*init_minishell(char **envp)
 	return (minishell);
 }
 
+/**
+ * Minishell entry point.
+ * 
+ * @param ac Number of arguments passed to the program
+ * @param av Array of the arguments passed to the program
+ * @param envp Array containing the environment variables on program startup
+ * @return EXIT_SUCCESS or EXIT_FAILURE 
+ */
 int	main(int ac, char **av, char **envp)
 {
 	t_minishell	*minishell;
