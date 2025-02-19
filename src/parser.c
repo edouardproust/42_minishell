@@ -5,7 +5,7 @@
  */
 t_cmd	*cmd_new(t_cmd *prev_cmd)
 {
-	t_cmd *cmd;
+	t_cmd	*cmd;
 
 	cmd = malloc(sizeof(t_cmd));
 	if (!cmd)
@@ -26,15 +26,16 @@ t_cmd	*cmd_new(t_cmd *prev_cmd)
 		cmd->prev->next = cmd;
 	return (cmd);
 }
+
 /* 
  * Adds an argument to the command's arguments list.
  */
 void	add_arg_to_cmd(t_cmd *cmd, char *arg)
 {
-	int	i;
-	int	count;
+	int		i;
+	int		count;
 	char	**new_args;
-	
+
 	count = 0;
 	while (cmd->args && cmd->args[count])
 		count++;
@@ -49,6 +50,7 @@ void	add_arg_to_cmd(t_cmd *cmd, char *arg)
 	free(cmd->args);
 	cmd->args = new_args;
 }
+
 /* 
  * Parses a list of tokens and converts them into a linked list of commands.
  *
@@ -72,7 +74,7 @@ t_cmd	*parse_tokens(t_token *tokens_head)
 	*parse.cmd_list_head = cmd_new(NULL);
 	parse.current_cmd = *parse.cmd_list_head;
 	if (!parse.current_cmd)
-		exit_parsing(&parse, "malloc error");
+		exit_parsing(&parse, NULL);
 	handle_token_type(&parse);
 	return (cmd_list);
 }

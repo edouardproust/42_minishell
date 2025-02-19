@@ -13,7 +13,7 @@ int	is_special_char(char c)
  */
 int	is_word_char(char c)
 {
-	return (c != ' ' && c != '|' && c != '<' && c != '>');
+	return (c != ' ' && !is_special_char(c));
 }
 /*
  * Checks if the character is a quote symbol.

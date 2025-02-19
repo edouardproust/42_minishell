@@ -7,7 +7,8 @@ int	main(int ac, char **av, char **envp)
 	(void)av;
 	if (ac > 1)
 		return (EXIT_FAILURE); // TODO (Ed) Deal with non-interactive mode
-	char	*input = "\"echo hello\"";
+//	char	*input = "\"'\"Hello\"'\"";
+	char	*input = "'hello' 'world'";
 	cmd_lst = init_cmd_lst(input);
 	if (!cmd_lst)
 		return (EXIT_FAILURE);

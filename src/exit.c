@@ -39,7 +39,7 @@ void	exit_parsing(t_parse *parse, char *fmt, ...)
 	va_list	args;
 
 	va_start(args, fmt);
-	if (ft_strncmp(fmt, "malloc error", 12) != 0)
+//	if (ft_strncmp(fmt, "malloc error", 12) != 0)
 		print_error(fmt, args);
 	va_end(args);
 	if (parse)

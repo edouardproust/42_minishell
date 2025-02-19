@@ -3,45 +3,43 @@
 int	skip_quotes(char *input, int *index, char *unmatched_quote)
 {
 	char	quote;
+	int	start;
 
 	quote = input[*index];
+	start = *index;
 	(*index)++;
 	while (input[*index] && input[*index] != quote)
 		(*index)++;
 	if (!input[*index])
 	{
 		*unmatched_quote = quote;
-		 return (0);
+		return (0);
 	}
+	(*index)++;
+	if (start == 0 && input[*index] == '\0') 
+		return (1);
 	return (1);
 }
 
 char	*remove_quotes(char *str)
 {
-	int	i;
-	int	j;
-	char	quote;
+	size_t	len;
 	char	*cleaned;
+	char	first;
+	char	last;
 
-	cleaned = malloc(sizeof(char) * (ft_strlen(str) + 1));
-	if (!cleaned)
-		return (NULL);
-	i = 0;
-	j = 0;
-	while (str[i])
+	len = ft_strlen(str);
+	first = str[0];
+	last = str[len - 1];
+	if (len < 2)
+		return (str);
+	if ((first == '\'' || first == '"') && first == last)
 	{
-		if (is_quote_char(str[i]))
-		{
-			quote = str[i++];
-			while (str[i] && str[i] != quote)
-				cleaned[j++] = str[i++];
-			if (str[i] == quote)
-				i++;
-		}
-		else
-			cleaned[j++] = str[i++];
+		if (ft_strchr(str + 1, first))
+			return (str);
+		cleaned = ft_substr(str, 1, len - 2);
+		free(str);
+		return (cleaned);
 	}
-	cleaned[j] = '\0';
-	free(str);
-	return (cleaned);
+	return (str);
 }

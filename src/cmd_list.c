@@ -9,14 +9,16 @@
  * - Frees the token list to avoid memory leaks.
  *
  * Returns:
- * - A pointer to the head of the command list (`cmd_lst`), or NULL if tokenization failed.
+ * - A pointer to the head of the command list (`cmd_lst`),
+ *   :q
+ *   or NULL if tokenization failed.
  */
 //TODO : Remove debug functions before submitting
 t_cmd	*init_cmd_lst(char *input)
 {
-        t_token	*tokens;
-        t_token	*tokens_head;
-        t_cmd	*cmd_lst;
+	t_token	*tokens;
+	t_token	*tokens_head;
+	t_cmd	*cmd_lst;
 
 	tokens = tokenizer(input);
 	tokens_head = tokens;

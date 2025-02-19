@@ -57,7 +57,8 @@ t_token	*create_word_token(char *input, int *index, char *unmatched_quote)
 			if (!skip_quotes(input, index, unmatched_quote))
 			return (NULL);
 		}
-		(*index)++;
+		else
+			(*index)++;
 	}
 	word = ft_substr(input, start, *index - start);
 	word = remove_quotes(word);

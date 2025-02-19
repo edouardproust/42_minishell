@@ -14,7 +14,7 @@ t_cmd	*free_cmd(t_cmd **cmd)
 	cur_cmd = *cmd;
 	ft_free_split(&cur_cmd->args);
 	ft_free_ptrs(3, &cur_cmd->infile, &cur_cmd->outfile,
-			&cur_cmd->pipe);
+		&cur_cmd->pipe);
 	nxt_cmd = cur_cmd->next;
 	ft_free_ptrs(1, &cur_cmd);
 	return (nxt_cmd);
@@ -40,6 +40,7 @@ void	free_token_lst(t_token **tokens)
 	}
 	*tokens = NULL;
 }
+
 /*
  * Frees all the commands in the list (starting by 'cmd_list' node).
  */

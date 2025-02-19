@@ -36,7 +36,7 @@ t_token	*tokenizer(char *input)
 			if (unmatched_quote)
 				exit_parsing(NULL, "unexpected EOF while looking for matching `%c'", unmatched_quote);
 			else
-				exit_parsing(NULL, "malloc error");
+				exit_parsing(NULL, NULL);
 			return (NULL);
 		}
 			token_addback(&tokens, new_token);
