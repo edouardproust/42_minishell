@@ -91,12 +91,11 @@ void	free_token_lst(t_token **tokens);
 void	flush_fds(void);
 
 // debug.c (TODO Delete these lines + debug.c before submit)
-t_cmd	*create_cmd_lst(void);
+//t_cmd	*create_cmd_lst(void);
 void	debug_tokens(t_token *tokens);
 void	debug_cmds(t_cmd *cmd);
 void	debug_cmd_lst(t_cmd *cmd_lst);
 void	debug_cmd(t_cmd *cmd, char *title);
 void	debug_fd(char *label, int fd);
-void	debug_read_fd(char *label, int fd);
 
 #endif
