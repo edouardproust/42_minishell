@@ -2,100 +2,148 @@
 # define MINISHELL_H
 
 # include "libft.h"
+# include <errno.h>
+# include <stdio.h>
+# include <fcntl.h>
+# include <readline/readline.h>
+# include <readline/history.h>
+# include <sys/wait.h>
 
-#include <errno.h>
-#include <stdio.h>
-#include <fcntl.h>
-#include <readline/readline.h>
-#include <readline/history.h>
-#include <sys/wait.h>
+/****************************************/
+/* Macros and Enums                     */
+/****************************************/
 
-#define FD_LIMIT 1024
+# define FD_LIMIT 1024
+# define TRUE 1
+# define FALSE 0
 
-#define TOKEN_WORD 0
-#define TOKEN_PIPE 1
-#define TOKEN_REDIR_IN 2
-#define TOKEN_REDIR_OUT 3
-#define TOKEN_APPEND 4
-#define TOKEN_HEREDOC 5
+/* Tokens */
+enum e_token
+{
+	TOKEN_WORD,
+	TOKEN_PIPE,
+	TOKEN_REDIR_IN,
+	TOKEN_REDIR_OUT,
+	TOKEN_APPEND,
+	TOKEN_HEREDOC,
+};
 
-typedef struct s_token {
-	char	*value;
-	int		type;
-	struct s_token *next;
-} t_token;
+/* Exit codes */
+# define E_CMDWRONGARG 2
+# define E_CMDNOTEXEC 126
+# define E_CMDNOTFOUND 127
+# define E_SIGBASE 128
+# define E_ERRMAX 255
 
-typedef struct s_cmd {
+/****************************************/
+/* Structs and Typedefs                 */
+/****************************************/
+
+typedef unsigned int	t_bool;
+
+typedef struct s_envvar
+{
+	char			*name;
+	char			*value;
+	struct s_envvar	*prev;
+	struct s_envvar	*next;
+}	t_envvar;
+
+typedef struct s_token
+{
+	char			*value;
+	int				type;
+	struct s_token	*next;
+}	t_token;
+
+typedef struct s_cmd
+{
 	char			**args;
 	char			*infile;
 	char			*outfile;
 	int				*pipe;
 	int				fdin;
 	int				fdout;
+	pid_t			pid;
 	struct s_cmd	*prev;
 	struct s_cmd	*next;
-} t_cmd;
+}	t_cmd;
 
-typedef struct	s_parse	{
-	t_cmd	**cmd_list_head;
-	t_cmd	*current_cmd;
-	t_token	*tokens_head;
-	t_token	*current_token;
-} t_parse;
+typedef struct s_minishell
+{
+	char		**envp;
+	t_envvar	*envvar_lst;
+	t_token		*token_lst;
+	t_cmd		*cmd_lst;
+}	t_minishell;
 
-//main.c
-int	main(int ac, char **av, char **envp);
+typedef struct s_builtin
+{
+	char	*name;
+	int		(*fn)(char **args, t_minishell *minishell);
+	int		affects_state;
+}	t_builtin;
 
-//cmd_list.c
-t_cmd	*init_cmd_lst(char *input);
+/****************************************/
+/* Functions                            */
+/****************************************/
 
-//general_utils.c
-int	is_special_char(char c);
-int	is_word_char(char c);
+/* Error handling */
+void		set_errno(int err_no);
+void		put_error_va(char *fmt, va_list args);
+void		put_error(char *fmt, ...);
 
-//tokenize.c
-t_token *tokenizer(char *input);
+/* Memory */
+void		free_minishell(t_minishell **minishell);
+void		free_token_lst(t_token **token_lst);
+t_envvar	*free_envvar_node(t_envvar **node);
+void		free_envvar_lst(t_envvar **var_lst);
+void		free_cmd_lst(t_cmd **cmd_lst);
+void		flush_fds(void);
 
-//tokens_utils.c
-t_token	*token_new(char *value, int type);
-int	get_token_type(char *input, int i);
-t_token	*create_word_token(char *input, int *index);
-void	token_addback(t_token **tokens, t_token *new);
+/* Exit */
+void		exit_minishell(int exit_code, t_minishell **minishell,
+				char *fmt, ...);
 
-//parser.c
-t_cmd   *cmd_new();
-void    add_arg_to_cmd(t_cmd *cmd, char *arg);
-t_cmd   *parse_tokens(t_token *tokens_head);
+/* Env */
+char		*get_env_value(char *var_name, t_minishell *minishell);
+t_envvar	*init_envvars(t_minishell *minishell);
+int			update_envp(t_minishell *minishell);
+t_envvar	*envvar_new(char *var);
+int			envvar_addoneback(t_envvar **lst, t_envvar *new);
+int			envvar_deleteone(t_envvar **lst, t_envvar *node);
+int			envvar_updateone(t_envvar *node, char *new_value);
+t_envvar	*envvar_findbyname(t_envvar *lst, char *name);
 
-//token_handlers.c
-void    handle_input_redirection(t_parse *parse);
-void    handle_output_redirection(t_parse *parse);
-void    handle_word(t_parse *parse);
-void    handle_pipe(t_parse *parse);
+/* Parsing */
+void		init_cmd_lst(char *input, t_minishell *minishell);
+t_cmd		*cmd_new(t_cmd *prev_cmd);
+void		add_arg_to_cmd(t_cmd *cmd, char *arg);
+int			parse_tokens(t_minishell *minishell);
+void		handle_token_type(t_token **cur_token, t_cmd **cur_cmd,
+				t_minishell *minishell);
+void		handle_input_redirection(t_token **cur_token, t_cmd **cur_cmd,
+				t_minishell *minishell);
+void		handle_output_redirection(t_token **cur_token, t_cmd **cur_cmd,
+				t_minishell *minishell);
+void		handle_word(t_token **cur_token, t_cmd **cur_cmd,
+				t_minishell *minishell);
+void		handle_pipe(t_token **cur_token, t_cmd **cur_cmd,
+				t_minishell *minishell);
 
-//parser_utils.c
-void	handle_token_type(t_parse *parse);
+/* Tokenization */
+t_token		*tokenizer(char *input);
+t_token		*token_new(char *value, int type);
+int			get_token_type(char *input, int i);
+t_token		*create_word_token(char *input, int *index);
+void		token_addback(t_token **tokens, t_token *new);
 
-// execute.c
-void	execute_cmd_lst(t_cmd **cmd_lst, char **envp);
-char    *get_exec_path(char *arg, t_cmd **cmd_lst);
+/* Execute */
+void		execute_cmd_lst(t_minishell *minishell);
+char		*get_exec_path(char *arg, t_minishell *minishell);
 
-// exit.c
-void	exit_parsing(t_parse *parse, char *fmt, ...);
-void	exit_exec(t_cmd **head, char *fmt, ...);
-
-// free.c
-t_cmd	*free_cmd(t_cmd **cmd);
-void	free_cmd_lst(t_cmd **cmd_lst);
-void	free_token_lst(t_token **tokens);
-void	flush_fds(void);
-
-// debug.c (TODO Delete these lines + debug.c before submit)
-//t_cmd	*create_cmd_lst(void);
-void	debug_tokens(t_token *tokens);
-void	debug_cmds(t_cmd *cmd);
-void	debug_cmd_lst(t_cmd *cmd_lst);
-void	debug_cmd(t_cmd *cmd, char *title);
-void	debug_fd(char *label, int fd);
+/* Utils */
+int			is_special_char(char c);
+int			is_word_char(char c);
 
 #endif

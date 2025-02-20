@@ -5,16 +5,17 @@
  */
 t_token	*token_new(char *value, int type)
 {
-	t_token *token;
+	t_token	*token;
 
 	token = malloc(sizeof(t_token));
 	if (!token)
 		return (NULL);
-        token->value = value;
-        token->type = type;
-        token->next = NULL;
-        return (token);
+	token->value = value;
+	token->type = type;
+	token->next = NULL;
+	return (token);
 }
+
 /* 
  * Determines the token type based on the character at position `i`.
  * Returns: The token type (e.g., TOKEN_PIPE, TOKEN_REDIR_IN).
@@ -38,14 +39,15 @@ int	get_token_type(char *input, int i)
 	}
 	return (TOKEN_WORD);
 }
+
 /* 
  * Creates a word token from the input string starting at `index`.
  * Returns: A new word token or NULL if allocation fails.
  */
 t_token	*create_word_token(char *input, int *index)
 {
-	int     start;
-	char    *word;
+	int		start;
+	char	*word;
 	t_token	*token;
 
 	start = *index;
@@ -59,15 +61,16 @@ t_token	*create_word_token(char *input, int *index)
 		free(word);
 	return (token);
 }
+
 /* 
  * Adds a new token to the end of the token list.
  */
 void	token_addback(t_token **tokens, t_token *new)
 {
-	t_token *tmp;
+	t_token	*tmp;
 
 	if (!*tokens)
-		*tokens= new;
+		*tokens = new;
 	else
 	{
 		tmp = *tokens;

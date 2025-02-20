@@ -8,18 +8,23 @@ NAME = ./minishell
 C_DIR = src
 
 C_FILES = debug.c \
-	free.c \
-	exit.c \
 	main.c \
+	free.c \
+	free2.c \
+	exit.c \
+	error.c \
+	env/init.c \
+	env/ops.c \
+	env/path.c \
+	env/utils.c \
 	cmd_list.c \
 	tokenize.c \
-	general_utils.c \
+	token_handlers.c \
 	tokens_utils.c \
 	parser.c \
 	parser_utils.c \
-	token_handlers.c \
 	execute.c \
-	execute_path.c \
+	general_utils.c \
 
 SRCS = $(addprefix $(C_DIR)/,$(C_FILES))
 
@@ -39,7 +44,8 @@ OBJS = $(addprefix $(O_DIR)/,$(C_FILES:.c=.o))
 
 H_DIR = inc
 
-H_FILES = minishell.h
+H_FILES = debug.h \
+	minishell.h
 
 HEADERS = $(addprefix $(H_DIR)/,$(H_FILES))
 
@@ -78,7 +84,7 @@ INCLUDES = -I$(H_DIR) -I$(LIBFT_DIR)
 all: libft $(NAME)
 
 $(O_DIR)/%.o: $(C_DIR)/%.c Makefile $(HEADERS)
-	@mkdir -p $(O_DIR)
+	@mkdir -p $(@D)
 	cc -c -o $@ $< $(INCLUDES) $(CFLAGS)
 
 $(NAME): $(OBJS)
