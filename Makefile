@@ -7,9 +7,12 @@ NAME = ./minishell
 
 C_DIR = src
 
-C_FILES = main.c \
+C_FILES = debug.c \
+	main.c \
 	free.c \
+	free2.c \
 	exit.c \
+	error.c \
 	env/init.c \
 	env/ops.c \
 	env/path.c \
@@ -21,7 +24,6 @@ C_FILES = main.c \
 	parser.c \
 	parser_utils.c \
 	execute.c \
-	execute_path.c \
 	general_utils.c \
 
 SRCS = $(addprefix $(C_DIR)/,$(C_FILES))
@@ -42,7 +44,8 @@ OBJS = $(addprefix $(O_DIR)/,$(C_FILES:.c=.o))
 
 H_DIR = inc
 
-H_FILES = minishell.h
+H_FILES = debug.h \
+	minishell.h
 
 HEADERS = $(addprefix $(H_DIR)/,$(H_FILES))
 

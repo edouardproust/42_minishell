@@ -1,6 +1,5 @@
 #include "minishell.h"
 
-
 /**
  * Exit safely the program at any point of its execution.
  * - print an error message

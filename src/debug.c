@@ -80,7 +80,7 @@ void	open_logfile(char *filepath)
 
 void	debug_cmd(t_cmd *cmd, char *label)
 {
-	int	o = g_logfd;
+	int	o = STDERR_FILENO;
 	
 	if (label == NULL)
 		ft_fprintf(o, "╭─ cmd ─────────────────────────╮\n");

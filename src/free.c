@@ -36,25 +36,27 @@ void	free_envvar_lst(t_envvar **var_lst)
 	*var_lst = NULL;
 }
 
-/*
+/**
  * Frees all the tokens' value and structure in the token list.
+ * 
+ * @param token_lst Pointer to the head of the list (by reference)
+ * @return void
  */
-void	free_token_lst(t_token **tokens)
+void	free_token_lst(t_token **token_lst)
 {
 	t_token	*cur_token;
 	t_token	*nxt_token;
 
-	if (!tokens || !*tokens)
+	if (!token_lst || !*token_lst)
 		return ;
-	cur_token = *tokens;
+	cur_token = *token_lst;
 	while (cur_token)
 	{
 		nxt_token = cur_token->next;
-		ft_free_ptrs(1, &cur_token->value);
-		free(cur_token);
+		ft_free_ptrs(2, &cur_token->value, &cur_token);
 		cur_token = nxt_token;
 	}
-	*tokens = NULL;
+	*token_lst = NULL;
 }
 
 /**
@@ -96,27 +98,10 @@ void	free_minishell(t_minishell **minishell)
 {
 	if ((*minishell)->envvar_lst)
 		free_envvar_lst(&(*minishell)->envvar_lst);
-	// Replace parse struct 
-	if ((*minishell)->cmd_list_head && *(*minishell)->cmd_list_head) //TODO double pointer on cmd_list_head
-		free_cmd_lst((*minishell)->cmd_list_head);
-	if ((*minishell)->tokens_head)
-		free_token_lst(&(*minishell)->tokens_head);
+	if ((*minishell)->token_lst)
+		free_token_lst(&(*minishell)->token_lst);
 	if ((*minishell)->cmd_lst)
 		free_cmd_lst(&(*minishell)->cmd_lst);
 	ft_free_split(&(*minishell)->envp);
 	ft_free_ptrs(1, minishell);
-}
-
-/**
- * Close any fd up to FD_LIMIT, except standard ones.
- * 
- * @return void
- */
-void	flush_fds(void)
-{
-	int	fd;
-
-	fd = STDERR_FILENO + 1;
-	while (fd < FD_LIMIT)
-		close(fd++);
 }
