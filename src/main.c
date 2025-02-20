@@ -15,6 +15,7 @@ static	t_minishell	*init_minishell(char **envp)
 	minishell = malloc(sizeof(t_minishell));
 	if (!minishell)
 		exit_minishell(EXIT_FAILURE, NULL, "failed to initialize");
+	minishell->token_lst = NULL;
 	minishell->cmd_lst = NULL;
 	minishell->envp = ft_matrix_dup(envp);
 	if (!minishell->envp)
@@ -45,9 +46,10 @@ int	main(int ac, char **av, char **envp)
 	minishell = init_minishell(envp);
 	//debug_envp(minishell->envp); //DEBUG
 	//debug_envvars(minishell->envvar_lst); //DEBUG
-	input = "<test/infile tail -n +4 | grep a | sort | uniq -c | sort -nr | head -n 3";
+	input = "''";
+	//input = "<test/infile tail -n +4 | grep a | sort | uniq -c | sort -nr | head -n 3";
 	init_cmd_lst(input, minishell);
-	//debug_cmd_lst(minishell->cmd_lst); //DEBUG
+	debug_cmd_lst(minishell->cmd_lst); //DEBUG
 	execute_cmd_lst(minishell);
 	free_minishell(&minishell);
 	return (EXIT_SUCCESS);

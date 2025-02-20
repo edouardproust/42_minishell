@@ -22,7 +22,6 @@ void	init_cmd_lst(char *input, t_minishell *minishell)
 	if (!tokens)
 		exit_minishell(EXIT_FAILURE, &minishell, NULL);
 	minishell->token_lst = tokens;
-	minishell->cmd_lst = NULL;
 	if (parse_tokens(minishell) == EXIT_FAILURE)
 		exit_minishell(EXIT_FAILURE, &minishell, NULL);
 	//debug_tokens(minishell->token_lst); //DEBUG
