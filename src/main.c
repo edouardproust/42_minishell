@@ -48,7 +48,7 @@ int	main(int ac, char **av, char **envp)
 	input = "<test/infile tail -n +4 | grep a | sort | uniq -c | sort -nr | head -n 3";
 	init_cmd_lst(input, minishell);
 	//debug_cmd_lst(minishell->cmd_lst); //DEBUG
-	execute_cmd_lst(&minishell);
+	execute_cmd_lst(minishell);
 	free_minishell(&minishell);
 	return (EXIT_SUCCESS);
 }

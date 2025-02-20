@@ -2,7 +2,6 @@
 # define MINISHELL_H
 
 # include "libft.h"
-
 # include <errno.h>
 # include <stdio.h>
 # include <fcntl.h>
@@ -15,7 +14,6 @@
 /****************************************/
 
 # define FD_LIMIT 1024
-
 # define TRUE 1
 # define FALSE 0
 
@@ -141,8 +139,8 @@ t_token		*create_word_token(char *input, int *index);
 void		token_addback(t_token **tokens, t_token *new);
 
 /* Execute */
-void		execute_cmd_lst(t_minishell **minishell);
-char		*get_exec_path(char *arg, t_minishell **minishell);
+void		execute_cmd_lst(t_minishell *minishell);
+char		*get_exec_path(char *arg, t_minishell *minishell);
 
 /* Utils */
 int			is_special_char(char c);
