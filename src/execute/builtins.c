@@ -44,11 +44,11 @@ t_builtin	*get_builtin(char *progname)
  * @note Exit on: ran in child process, callback failure
  */
 void	run_builtin(t_bool in_child_proc, t_builtin *builtin, char **args,
-	t_minishell **minishell)
+	t_minishell *minishell)
 {
 	int		exit_code;
 
-	exit_code = builtin->fn(args, *minishell);
+	exit_code = builtin->fn(args, minishell);
 	if (in_child_proc || exit_code != EXIT_SUCCESS)
 		exit_minishell(exit_code, minishell, NULL);
 }

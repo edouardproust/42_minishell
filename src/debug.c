@@ -19,14 +19,13 @@ t_cmd	*create_cmd_lst(void)
 	//t_cmd *cmd5 = cmd_new_addback("cd ..", NULL, NULL, cmd4);
 	cmd_new_addback("head -n 3", NULL, "test/outfile", cmd4);
 	*/
-	t_cmd *cmd0 = cmd_new_addback("echo -n -n -n hello -n", NULL, NULL, NULL);
+	t_cmd *cmd0 = cmd_new_addback("tail -n +4", "test/infile", NULL, NULL);
 	//t_cmd *cmd0 = cmd_new_addback("cd test", NULL, NULL, NULL);
 	//t_cmd *cmd0 = cmd_new_addback("unset USERNAME LANG ZZZZ HOME", NULL, NULL, NULL);
 	//t_cmd *cmd0 = cmd_new_addback("env ZZZ", NULL, NULL, NULL);
 	//t_cmd *cmd0 = cmd_new_addback("export", NULL, NULL, NULL);
-	//t_cmd *cmd0 = cmd_new_addback("export HOME='hello world!'", NULL, NULL, NULL);
+//t_cmd *cmd0 = cmd_new_addback("export HOME='hello world!'", NULL, NULL, NULL);
 	//t_cmd *cmd0 = cmd_new_addback("exit wrong_exit_code", NULL, NULL, NULL);
-	
 	return(cmd0);
 }
 
@@ -71,7 +70,7 @@ void	open_logfile(char *filepath)
 
 void	debug_cmd(t_cmd *cmd, char *label)
 {
-	int	o = g_logfd;
+	int	o = STDERR_FILENO;
 	
 	if (label == NULL)
 		ft_fprintf(o, "╭─ cmd ─────────────────────────╮\n");
@@ -81,12 +80,17 @@ void	debug_cmd(t_cmd *cmd, char *label)
 	char *after = "\n";
 	ft_fprintf(o, "%sargs: ", before);
 	int	j = 0;
-	while (cmd->args[j] != NULL)
+	if (cmd->args[j] == NULL)
+		ft_fprintf(o, "%s", NULL);
+	else
 	{
-		ft_fprintf(o, "%s", cmd->args[j]);
-		if (cmd->args[j + 1] != NULL)
-			ft_fprintf(o, ", ");
-		j++;
+		while (cmd->args[j] != NULL)
+		{
+			ft_fprintf(o, "\"%s\"", cmd->args[j]);
+			if (cmd->args[j + 1] != NULL)
+				ft_fprintf(o, ", ");
+			j++;
+		}
 	}
 	ft_fprintf(o, "%s", after);
 	ft_fprintf(o, "%sinfile: %s%s", before, cmd->infile, after);

@@ -32,6 +32,6 @@ int	do_exit(char **args, t_minishell *minishell)
 		exit_code = 2;
 		put_error("exit: %s: numeric argument required", args[1]);
 	}
-	exit_minishell(exit_code, &minishell, NULL);
+	exit_minishell(exit_code, minishell, NULL);
 	return (EXIT_SUCCESS);
 }

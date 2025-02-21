@@ -24,7 +24,7 @@ static int	duplicate_fd(int oldfd, int newfd)
  * @return void
  * @note Exit on: a call to duplicate_fd fails
  */
-static void	redirect_io(t_cmd *cmd, t_minishell **minishell)
+static void	redirect_io(t_cmd *cmd, t_minishell *minishell)
 {
 	int	exit_code;
 
@@ -48,7 +48,7 @@ static void	redirect_io(t_cmd *cmd, t_minishell **minishell)
  * @note Exit on: fork failure, child process exit code > E_ERRMAX
  */
 pid_t	run_in_child_process(t_builtin *builtin, t_cmd *cmd,
-	t_minishell **minishell)
+	t_minishell *minishell)
 {
 	pid_t	pid;
 

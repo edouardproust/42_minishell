@@ -92,14 +92,14 @@ void		put_error_va(char *fmt, va_list args);
 void		put_error(char *fmt, ...);
 
 /* Memory */
-void		free_minishell(t_minishell **minishell);
+void		free_minishell(t_minishell *minishell);
 t_envvar	*free_envvar_node(t_envvar **node);
 void		free_envvar_lst(t_envvar **var_lst);
 void		free_cmd_lst(t_cmd **cmd_lst);
 void		flush_fds(void);
 
 /* Exit */
-void		exit_minishell(int exit_code, t_minishell **minishell,
+void		exit_minishell(int exit_code, t_minishell *minishell,
 				char *fmt, ...);
 
 /* Env */
@@ -113,18 +113,18 @@ int			envvar_updateone(t_envvar *node, char *new_value);
 t_envvar	*envvar_findbyname(t_envvar *lst, char *name);
 
 /* Execute */
-void		execute_cmd_lst(t_minishell **cmd_minishell);
-char		*get_exec_path(char *arg, t_minishell **minishell);
+void		execute_cmd_lst(t_minishell *minishell);
+char		*get_exec_path(char *arg, t_minishell *minishell);
 pid_t		run_in_child_process(t_builtin *builtin, t_cmd *cmd,
-				t_minishell **minishell);
+				t_minishell *minishell);
 
 /* Executables */
-void		run_executable(t_cmd *cmd, t_minishell **minishell);
+void		run_executable(t_cmd *cmd, t_minishell *minishell);
 
 /* Builtins */
 t_builtin	*get_builtin(char *progname);
 void		run_builtin(t_bool in_child_process, t_builtin *builtin, char **args,
-				t_minishell **minishell);
+				t_minishell *minishell);
 int			do_echo(char **args, t_minishell *minishell);
 int			do_cd(char **args, t_minishell *minishell);
 int			do_pwd(char **args, t_minishell *minishell);

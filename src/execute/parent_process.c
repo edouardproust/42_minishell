@@ -10,7 +10,7 @@
  * @return void
  * @note Exit on: pipe failure, open failure
  */
-static void	setup_io(t_cmd *cmd, t_minishell **minishell)
+static void	setup_io(t_cmd *cmd, t_minishell *minishell)
 {
 	if (cmd->next)
 	{
@@ -73,12 +73,12 @@ static void	cleanup_io(t_cmd *cmd)
  * @return void
  * @note Exit on: a process exits with code > E_ERRMAX
  */
-static void	wait_for_processes(t_minishell **minishell)
+static void	wait_for_processes(t_minishell *minishell)
 {
 	t_cmd	*cmd;
 	int		status;
 
-	cmd = (*minishell)->cmd_lst;
+	cmd = minishell->cmd_lst;
 	while (cmd)
 	{
 		if (cmd->pid > 0)
@@ -99,16 +99,18 @@ static void	wait_for_processes(t_minishell **minishell)
  * @return void
  * @note Exit on: incorrect input, function call exit
  */
-void	execute_cmd_lst(t_minishell **minishell)
+void	execute_cmd_lst(t_minishell *minishell)
 {
 	t_cmd		*cmd;
 	t_builtin	*builtin;
 
-	if (!minishell || !*minishell || !(*minishell)->cmd_lst)
+	if (!minishell || !minishell->cmd_lst)
 		exit_minishell(EXIT_FAILURE, NULL, "Incorrect parsed command");
-	cmd = (*minishell)->cmd_lst;
+	cmd = minishell->cmd_lst;
 	while (cmd)
 	{
+		if (cmd->args[0] == NULL || ft_strlen(cmd->args[0]) == 0)
+			break ;
 		setup_io(cmd, minishell);
 		builtin = get_builtin(cmd->args[0]);
 		if (builtin && builtin->affects_state && !cmd->next && !cmd->prev)

@@ -73,7 +73,7 @@ static char	*find_abspath(char **dirnames, char *progname)
  * @return The absolute path of the executable. NULL in case it is not found
  *  or an error occured during the search.
  */
-char	*get_exec_path(char *progname, t_minishell **minishell)
+char	*get_exec_path(char *progname, t_minishell *minishell)
 {
 	char	*abspath;
 	char	**dirnames;
@@ -86,7 +86,7 @@ char	*get_exec_path(char *progname, t_minishell **minishell)
 	}
 	else
 	{
-		dirnames = split_env_path(*minishell);
+		dirnames = split_env_path(minishell);
 		if (dirnames == NULL)
 			exit_minishell(E_CMDNOTFOUND, minishell, progname);
 		abspath = find_abspath(dirnames, progname);

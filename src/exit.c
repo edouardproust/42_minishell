@@ -11,7 +11,7 @@
  * @param fmt Format for the error message to print on stderr
  * @param ... Variadic list of values to expend in fmt
  */
-void	exit_minishell(int exit_code, t_minishell **minishell, char *fmt, ...)
+void	exit_minishell(int exit_code, t_minishell *minishell, char *fmt, ...)
 {
 	va_list	args;
 
