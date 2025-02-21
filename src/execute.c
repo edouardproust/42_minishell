@@ -5,7 +5,7 @@ static void	setup_io(t_cmd *cmd, t_minishell *minishell)
 	if (cmd->next)
 	{
 		if (pipe(cmd->pipe) == -1)
-			exit_minishell(EXIT_FAILURE, &minishell, "pipe");
+			exit_minishell(EXIT_FAILURE, minishell, "pipe");
 	}
 	if (cmd->prev)
 		cmd->fdin = cmd->prev->pipe[0];
@@ -13,7 +13,7 @@ static void	setup_io(t_cmd *cmd, t_minishell *minishell)
 	{
 		cmd->fdin = open(cmd->infile, O_RDONLY);
 		if (cmd->fdin == -1)
-			exit_minishell(EXIT_FAILURE, &minishell, cmd->infile);
+			exit_minishell(EXIT_FAILURE, minishell, cmd->infile);
 	}
 	if (cmd->next)
 		cmd->fdout = cmd->pipe[1];
@@ -21,7 +21,7 @@ static void	setup_io(t_cmd *cmd, t_minishell *minishell)
 	{
 		cmd->fdout = open(cmd->outfile, O_WRONLY | O_CREAT | O_TRUNC, 0644);
 		if (cmd->fdout == -1)
-			exit_minishell(EXIT_FAILURE, &minishell, cmd->outfile);
+			exit_minishell(EXIT_FAILURE, minishell, cmd->outfile);
 	}
 }
 
@@ -40,7 +40,7 @@ static void	cleanup_io(t_cmd *cmd)
 static void	duplicate_io(int newfd, int oldfd, t_minishell *minishell)
 {
 	if (dup2(newfd, oldfd) == -1)
-		exit_minishell(EXIT_FAILURE, &minishell, "dup2");
+		exit_minishell(EXIT_FAILURE, minishell, "dup2");
 	close(newfd);
 }
 
@@ -52,7 +52,7 @@ static void	execute_cmd(t_cmd *cmd, t_minishell *minishell)
 
 	pid = fork();
 	if (pid < 0)
-		exit_minishell(EXIT_FAILURE, &minishell, "fork");
+		exit_minishell(EXIT_FAILURE, minishell, "fork");
 	if (pid == 0)
 	{
 		if (cmd->fdin != STDIN_FILENO)
@@ -61,11 +61,11 @@ static void	execute_cmd(t_cmd *cmd, t_minishell *minishell)
 			duplicate_io(cmd->fdout, STDOUT_FILENO, minishell);
 		exec_path = get_exec_path(cmd->args[0], minishell);
 		execve(exec_path, cmd->args, minishell->envp);
-		exit_minishell(EXIT_FAILURE, &minishell, exec_path);
+		exit_minishell(EXIT_FAILURE, minishell, exec_path);
 	}
 	waitpid(pid, &status, 0);
 	if (WIFEXITED(status) && WEXITSTATUS(status) != 0)
-		exit_minishell(EXIT_FAILURE, &minishell, NULL);
+		exit_minishell(EXIT_FAILURE, minishell, NULL);
 }
 
 void	execute_cmd_lst(t_minishell *minishell)

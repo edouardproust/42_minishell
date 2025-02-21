@@ -21,6 +21,7 @@ t_cmd	*cmd_new(t_cmd *prev_cmd)
 	cmd->pipe[1] = -1;
 	cmd->fdin = STDIN_FILENO;
 	cmd->fdout = STDOUT_FILENO;
+	cmd->pid = -1;
 	cmd->prev = prev_cmd;
 	cmd->next = NULL;
 	if (cmd->prev)
@@ -73,7 +74,7 @@ int	parse_tokens(t_minishell *minishell)
 		return (EXIT_FAILURE);
 	minishell->cmd_lst = cmd_new(NULL);
 	if (!minishell->cmd_lst)
-		exit_minishell(EXIT_FAILURE, &minishell, NULL);
+		exit_minishell(EXIT_FAILURE, minishell, NULL);
 	cur_token = minishell->token_lst;
 	cur_cmd = minishell->cmd_lst;
 	while (cur_token)
