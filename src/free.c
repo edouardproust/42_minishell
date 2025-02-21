@@ -82,17 +82,3 @@ void	free_minishell(t_minishell *minishell)
 	ft_free_split(&minishell->envp);
 	ft_free_ptrs(1, &minishell);
 }
-
-/**
- * Close any fd up to FD_LIMIT, except standard ones.
- * 
- * @return void
- */
-void	flush_fds(void)
-{
-	int	fd;
-
-	fd = STDERR_FILENO + 1;
-	while (fd < FD_LIMIT)
-		close(fd++);
-}

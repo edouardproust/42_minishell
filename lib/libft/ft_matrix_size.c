@@ -21,6 +21,8 @@ size_t	ft_matrix_size(char **matrix)
 {
 	int	count;
 
+	if (!matrix || !*matrix)
+		return (0);
 	count = 0;
 	while (matrix[count])
 		count++;

@@ -10,6 +10,7 @@ C_DIR = src
 C_FILES = debug.c \
 	main.c \
 	free.c \
+	close.c \
 	exit.c \
 	error.c \
 	env/init.c \

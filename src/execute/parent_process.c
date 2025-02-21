@@ -56,13 +56,13 @@ static void	setup_io(t_cmd *cmd, t_minishell *minishell)
 static void	cleanup_io(t_cmd *cmd)
 {
 	if (cmd->infile)
-		close(cmd->fdin);
+		close_fd(cmd->fdin);
 	if (cmd->outfile)
-		close(cmd->fdout);
+		close_fd(cmd->fdout);
 	if (cmd->next)
-		close(cmd->pipe[1]);
+		close_fd(cmd->pipe[1]);
 	if (cmd->prev)
-		close(cmd->prev->pipe[0]);
+		close_fd(cmd->prev->pipe[0]);
 }
 
 /**
@@ -109,15 +109,17 @@ void	execute_cmd_lst(t_minishell *minishell)
 	cmd = minishell->cmd_lst;
 	while (cmd)
 	{
-		if (cmd->args[0] == NULL || ft_strlen(cmd->args[0]) == 0)
-			break ;
-		setup_io(cmd, minishell);
-		builtin = get_builtin(cmd->args[0]);
-		if (builtin && builtin->affects_state && !cmd->next && !cmd->prev)
-			run_builtin(FALSE, builtin, cmd->args, minishell);
-		else
-			cmd->pid = run_in_child_process(builtin, cmd, minishell);
-		cleanup_io(cmd);
+		if (cmd->args != NULL && cmd->args[0] != NULL
+			&& ft_strlen(cmd->args[0]) != 0)
+		{
+			setup_io(cmd, minishell);
+			builtin = get_builtin(cmd->args[0]);
+			if (builtin && builtin->affects_state && !cmd->next && !cmd->prev)
+				run_builtin(FALSE, builtin, cmd->args, minishell);
+			else
+				cmd->pid = run_in_child_process(builtin, cmd, minishell);
+			cleanup_io(cmd);
+		}
 		cmd = cmd->next;
 	}
 	wait_for_processes(minishell);

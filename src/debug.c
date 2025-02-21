@@ -10,16 +10,14 @@ static t_cmd *cmd_new_addback(char *bash_cmd, char *infile, char *outfile, t_cmd
 
 t_cmd	*create_cmd_lst(void)
 {
-	/*
 	t_cmd *cmd0 = cmd_new_addback("tail -n +4", "test/infile", NULL, NULL);
 	t_cmd *cmd1 = cmd_new_addback("grep a", NULL, NULL, cmd0);
 	t_cmd *cmd2 = cmd_new_addback("sort", NULL, NULL, cmd1);
 	t_cmd *cmd3 = cmd_new_addback("uniq -c", NULL, NULL, cmd2);
 	t_cmd *cmd4 = cmd_new_addback("sort -nr", NULL, NULL, cmd3);
 	//t_cmd *cmd5 = cmd_new_addback("cd ..", NULL, NULL, cmd4);
-	cmd_new_addback("head -n 3", NULL, "test/outfile", cmd4);
-	*/
-	t_cmd *cmd0 = cmd_new_addback("tail -n +4", "test/infile", NULL, NULL);
+	cmd_new_addback("head -n 3", NULL, NULL, cmd4);
+	//t_cmd *cmd0 = cmd_new_addback("tail -n +4", "test/infile", NULL, NULL);
 	//t_cmd *cmd0 = cmd_new_addback("cd test", NULL, NULL, NULL);
 	//t_cmd *cmd0 = cmd_new_addback("unset USERNAME LANG ZZZZ HOME", NULL, NULL, NULL);
 	//t_cmd *cmd0 = cmd_new_addback("env ZZZ", NULL, NULL, NULL);
@@ -80,9 +78,7 @@ void	debug_cmd(t_cmd *cmd, char *label)
 	char *after = "\n";
 	ft_fprintf(o, "%sargs: ", before);
 	int	j = 0;
-	if (cmd->args[j] == NULL)
-		ft_fprintf(o, "%s", NULL);
-	else
+	if (cmd->args != NULL && cmd->args[0] != NULL && ft_strlen(cmd->args[0]) != 0)
 	{
 		while (cmd->args[j] != NULL)
 		{
@@ -92,6 +88,8 @@ void	debug_cmd(t_cmd *cmd, char *label)
 			j++;
 		}
 	}
+	else
+		ft_fprintf(o, "%s", NULL);
 	ft_fprintf(o, "%s", after);
 	ft_fprintf(o, "%sinfile: %s%s", before, cmd->infile, after);
 	ft_fprintf(o, "%soutfile: %s%s", before, cmd->outfile, after);

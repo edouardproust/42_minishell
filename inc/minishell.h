@@ -96,7 +96,11 @@ void		free_minishell(t_minishell *minishell);
 t_envvar	*free_envvar_node(t_envvar **node);
 void		free_envvar_lst(t_envvar **var_lst);
 void		free_cmd_lst(t_cmd **cmd_lst);
+
+/* File descriptors */
+void		close_fd(int fd);
 void		flush_fds(void);
+
 
 /* Exit */
 void		exit_minishell(int exit_code, t_minishell *minishell,
