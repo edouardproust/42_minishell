@@ -28,13 +28,13 @@ static void	setup_io(t_cmd *cmd, t_minishell *minishell)
 static void	cleanup_io(t_cmd *cmd)
 {
 	if (cmd->infile)
-		close(cmd->fdin);
+		close_fd(cmd->fdin);
 	if (cmd->outfile)
-		close(cmd->fdout);
+		close_fd(cmd->fdout);
 	if (cmd->next)
-		close(cmd->pipe[1]);
+		close_fd(cmd->pipe[1]);
 	if (cmd->prev)
-		close(cmd->prev->pipe[0]);
+		close_fd(cmd->prev->pipe[0]);
 }
 
 static void	duplicate_io(int newfd, int oldfd, t_minishell *minishell)
@@ -64,7 +64,7 @@ static void	execute_cmd(t_cmd *cmd, t_minishell *minishell)
 		exit_minishell(EXIT_FAILURE, minishell, exec_path);
 	}
 	waitpid(pid, &status, 0);
-	if (WIFEXITED(status) && WEXITSTATUS(status) != 0)
+	if (WIFEXITED(status) && WEXITSTATUS(status) >= E_CMDNOTEXEC)
 		exit_minishell(EXIT_FAILURE, minishell, NULL);
 }
 
@@ -75,9 +75,12 @@ void	execute_cmd_lst(t_minishell *minishell)
 	cmd = minishell->cmd_lst;
 	while (cmd)
 	{
-		setup_io(cmd, minishell);
-		execute_cmd(cmd, minishell);
-		cleanup_io(cmd);
+		if (ft_matrix_size(cmd->args) != 0)
+		{
+			setup_io(cmd, minishell);
+			execute_cmd(cmd, minishell);
+			cleanup_io(cmd);
+		}
 		cmd = cmd->next;
 	}
 }

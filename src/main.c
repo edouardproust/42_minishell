@@ -1,5 +1,4 @@
 #include "minishell.h"
-#include "debug.h" //DEBUG
 
 /**
  * Inititalize the t_minishell struct containing global data on the program.
@@ -44,12 +43,8 @@ int	main(int ac, char **av, char **envp)
 	if (ac > 1)
 		return (EXIT_FAILURE); //TODO Deal with non-interactive mode
 	minishell = init_minishell(envp);
-	//debug_envp(minishell->envp); //DEBUG
-	//debug_envvars(minishell->envvar_lst); //DEBUG
-	input = "";
-	//input = "<test/infile tail -n +4 | grep a | sort | uniq -c | sort -nr | head -n 3";
+	input = "| tail -n +4 | grep a | sort | uniq -c | sort -nr | head -n 3";
 	init_cmd_lst(input, minishell);
-	debug_cmd_lst(minishell->cmd_lst); //DEBUG
 	execute_cmd_lst(minishell);
 	free_minishell(minishell);
 	return (EXIT_SUCCESS);
