@@ -15,7 +15,7 @@ int	is_special_char(char c)
  */
 int	is_space_char(char c)
 {
-	return (c = ' ' || (c >= 9 && c <= 13));
+	return (c == ' ' || (c >= 9 && c <= 13));
 }
 
 /*

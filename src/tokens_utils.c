@@ -29,7 +29,7 @@ t_token	*create_word_token(char *input, int *index, char *unmatched_quote)
 
 	start = *index;
 	while (input[*index] && !is_special_char(input[*index])
-			&& !isspace(input[*index]))
+			&& (!is_space_char(input[*index])))
 	{
 		if (is_quote_char(input[*index]))
 		{

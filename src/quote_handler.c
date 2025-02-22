@@ -25,10 +25,10 @@ char	*remove_quotes(char *str)
 	char	last;
 
 	len = ft_strlen(str);
-	first = str[0];
-	last = str[len - 1];
 	if (len < 2)
 		return (str);
+	first = str[0];
+	last = str[len - 1];
 	if ((first == '\'' || first == '"') && first == last)
 	{
 		cleaned = ft_substr(str, 1, len - 2);
