@@ -94,14 +94,14 @@ void	free_cmd_lst(t_cmd **cmd_lst)
  * 	including lists of t_cmd, t_envvar, etc.
  * @return void
  */
-void	free_minishell(t_minishell *minishell)
+void	free_minishell(t_minishell **minishell)
 {
-	if (minishell->envvar_lst)
-		free_envvar_lst(&minishell->envvar_lst);
-	if (minishell->token_lst)
-		free_token_lst(&minishell->token_lst);
-	if (minishell->cmd_lst)
-		free_cmd_lst(&minishell->cmd_lst);
-	ft_free_split(&minishell->envp);
-	ft_free_ptrs(1, &minishell);
+	if ((*minishell)->envvar_lst)
+		free_envvar_lst(&(*minishell)->envvar_lst);
+	if ((*minishell)->token_lst)
+		free_token_lst(&(*minishell)->token_lst);
+	if ((*minishell)->cmd_lst)
+		free_cmd_lst(&(*minishell)->cmd_lst);
+	ft_free_split(&(*minishell)->envp);
+	ft_free_ptrs(1, minishell);
 }

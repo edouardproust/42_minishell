@@ -43,9 +43,9 @@ int	main(int ac, char **av, char **envp)
 	if (ac > 1)
 		return (EXIT_FAILURE); //TODO Deal with non-interactive mode
 	minishell = init_minishell(envp);
-	input = "| tail -n +4 | grep a | sort | uniq -c | sort -nr | head -n 3";
+	input = "<test/infile tail -n +4 | grep a | sort | uniq -c | sort -nr | head -n 3";
 	init_cmd_lst(input, minishell);
 	execute_cmd_lst(minishell);
-	free_minishell(minishell);
+	free_minishell(&minishell);
 	return (EXIT_SUCCESS);
 }

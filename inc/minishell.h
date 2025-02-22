@@ -94,7 +94,7 @@ void		put_error_va(char *fmt, va_list args);
 void		put_error(char *fmt, ...);
 
 /* Memory */
-void		free_minishell(t_minishell *minishell);
+void		free_minishell(t_minishell **minishell);
 void		free_token_lst(t_token **token_lst);
 t_envvar	*free_envvar_node(t_envvar **node);
 void		free_envvar_lst(t_envvar **var_lst);
