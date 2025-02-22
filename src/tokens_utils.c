@@ -17,31 +17,6 @@ t_token	*token_new(char *value, int type)
 }
 
 /* 
- * Determines the token type based on the character at position `i`.
- * Returns: The token type (e.g., TOKEN_PIPE, TOKEN_REDIR_IN).
- */
-// TODO (A): implement heredoc and append logic
-int	get_token_type(char *input, int i)
-{
-	if (input[i] == '|')
-		return (TOKEN_PIPE);
-	if (input[i] == '<')
-	{
-		if (input[i + 1] == '<')
-			return (TOKEN_HEREDOC);
-		return (TOKEN_REDIR_IN);
-	}
-	if (input[i] == '>')
-	{
-		if (input[i + 1] == '>')
-			return (TOKEN_APPEND);
-		return (TOKEN_REDIR_OUT);
-	}
-	return (TOKEN_WORD);
-
-}
-
-/* 
  * Creates a word token from the input string starting at `index`.
  * Loops inside the input string and checks for quote chars.
  * Returns: A new word token or NULL if allocation fails.
@@ -53,7 +28,8 @@ t_token	*create_word_token(char *input, int *index, char *unmatched_quote)
 	t_token	*token;
 
 	start = *index;
-	while (input[*index] && !is_special_char(input[*index]))
+	while (input[*index] && !is_special_char(input[*index])
+			&& !isspace(input[*index]))
 	{
 		if (is_quote_char(input[*index]))
 		{

@@ -6,13 +6,16 @@
  */
 void	handle_pipe(t_parse *parse)
 {
-	if (!parse->current_token->next
-		|| parse->current_token->next->type == TOKEN_PIPE)
+	t_token	*token;
+
+	token = parse->current_token;
+	if (!token->next || token->next->type == TOKEN_PIPE)
 		exit_parsing(parse, "syntax error near unexpected token `|'");
 	parse->current_cmd->next = cmd_new(parse->current_cmd);
 	if (!parse->current_cmd->next)
 		exit_parsing(parse, NULL);
 	parse->current_cmd = parse->current_cmd->next;
+	parse->current_token = token->next;
 }
 
 /* 
@@ -20,16 +23,18 @@ void	handle_pipe(t_parse *parse)
  * - Ensures that the next token is a valid file name (word token).
  * - Copies the file name to the current command's infile field.
  */
-void	handle_input_redirection(t_parse *parse)
+void	handle_redir_in(t_parse *parse)
 {
-	if (!parse->current_token->next
-		|| parse->current_token->next->type != TOKEN_WORD)
+	t_token	*token;
+
+	token = parse->current_token;
+	if (!token->next || token->next->type != TOKEN_WORD)
 		exit_parsing(parse, "syntax error near unexpected token `newline'");
 	ft_free_ptrs(1, &parse->current_cmd->infile);
-	parse->current_cmd->infile = ft_strdup(parse->current_token->next->value);
+	parse->current_cmd->infile = ft_strdup(token->next->value);
 	if (!parse->current_cmd->infile)
 		exit_parsing(parse, NULL);
-	parse->current_token = parse->current_token->next;
+	parse->current_token = token->next->next;
 }
 
 /* 
@@ -37,16 +42,18 @@ void	handle_input_redirection(t_parse *parse)
  * - Ensures that the next token is a valid file name (word token).
  * - Copies the file name to the current command's outfile field.
  */
-void	handle_output_redirection(t_parse *parse)
+void	handle_redir_out(t_parse *parse)
 {
-	if (!parse->current_token->next
-		|| parse->current_token->next->type != TOKEN_WORD)
+	t_token	*token;
+
+	token = parse->current_token;
+	if (!token->next || token->next->type != TOKEN_WORD)
 		exit_parsing(parse, "syntax error near unexpected token `newline'");
 	ft_free_ptrs(1, &parse->current_cmd->outfile);
-	parse->current_cmd->outfile = ft_strdup(parse->current_token->next->value);
+	parse->current_cmd->outfile = ft_strdup(token->next->value);
 	if (!parse->current_cmd->outfile)
 		exit_parsing(parse, NULL);
-	parse->current_token = parse->current_token->next;
+	parse->current_token = token->next->next;
 }
 
 /* 
@@ -56,10 +63,13 @@ void	handle_output_redirection(t_parse *parse)
  */
 void	handle_word(t_parse *parse)
 {
+	t_token	*token;
 	char	*arg_copy;
 
-	arg_copy = ft_strdup(parse->current_token->value);
+	token = parse->current_token;
+	arg_copy = ft_strdup(token->value);
 	if (!arg_copy)
 		exit_parsing(parse, NULL);
 	add_arg_to_cmd(parse->current_cmd, arg_copy);
+	parse->current_token = token->next;
 }

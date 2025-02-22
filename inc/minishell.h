@@ -12,12 +12,15 @@
 
 #define FD_LIMIT 1024
 
-#define TOKEN_WORD 0
-#define TOKEN_PIPE 1
-#define TOKEN_REDIR_IN 2
-#define TOKEN_REDIR_OUT 3
-#define TOKEN_APPEND 4
-#define TOKEN_HEREDOC 5
+enum	e_token
+{
+		TOKEN_WORD,
+		TOKEN_PIPE,
+		TOKEN_REDIR_IN,
+		TOKEN_REDIR_OUT,
+		TOKEN_APPEND,
+		TOKEN_HEREDOC,
+};
 
 typedef struct s_token {
 	char	*value;
@@ -43,6 +46,12 @@ typedef struct	s_parse	{
 	t_token	*current_token;
 } t_parse;
 
+typedef struct	s_token_op {
+	char	*pattern;
+	int			type;
+	void	(*handler)(t_parse *);
+}	t_token_op;
+
 //main.c
 int	main(int ac, char **av, char **envp);
 
@@ -52,6 +61,7 @@ t_cmd	*init_cmd_lst(char *input);
 //general_utils.c
 int	is_special_char(char c);
 int	is_word_char(char c);
+int	is_space_char(char c);
 int	is_quote_char(char c);
 void	skip_whitespaces(char *input, int *i);
 
@@ -60,9 +70,13 @@ t_token *tokenizer(char *input);
 
 //tokens_utils.c
 t_token	*token_new(char *value, int type);
-int	get_token_type(char *input, int i);
 t_token	*create_word_token(char *input, int *index, char *unmatched_quote);
 void	token_addback(t_token **tokens, t_token *new);
+
+//token_types.c
+t_token_op	*get_token_op_for_tokenization(char *input_start);
+t_token_op	*get_token_ops(void);
+t_token_op	*get_token_op(int type);
 
 //tokenize_utils.c
 t_token	*handle_special_char(char *input, int *i);
@@ -78,8 +92,8 @@ void    add_arg_to_cmd(t_cmd *cmd, char *arg);
 t_cmd   *parse_tokens(t_token *tokens_head);
 
 //token_handlers.c
-void    handle_input_redirection(t_parse *parse);
-void    handle_output_redirection(t_parse *parse);
+void    handle_redir_in(t_parse *parse);
+void    handle_redir_out(t_parse *parse);
 void    handle_word(t_parse *parse);
 void    handle_pipe(t_parse *parse);
 
