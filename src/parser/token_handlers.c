@@ -17,7 +17,7 @@ void	handle_pipe(t_token **cur_token, t_cmd **cur_cmd,
 			"syntax error near unexpected token `|'");
 	(*cur_cmd)->next = cmd_new((*cur_cmd));
 	if (!(*cur_cmd)->next)
-		exit_minishell(EXIT_FAILURE, &minishell, NULL);
+		exit_minishell(EXIT_FAILURE, minishell, NULL);
 	(*cur_cmd) = (*cur_cmd)->next;
 	*cur_token = token->next;
 }
@@ -83,7 +83,7 @@ void	handle_word(t_token **cur_token, t_cmd **cur_cmd,
 	token = *cur_token;
 	arg_copy = ft_strdup(token->value);
 	if (!arg_copy)
-		exit_minishell(EXIT_FAILURE, &minishell, NULL);
+		exit_minishell(EXIT_FAILURE, minishell, NULL);
 	add_arg_to_cmd(*cur_cmd, arg_copy);
 	*cur_token = token->next;
 }

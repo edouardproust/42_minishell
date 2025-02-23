@@ -90,12 +90,17 @@ void	debug_cmd(t_cmd *cmd, char *label)
 	char *after = "\n";
 	ft_fprintf(o, "%sargs: ", before);
 	int	j = 0;
-	while (cmd->args[j] != NULL)
+	if (ft_matrix_size(cmd->args) <= 0)
+		ft_fprintf(o, "%s", NULL);
+	else
 	{
-		ft_fprintf(o, "%s", cmd->args[j]);
-		if (cmd->args[j + 1] != NULL)
-			ft_fprintf(o, ", ");
-		j++;
+		while (cmd->args[j] != NULL)
+		{
+			ft_fprintf(o, "%s", cmd->args[j]);
+			if (cmd->args[j + 1] != NULL)
+				ft_fprintf(o, ", ");
+			j++;
+		}
 	}
 	ft_fprintf(o, "%s", after);
 	ft_fprintf(o, "%sinfile: %s%s", before, cmd->infile, after);

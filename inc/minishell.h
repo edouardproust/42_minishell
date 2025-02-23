@@ -110,10 +110,11 @@ void		free_token_lst(t_token **token_lst);
 t_envvar	*free_envvar_node(t_envvar **node);
 void		free_envvar_lst(t_envvar **var_lst);
 void		free_cmd_lst(t_cmd **cmd_lst);
+void		close_fd(int fd);
 void		flush_fds(void);
 
 /* Exit */
-void		exit_minishell(int exit_code, t_minishell **minishell,
+void		exit_minishell(int exit_code, t_minishell *minishell,
 				char *fmt, ...);
 
 /* Env */
