@@ -1,6 +1,6 @@
 #include "minishell.h"
 
-t_token_op *get_token_ops(void)
+t_tokenize_op *get_tokenize_ops(void)
 {
     static t_tokenize_op tokenize_ops[] =
     {
@@ -11,7 +11,7 @@ t_token_op *get_token_ops(void)
         {">", TOKEN_REDIR_OUT},
         {NULL, TOKEN_WORD}
     };
-    return (tokeninze_ops);
+    return (tokenize_ops);
 }
 
 t_token	*handle_special_char(char *input, int *i)

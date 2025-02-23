@@ -148,7 +148,9 @@ void		handle_pipe(t_token **cur_token, t_cmd **cur_cmd,
 t_token		*tokenizer(char *input, t_minishell *minishell);
 t_token		*token_new(char *value, int type);
 t_tokenize_op	*get_tokenize_ops(void);
-t_token		*create_word_token(char *input, int *index);
+t_token		*handle_special_char(char *input, int *i);
+t_token		*handle_word_token(char *input, int *i, char *unmatched_quote);
+t_token		*create_word_token(char *input, int *index, char *unmatched_quote);
 void		token_addback(t_token **tokens, t_token *new);
 int			skip_quotes(char *input, int *index, char *unmatched_quote);
 char		*remove_quotes(char *str);

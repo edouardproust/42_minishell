@@ -39,5 +39,5 @@ void	handle_token_type(t_token **cur_token, t_cmd **cur_cmd,
 		}
 		i++;
 	}
-	exit_minishell(EXIT_FAILURE, &minishell, NULL);
+	exit_minishell(EXIT_FAILURE, minishell, NULL);
 }

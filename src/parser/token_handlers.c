@@ -13,7 +13,7 @@ void	handle_pipe(t_token **cur_token, t_cmd **cur_cmd,
 
 	token = *cur_token;
 	if (!(token)->next || token->next->type == TOKEN_PIPE)
-		exit_minishell(EXIT_FAILURE, &minishell,
+		exit_minishell(EXIT_FAILURE, minishell,
 			"syntax error near unexpected token `|'");
 	(*cur_cmd)->next = cmd_new((*cur_cmd));
 	if (!(*cur_cmd)->next)
@@ -36,12 +36,12 @@ void	handle_redir_in(t_token **cur_token, t_cmd **cur_cmd,
 
 	token = *cur_token;
 	if (!token->next || token->next->type != TOKEN_WORD)
-		exit_minishell(EXIT_FAILURE, &minishell,
+		exit_minishell(EXIT_FAILURE, minishell,
 			"syntax error near unexpected token `newline'");
 	ft_free_ptrs(1, &(*cur_cmd)->infile);
 	(*cur_cmd)->infile = ft_strdup(token->next->value);
 	if (!(*cur_cmd)->infile)
-		exit_minishell(EXIT_FAILURE, &minishell, NULL);
+		exit_minishell(EXIT_FAILURE, minishell, NULL);
 	(*cur_token) = token->next->next;
 }
 
@@ -59,12 +59,12 @@ void	handle_redir_out(t_token **cur_token, t_cmd **cur_cmd,
 
 	token = *cur_token;
 	if (!token->next || token->next->type != TOKEN_WORD)
-		exit_minishell(EXIT_FAILURE, &minishell,
+		exit_minishell(EXIT_FAILURE, minishell,
 			"syntax error near unexpected token `newline'");
 	ft_free_ptrs(1, &(*cur_cmd)->outfile);
 	(*cur_cmd)->outfile = ft_strdup(token->next->value);
 	if (!(*cur_cmd)->outfile)
-		exit_minishell(EXIT_FAILURE, &minishell, NULL);
+		exit_minishell(EXIT_FAILURE, minishell, NULL);
 	(*cur_token) = token->next->next;
 }
 
