@@ -5,13 +5,11 @@
  * the appropriate handler function is called.
  * - Handles redirections (input/output), pipes, and arguments.
  */
-void	handle_token_type(t_parse *parse)
+void	handle_token_type(t_token **cur_token, t_cmd **cur_cmd,
+	t_minishell *minishell)
 {
 	t_token_op	*token_op;
 
-	while (parse->current_token)
-	{
-		token_op = get_token_op(parse->current_token->type);
-		token_op->handler(parse);
-	}
+		token_op = get_token_op((*cur_token)->type);
+		token_op->handler(cur_token, cur_cmd, minishell);
 }

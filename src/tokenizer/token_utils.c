@@ -5,15 +5,15 @@
  */
 t_token	*token_new(char *value, int type)
 {
-	t_token *token;
+	t_token	*token;
 
 	token = malloc(sizeof(t_token));
 	if (!token)
 		return (NULL);
-        token->value = value;
-        token->type = type;
-        token->next = NULL;
-        return (token);
+	token->value = value;
+	token->type = type;
+	token->next = NULL;
+	return (token);
 }
 
 /* 
@@ -23,8 +23,8 @@ t_token	*token_new(char *value, int type)
  */
 t_token	*create_word_token(char *input, int *index, char *unmatched_quote)
 {
-	int     start;
-	char    *word;
+	int		start;
+	char	*word;
 	t_token	*token;
 
 	start = *index;
@@ -54,10 +54,10 @@ t_token	*create_word_token(char *input, int *index, char *unmatched_quote)
  */
 void	token_addback(t_token **tokens, t_token *new)
 {
-	t_token *tmp;
+	t_token	*tmp;
 
 	if (!*tokens)
-		*tokens= new;
+		*tokens = new;
 	else
 	{
 		tmp = *tokens;

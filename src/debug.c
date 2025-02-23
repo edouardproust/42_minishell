@@ -4,17 +4,30 @@
 #include "minishell.h"
 #include <sys/stat.h>
 
-//static t_cmd *cmd_new_addback(char *bash_cmd, char *infile, char *outfile, t_cmd *prev_cmd);
+int	g_logfd = -1;
 
-/*t_cmd	*create_cmd_lst(char *input)
+static t_cmd *cmd_new_addback(char *bash_cmd, char *infile, char *outfile, t_cmd *prev_cmd);
+
+t_cmd	*create_cmd_lst(void)
 {
+	/*
 	t_cmd *cmd0 = cmd_new_addback("tail -n +4", "test/infile", NULL, NULL);
 	t_cmd *cmd1 = cmd_new_addback("grep a", NULL, NULL, cmd0);
 	t_cmd *cmd2 = cmd_new_addback("sort", NULL, NULL, cmd1);
 	t_cmd *cmd3 = cmd_new_addback("uniq -c", NULL, NULL, cmd2);
-	t_cmd *cmd4 = cmd_new_addback("sort -nr", NULL, NULL, cmd3); 
+	t_cmd *cmd4 = cmd_new_addback("sort -nr", NULL, NULL, cmd3);
+	//t_cmd *cmd5 = cmd_new_addback("cd ..", NULL, NULL, cmd4);
 	cmd_new_addback("head -n 3", NULL, "test/outfile", cmd4);
-	return (cmd0);
+	*/
+	t_cmd *cmd0 = cmd_new_addback("echo -n -n -n hello -n", NULL, NULL, NULL);
+	//t_cmd *cmd0 = cmd_new_addback("cd test", NULL, NULL, NULL);
+	//t_cmd *cmd0 = cmd_new_addback("unset USERNAME LANG ZZZZ HOME", NULL, NULL, NULL);
+	//t_cmd *cmd0 = cmd_new_addback("env ZZZ", NULL, NULL, NULL);
+	//t_cmd *cmd0 = cmd_new_addback("export", NULL, NULL, NULL);
+	//t_cmd *cmd0 = cmd_new_addback("export HOME='hello world!'", NULL, NULL, NULL);
+	//t_cmd *cmd0 = cmd_new_addback("exit wrong_exit_code", NULL, NULL, NULL);
+	
+	return(cmd0);
 }
 
 static t_cmd *cmd_new_addback(char *bash_cmd, char *infile, char *outfile, t_cmd *prev_cmd)
@@ -28,6 +41,7 @@ static t_cmd *cmd_new_addback(char *bash_cmd, char *infile, char *outfile, t_cmd
 	cmd->fdout = STDOUT_FILENO;
 	cmd->prev = prev_cmd;
 	cmd->next = NULL;
+	cmd->pid = 0;
 
 	cmd->args = ft_split(bash_cmd, ' ');
 	if (infile != NULL)
@@ -41,8 +55,7 @@ static t_cmd *cmd_new_addback(char *bash_cmd, char *infile, char *outfile, t_cmd
 	cmd->pipe[1] = -1;
 
 	return (cmd);
-}*/
-
+}
 
 void	debug_tokens(t_token *tokens)
 {
@@ -53,27 +66,16 @@ void	debug_tokens(t_token *tokens)
 	}
 }
 
-void	debug_cmds(t_cmd *cmd)
+void	open_logfile(char *filepath)
 {
-	int     i;
-
-	while (cmd)
-	{
-		printf("Command: ");
-		if (cmd->args)
-		{
-			i = 0;
-			while (cmd->args[i])
-			{
-				printf("%s ", cmd->args[i]);
-				i++;
-			}
-		}
-		printf("\nInfile: %s\n", cmd->infile ? cmd->infile : "(none)");
-		printf("Outfile: %s\n", cmd->outfile ? cmd->outfile : "(none)");
-		printf("----------------\n");
-		cmd = cmd->next;
-	}
+	int tmp_fd;
+	
+	tmp_fd = open(filepath, O_WRONLY | O_CREAT | O_TRUNC, 0644);
+    if (tmp_fd != -1)
+		close(tmp_fd);
+	g_logfd = open(filepath, O_WRONLY | O_APPEND, 0644);
+	if (g_logfd == -1)
+		ft_pexit("DEBUG: Wrong logfile path");
 }
 
 void	debug_cmd(t_cmd *cmd, char *label)
@@ -104,6 +106,7 @@ void	debug_cmd(t_cmd *cmd, char *label)
 	ft_fprintf(o, "%s", after);
 	ft_fprintf(o, "%sfdin: %d%s", before, cmd->fdin, after);
 	ft_fprintf(o, "%sfdout: %d%s", before, cmd->fdout, after);
+	ft_fprintf(o, "%spid: %d%s", before, cmd->pid, after);
 	if (label == NULL)
 		ft_fprintf(o, "╰───────────────────────────────╯\n");
 	else
@@ -136,11 +139,16 @@ void	debug_cmd_lst(t_cmd *cmd_lst)
 		if (cmd->next)
 			ft_printf("\t\t▼\n");
 	 	cmd = cmd->next;
-	}
+	}	
+}
+
+void	debug_process(int pid, int status)
+{
+	ft_fprintf(g_logfd, "[Process: pid=%d, status=%d]\n", pid, WEXITSTATUS(status));
 }
 
 void debug_fd(char *label, int fd) {
-	int	o = STDERR_FILENO;
+	int	o = g_logfd;
 	int flags = fcntl(fd, F_GETFL);
 
 	if (flags == -1) {
@@ -150,41 +158,30 @@ void debug_fd(char *label, int fd) {
 	}
 }
 
-void debug_read_fd(char *label, int fd)
+void	debug_envvars(t_envvar *lst)
 {
-    char buffer[1024];
-    int bytes_read;
-    int o = STDERR_FILENO;
+	int	fd = STDERR_FILENO;
+	ft_fprintf(fd, "╭────────────────────────────────╮\n");
+	ft_fprintf(fd, "│ env. variables                 │\n");
+	ft_fprintf(fd, "╰────────────────────────────────╯\n");
+	while (lst)
+	{
+		ft_fprintf(fd, "'%s': '%s'\n", lst->name, lst->value);
+		lst = lst->next;
+	}
+	ft_fprintf(fd, "────────────────────────────────────\n\n");
+}
 
-    ft_fprintf(o, "▶ ");
-    if (label != NULL)
-        ft_fprintf(o, "Read %s", label);
-    else
-        ft_fprintf(o, "Read fd");
-    ft_fprintf(o, ":\n");
-
-    int fd_copy = dup(fd);
-    if (fd_copy == -1) {
-        ft_fprintf(o, "Error: dup failed\n");
-        return;
-    }
-    bytes_read = read(fd_copy, buffer, 1023);
-    if (bytes_read == -1) {
-        ft_fprintf(o, "Error: read failed\n");
-        close(fd_copy);
-        return;
-    }
-    buffer[bytes_read] = '\0';
-
-    if (bytes_read == 0) {
-        ft_fprintf(o, "(null)\n");
-    } else {
-        ft_fprintf(o, "%s\n", buffer);
-    }
-    struct stat st;
-    if (fstat(fd, &st) == 0 && S_ISREG(st.st_mode)) {
-        lseek(fd, 0, SEEK_SET);
-    }
-
-    close(fd_copy);
+void	debug_envp(char **envp)
+{
+	int	fd = STDERR_FILENO;
+	ft_fprintf(fd, "╭────────────────────────────────╮\n");
+	ft_fprintf(fd, "│ envp                           │\n");
+	ft_fprintf(fd, "╰────────────────────────────────╯\n");
+	while (*envp)
+	{
+		ft_fprintf(fd, "%s\n", *envp);
+		envp++;
+	}
+	ft_fprintf(fd, "────────────────────────────────────\n\n");
 }

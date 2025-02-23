@@ -1,48 +1,69 @@
 #include "minishell.h"
 
-/*
- * Frees one command (t_cmd).
- * Return: pointer to the next cmd in the list
+/**
+ * Free one t_envvar node
+ * 
+ * @param var Pointer to the node to delete (by reference)
+ * @return Pointer to the next node in the list
  */
-t_cmd	*free_cmd(t_cmd **cmd)
+t_envvar	*free_envvar_node(t_envvar **var)
 {
-	t_cmd	*cur_cmd;
-	t_cmd	*nxt_cmd;
+	t_envvar	*nxt_var;
 
-	if (!cmd || !*cmd)
+	if (!var || !*var)
 		return (NULL);
-	cur_cmd = *cmd;
-	ft_free_split(&cur_cmd->args);
-	ft_free_ptrs(3, &cur_cmd->infile, &cur_cmd->outfile,
-		&cur_cmd->pipe);
-	nxt_cmd = cur_cmd->next;
-	ft_free_ptrs(1, &cur_cmd);
-	return (nxt_cmd);
+	nxt_var = (*var)->next;
+	ft_free_ptrs(3,
+		&(*var)->name,
+		&(*var)->value,
+		var);
+	return (nxt_var);
 }
 
-/*
- * Frees all the tokens' value and structure in the token list.
+/**
+ * Free all the nodes in the list of t_envvar (starting by the 
+ * 'envvar_list' node).
+ * 
+ * @param var_lst Pointer to the head of the list (by reference)
+ * @return void
  */
-void	free_token_lst(t_token **tokens)
+void	free_envvar_lst(t_envvar **var_lst)
+{
+	if (!var_lst || !*var_lst)
+		return ;
+	while (*var_lst)
+		*var_lst = free_envvar_node(var_lst);
+	*var_lst = NULL;
+}
+
+/**
+ * Frees all the tokens' value and structure in the token list.
+ * 
+ * @param token_lst Pointer to the head of the list (by reference)
+ * @return void
+ */
+void	free_token_lst(t_token **token_lst)
 {
 	t_token	*cur_token;
 	t_token	*nxt_token;
 
-	if (!tokens || !*tokens)
+	if (!token_lst || !*token_lst)
 		return ;
-	cur_token = *tokens;
+	cur_token = *token_lst;
 	while (cur_token)
 	{
 		nxt_token = cur_token->next;
-		ft_free_ptrs(1, &cur_token->value);
-		free(cur_token);
+		ft_free_ptrs(2, &cur_token->value, &cur_token);
 		cur_token = nxt_token;
 	}
-	*tokens = NULL;
+	*token_lst = NULL;
 }
 
-/*
- * Frees all the commands in the list (starting by 'cmd_list' node).
+/**
+ * Free all the node in the list of t_cmd (starting by the 'cmd_lst' node).
+ * 
+ * @param cmd_lst Pointer to the head of the list (by reference)
+ * @return void
  */
 void	free_cmd_lst(t_cmd **cmd_lst)
 {
@@ -54,21 +75,33 @@ void	free_cmd_lst(t_cmd **cmd_lst)
 	cur_cmd = *cmd_lst;
 	while (cur_cmd)
 	{
+		ft_free_split(&cur_cmd->args);
 		nxt_cmd = cur_cmd->next;
-		free_cmd(&cur_cmd);
+		ft_free_ptrs(4,
+			&cur_cmd->infile,
+			&cur_cmd->outfile,
+			&cur_cmd->pipe,
+			&cur_cmd);
 		cur_cmd = nxt_cmd;
 	}
 	*cmd_lst = NULL;
 }
 
-/*
- * Closes any fd up to FD_LIMIT, except standard ones.
+/**
+ * Free minishell at any point during the program execution.
+ * 
+ * @param minishell Struct containing global data on the program,
+ * 	including lists of t_cmd, t_envvar, etc.
+ * @return void
  */
-void	flush_fds(void)
+void	free_minishell(t_minishell **minishell)
 {
-	int	fd;
-
-	fd = 3;
-	while (fd < FD_LIMIT)
-		close(fd++);
+	if ((*minishell)->envvar_lst)
+		free_envvar_lst(&(*minishell)->envvar_lst);
+	if ((*minishell)->token_lst)
+		free_token_lst(&(*minishell)->token_lst);
+	if ((*minishell)->cmd_lst)
+		free_cmd_lst(&(*minishell)->cmd_lst);
+	ft_free_split(&(*minishell)->envp);
+	ft_free_ptrs(1, minishell);
 }

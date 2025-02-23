@@ -16,6 +16,7 @@ int	skip_quotes(char *input, int *index, char *unmatched_quote)
 	(*index)++;
 	return (1);
 }
+
 static void	process_char(char c, char *in_quote, char *cleaned, int *j)
 {
 	if (*in_quote)

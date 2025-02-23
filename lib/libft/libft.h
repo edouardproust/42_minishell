@@ -6,7 +6,7 @@
 /*   By: eproust <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/13 12:55:09 by eproust           #+#    #+#             */
-/*   Updated: 2025/02/04 19:39:18 by eproust          ###   ########.fr       */
+/*   Updated: 2025/02/06 18:55:07 by eproust          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,10 +23,6 @@
 #  define BUFFER_SIZE 1024
 # endif
 
-# define STDIN_FILENO 0
-# define STDOUT_FILENO 1
-# define STDERR_FILENO 2
-
 /* Exit & Error */
 void	ft_exit(char *error_msg);
 void	ft_pexit(char *error_msg);
@@ -34,22 +30,7 @@ void	ft_pexit(char *error_msg);
 /* Free */
 void	*ft_free_ptrs(int count, ...);
 void	ft_free_split(char ***array);
-
-/* String */
-size_t	ft_strlen(const char *s);
-size_t	ft_strlcpy(char *dst, const char *src, size_t size);
-char	*ft_strdup(const char *s);
-char	*ft_substr(char const *s, unsigned int start, size_t len);
-size_t	ft_strlcat(char *dst, const char *src, size_t size);
-char	*ft_strjoin(char const *s1, char const *s2);
-char	*ft_strtrim(char const *s1, char const *set);
-char	**ft_split(char const *s, char sep);
-char	*ft_strchr(const char *s, int c);
-char	*ft_strrchr(const char *s, int c);
-int		ft_strncmp(const char *s1, const char *s2, size_t n);
-char	*ft_strnstr(const char *big, const char *little, size_t len);
-char	*ft_strmapi(char const *s, char (*f)(unsigned int, char));
-void	ft_striteri(char *s, void (*f)(unsigned int, char*));
+void	ft_free_splitn(char ***matrix, int n);
 
 /* Character */
 int		ft_isalpha(int c);
@@ -60,6 +41,28 @@ int		ft_isprint(int c);
 int		ft_isspace(int c);
 int		ft_toupper(int c);
 int		ft_tolower(int c);
+
+/* String */
+size_t	ft_strlen(const char *s);
+size_t	ft_strlcpy(char *dst, const char *src, size_t size);
+char	*ft_strdup(const char *s);
+char	*ft_substr(char const *s, unsigned int start, size_t len);
+size_t	ft_strlcat(char *dst, const char *src, size_t size);
+char	*ft_strjoin(char const *s1, char const *s2);
+char	*ft_strglue(char *s1, char *glue, char *s2);
+char	*ft_strtrim(char const *s1, char const *set);
+char	*ft_strchr(const char *s, int c);
+int		ft_strchri(char *s, int c);
+char	*ft_strrchr(const char *s, int c);
+int		ft_strncmp(const char *s1, const char *s2, size_t n);
+char	*ft_strnstr(const char *big, const char *little, size_t len);
+char	*ft_strmapi(char const *s, char (*f)(unsigned int, char));
+void	ft_striteri(char *s, void (*f)(unsigned int, char*));
+
+/* Matrix */
+char	**ft_split(char const *s, char sep);
+char	**ft_matrix_dup(char **matrix);
+size_t	ft_matrix_size(char **matrix);
 
 /* Memory */
 void	ft_bzero(void *s, size_t n);

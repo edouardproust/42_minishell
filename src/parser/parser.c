@@ -10,19 +10,22 @@
  * Returns: A linked list of parsed t_cmd structures, or NULL if parsing fails.
  */
 //TODO (A) Implement append and heredoc logic types.
-t_cmd	*parse_tokens(t_token *tokens_head)
+int	parse_tokens(t_minishell *minishell)
 {
-	t_parse	parse;
-	t_cmd	*cmd_list;
+	t_token	*cur_token;
+	t_cmd	*cur_cmd;
 
-	cmd_list = NULL;
-	parse = (t_parse){&cmd_list, NULL, tokens_head, tokens_head};
-	if (!parse.current_token)
-		return (NULL);
-	*parse.cmd_list_head = cmd_new(NULL);
-	parse.current_cmd = *parse.cmd_list_head;
-	if (!parse.current_cmd)
-		exit_parsing(&parse, NULL);
-	handle_token_type(&parse);
-	return (cmd_list);
+	if (!minishell->token_lst)
+		return (EXIT_FAILURE);
+	minishell->cmd_lst = cmd_new(NULL);
+	if (!minishell->cmd_lst)
+		exit_minishell(EXIT_FAILURE, &minishell, NULL);
+	cur_token = minishell->token_lst;
+	cur_cmd = minishell->cmd_lst;
+	while (cur_token)
+	{
+		handle_token_type(&cur_token, &cur_cmd, minishell);
+		cur_token = cur_token->next;
+	}
+	return (EXIT_SUCCESS);
 }
