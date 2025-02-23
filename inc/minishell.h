@@ -53,43 +53,46 @@ typedef struct	s_token_op {
 }	t_token_op;
 
 //main.c
-int	main(int ac, char **av, char **envp);
+int			main(int ac, char **av, char **envp);
 
 //cmd_list.c
 t_cmd	*init_cmd_lst(char *input);
 
-//general_utils.c
-int	is_special_char(char c);
-int	is_word_char(char c);
-int	is_space_char(char c);
-int	is_quote_char(char c);
+//string_utils.c
+int			is_special_char(char c);
+int			is_space_char(char c);
+int			is_quote_char(char c);
 void	skip_whitespaces(char *input, int *i);
 
-//tokenize.c
+//tokenizer.c
 t_token *tokenizer(char *input);
 
-//tokens_utils.c
+//token_utils.c
 t_token	*token_new(char *value, int type);
 t_token	*create_word_token(char *input, int *index, char *unmatched_quote);
 void	token_addback(t_token **tokens, t_token *new);
 
 //token_types.c
-t_token_op	*get_token_op_for_tokenization(char *input_start);
 t_token_op	*get_token_ops(void);
 t_token_op	*get_token_op(int type);
 
-//tokenize_utils.c
+//tokenizer_utils.c
+t_token_op	*get_token_op_for_tokenization(char *input_start);
 t_token	*handle_special_char(char *input, int *i);
 t_token	*handle_word_token(char *input, int *i, char *unmatched_quote);
 
 //quote_handler.c
-int	skip_quotes(char *input, int *index, char *unmatched_quote);
+int			skip_quotes(char *input, int *index, char *unmatched_quote);
 char	*remove_quotes(char *str);
 
 //parser.c
 t_cmd   *cmd_new();
 void    add_arg_to_cmd(t_cmd *cmd, char *arg);
 t_cmd   *parse_tokens(t_token *tokens_head);
+
+//cmd_utils.c
+t_cmd	*cmd_new(t_cmd *prev_cmd);
+void	add_arg_to_cmd(t_cmd *cmd, char *arg);
 
 //token_handlers.c
 void    handle_redir_in(t_parse *parse);

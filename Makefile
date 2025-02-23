@@ -12,15 +12,16 @@ C_FILES = debug.c \
 	exit.c \
 	main.c \
 	cmd_list.c \
-	general_utils.c \
-	tokenize.c \
-	tokenize_utils.c \
-	token_types.c \
-	tokens_utils.c \
-	quote_handler.c \
-	parser.c \
-	parser_utils.c \
-	token_handlers.c \
+	utils/string_utils.c \
+	tokenizer/tokenizer.c \
+	tokenizer/tokenizer_utils.c \
+	tokenizer/token_types.c \
+	tokenizer/token_utils.c \
+	tokenizer/quote_handler.c \
+	parser/parser.c \
+	parser/parser_utils.c \
+	parser/cmd_utils.c \
+	parser/token_handlers.c \
 	execute.c \
 	execute_path.c \
 
@@ -81,7 +82,7 @@ INCLUDES = -I$(H_DIR) -I$(LIBFT_DIR)
 all: libft $(NAME)
 
 $(O_DIR)/%.o: $(C_DIR)/%.c Makefile $(HEADERS)
-	@mkdir -p $(O_DIR)
+	@mkdir -p $(@D)
 	cc -c -o $@ $< $(INCLUDES) $(CFLAGS)
 
 $(NAME): $(OBJS)
