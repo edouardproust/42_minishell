@@ -2,14 +2,14 @@
 
 t_parse_op	*get_parse_ops(void)
 {
-    static	t_parse_op parse_ops[] = {
-		{TOKEN_PIPE, handle_pipe},
-		{TOKEN_REDIR_IN, handle_redir_in},
-		{TOKEN_REDIR_OUT, handle_redir_out},
-//		{TOKEN_HEREDOC, handle_heredoc},
-//		{TOKEN_APPEND, handle_append},
-		{TOKEN_WORD, handle_word},
-		{0, NULL}
+	static t_parse_op	parse_ops[] = {
+	{TOKEN_PIPE, handle_pipe},
+	{TOKEN_REDIR_IN, handle_redir_in},
+	{TOKEN_REDIR_OUT, handle_redir_out},
+//	{TOKEN_HEREDOC, handle_heredoc},
+//	{TOKEN_APPEND, handle_append},
+	{TOKEN_WORD, handle_word},
+	{0, NULL}
 	};
 	return (parse_ops);
 }
@@ -23,9 +23,9 @@ t_parse_op	*get_parse_ops(void)
 void	handle_token_type(t_token **cur_token, t_cmd **cur_cmd,
 	t_minishell *minishell)
 {
-	t_parse_op *parse_ops;
-	int	type;
-	int	i;
+	t_parse_op	*parse_ops;
+	int			type;
+	int			i;
 
 	parse_ops = get_parse_ops();
 	type = (*cur_token)->type;

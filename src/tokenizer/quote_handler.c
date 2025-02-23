@@ -39,8 +39,8 @@ char	*remove_quotes(char *str)
 {
 	char	*cleaned;
 	char	in_quote;
-	int			i;
-	int			j;
+	int		i;
+	int		j;
 
 	cleaned = malloc(ft_strlen(str) + 1);
 	if (!cleaned)
