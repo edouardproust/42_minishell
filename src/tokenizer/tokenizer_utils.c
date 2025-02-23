@@ -1,36 +1,40 @@
 #include "minishell.h"
 
-t_token_op *get_token_op_for_tokenization(char *input_start)
+t_token_op *get_token_ops(void)
 {
-	t_token_op	*token_ops;
-	int	i;
-	int	pattern_len;
-
-	token_ops = get_token_ops();
-	i = 0;
-	while (token_ops[i].pattern)
-	{
-		pattern_len = ft_strlen(token_ops[i].pattern);
-		if (ft_strncmp(input_start, token_ops[i].pattern, pattern_len) == 0)
-			return (&token_ops[i]);
-		i++;
-	}
-	return &token_ops[i];
+    static t_tokenize_op tokenize_ops[] =
+    {
+        {"|", TOKEN_PIPE},
+//      {"<<", TOKEN_HEREDOC},
+//      {">>", TOKEN_APPEND},
+ 		{"<", TOKEN_REDIR_IN},
+        {">", TOKEN_REDIR_OUT},
+        {NULL, TOKEN_WORD}
+    };
+    return (tokeninze_ops);
 }
 
 t_token	*handle_special_char(char *input, int *i)
 {
-	t_token_op	*op;
+	t_tokenize_op	*ops;
 	char	*value;
+	int	j;
 	int	len;
 
-	op = get_token_op_for_tokenization(&input[*i]);
-	len = ft_strlen(op->pattern);
-	value = ft_substr(input, *i, len);
-	if (!value)
-		return (NULL);
-	*i = *i + len;
-	return (token_new(value, op->type));
+	ops = get_tokenize_ops(); 
+	j = 0;
+	while (ops[j].pattern)
+	{
+		len = ft_strlen(ops[j].pattern);
+		if (ft_strncmp(input + *i, ops[j].pattern, len) == 0)
+		{
+			value = ft_substr(input, *i, len);
+			*i = *i + len;
+			return (token_new(value, ops[j].type));
+		}
+		j++;
+	}
+	return (NULL);
 }
 
 t_token	*handle_word_token(char *input, int *i, char *unmatched_quote)

@@ -77,9 +77,10 @@ t_token	*tokenizer(char *input, t_minishell *minishell)
 		{
 			free_token_lst(&minishell->token_lst);
 			if (unmatched_quote)
-				exit_parsing(NULL, "unexpected EOF while looking for matching `%c'", unmatched_quote);
+				exit_minishell(NEXIT_FAILURE, &minishell,
+					"unexpected EOF while looking for matching `%c'");
 			else
-				exit_parsing(NULL, NULL);
+				exit_minishell(EXIT_FAILURE, &minishell, NULL);
 			return (NULL);
 		}
 			token_addback(&minishell->token_lst, new_token);

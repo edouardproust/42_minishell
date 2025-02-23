@@ -76,11 +76,17 @@ typedef struct s_minishell
 	t_cmd		*cmd_lst;
 }	t_minishell;
 
-typedef struct	s_token_op {
+typedef struct	s_tokenize_op
+{
 	char	*pattern;
 	int			type;
-	void	(*handler)(t_parse *);
-}	t_token_op;
+}	t_tokenize_op;
+
+typedef struct	s_parse_op
+{
+	int			type;
+	void	(*handler)(t_token **, t_cmd **, t_minishell *);
+}	t_parse_op;
 
 typedef struct s_builtin
 {
@@ -125,6 +131,7 @@ void		init_cmd_lst(char *input, t_minishell *minishell);
 t_cmd		*cmd_new(t_cmd *prev_cmd);
 void		add_arg_to_cmd(t_cmd *cmd, char *arg);
 int			parse_tokens(t_minishell *minishell);
+t_parse_op	*get_parse_ops(void);
 void		handle_token_type(t_token **cur_token, t_cmd **cur_cmd,
 				t_minishell *minishell);
 void		handle_redir_in(t_token **cur_token, t_cmd **cur_cmd,
@@ -139,7 +146,7 @@ void		handle_pipe(t_token **cur_token, t_cmd **cur_cmd,
 /* Tokenization */
 t_token		*tokenizer(char *input, t_minishell *minishell);
 t_token		*token_new(char *value, int type);
-int			get_token_type(char *input, int i);
+t_tokenize_op	*get_tokenize_ops(void);
 t_token		*create_word_token(char *input, int *index);
 void		token_addback(t_token **tokens, t_token *new);
 int			skip_quotes(char *input, int *index, char *unmatched_quote);

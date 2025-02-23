@@ -22,7 +22,6 @@ C_FILES = debug.c \
 	utils/string_utils.c \
 	tokenizer/tokenizer.c \
 	tokenizer/tokenizer_utils.c \
-	tokenizer/token_types.c \
 	tokenizer/token_utils.c \
 	tokenizer/quote_handler.c \
 	parser/parser.c \

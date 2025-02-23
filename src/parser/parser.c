@@ -14,6 +14,7 @@ int	parse_tokens(t_minishell *minishell)
 {
 	t_token	*cur_token;
 	t_cmd	*cur_cmd;
+	t_token	*prev_token;
 
 	if (!minishell->token_lst)
 		return (EXIT_FAILURE);
@@ -24,8 +25,13 @@ int	parse_tokens(t_minishell *minishell)
 	cur_cmd = minishell->cmd_lst;
 	while (cur_token)
 	{
+		prev_token = cur_token;
 		handle_token_type(&cur_token, &cur_cmd, minishell);
-		cur_token = cur_token->next;
+		if (cur_token == prev_token)
+		{
+			exit_minishell(EXIT_FAILURE, &minishell, NULL);
+			return (EXIT_FAILURE);
+		}
 	}
 	return (EXIT_SUCCESS);
 }

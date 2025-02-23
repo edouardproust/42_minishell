@@ -45,7 +45,7 @@ t_token	*create_word_token(char *input, int *index, char *unmatched_quote)
 		return (NULL);
 	token = token_new(word, TOKEN_WORD);
 	if (!token)
-		free(word);
+		return (free(word), NULL);
 	return (token);
 }
 

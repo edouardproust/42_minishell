@@ -52,7 +52,7 @@ void	handle_redir_in(t_token **cur_token, t_cmd **cur_cmd,
  * - Copies the file name to the current command's outfile field.
  * @TODO Check malloc error message (for now on NULL)
  */
-void	handle_redit_out(t_token **cur_token, t_cmd **cur_cmd,
+void	handle_redir_out(t_token **cur_token, t_cmd **cur_cmd,
 	t_minishell *minishell)
 {
 	t_token	*token;

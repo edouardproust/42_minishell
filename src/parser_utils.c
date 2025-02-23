@@ -1,5 +1,19 @@
 #include "minishell.h"
 
+t_parse_op	*get_parse_ops(void)
+{
+    static	t_parse_op parse_ops[] = {
+		{TOKEN_PIPE, handle_pipe},
+		{TOKEN_REDIR_IN, handle_redir_in},
+		{TOKEN_REDIR_OUT, handle_redir_out},
+		{TOKEN_HEREDOC, handle_heredoc},
+		{TOKEN_APPEND, handle_append},
+		{TOKEN_WORD, handle_word},
+		{0, NULL}
+	};
+	return (parse_ops);
+}
+
 /**
  * Iterates through tokens and handles each token based on its type.
  * 
