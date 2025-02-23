@@ -61,4 +61,8 @@ int	main(void)
 	ft_free_splitn(&dup, i);
 	return (EXIT_SUCCESS);
 }
+<<<<<<< HEAD
 */
+=======
+*/
+>>>>>>> main

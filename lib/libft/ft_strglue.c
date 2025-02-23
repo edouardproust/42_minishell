@@ -44,4 +44,8 @@ int	main(void)
 	ft_free_ptrs(1, &glued);
 	return (0);
 }
+<<<<<<< HEAD
 */
+=======
+*/
+>>>>>>> main

@@ -1,5 +1,4 @@
 #include "minishell.h"
-#include "debug.h" // DEBUG
 
 /**
  * Inititalize the t_minishell struct containing global data on the program.
@@ -15,6 +14,7 @@ static	t_minishell	*init_minishell(char **envp)
 	minishell = malloc(sizeof(t_minishell));
 	if (!minishell)
 		exit_minishell(EXIT_FAILURE, NULL, "failed to initialize");
+	minishell->token_lst = NULL;
 	minishell->cmd_lst = NULL;
 	minishell->envp = ft_matrix_dup(envp);
 	if (!minishell->envp)
@@ -37,13 +37,15 @@ static	t_minishell	*init_minishell(char **envp)
 int	main(int ac, char **av, char **envp)
 {
 	t_minishell	*minishell;
+	char		*input;
 
 	(void)av;
 	if (ac > 1)
-		return (EXIT_FAILURE); // TODO: Deal with non-interactive mode
+		return (EXIT_FAILURE); //TODO Deal with non-interactive mode
 	minishell = init_minishell(envp);
-	minishell->cmd_lst = create_cmd_lst(); // DEBUG
+	input = "<test/infile tail -n +4 | grep a | sort | uniq -c | sort -nr | head -n 3";
+	init_cmd_lst(input, minishell);
 	execute_cmd_lst(minishell);
-	free_minishell(minishell);
+	free_minishell(&minishell);
 	return (EXIT_SUCCESS);
 }

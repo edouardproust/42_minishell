@@ -37,6 +37,29 @@ void	free_envvar_lst(t_envvar **var_lst)
 }
 
 /**
+ * Frees all the tokens' value and structure in the token list.
+ * 
+ * @param token_lst Pointer to the head of the list (by reference)
+ * @return void
+ */
+void	free_token_lst(t_token **token_lst)
+{
+	t_token	*cur_token;
+	t_token	*nxt_token;
+
+	if (!token_lst || !*token_lst)
+		return ;
+	cur_token = *token_lst;
+	while (cur_token)
+	{
+		nxt_token = cur_token->next;
+		ft_free_ptrs(2, &cur_token->value, &cur_token);
+		cur_token = nxt_token;
+	}
+	*token_lst = NULL;
+}
+
+/**
  * Free all the node in the list of t_cmd (starting by the 'cmd_lst' node).
  * 
  * @param cmd_lst Pointer to the head of the list (by reference)
@@ -71,14 +94,16 @@ void	free_cmd_lst(t_cmd **cmd_lst)
  * 	including lists of t_cmd, t_envvar, etc.
  * @return void
  */
-void	free_minishell(t_minishell *minishell)
+void	free_minishell(t_minishell **minishell)
 {
-	if (!minishell)
+	if (!minishell || !*minishell)
 		return ;
-	if (minishell->envvar_lst)
-		free_envvar_lst(&minishell->envvar_lst);
-	if (minishell->cmd_lst)
-		free_cmd_lst(&minishell->cmd_lst);
-	ft_free_split(&minishell->envp);
-	ft_free_ptrs(1, &minishell);
+	if ((*minishell)->envvar_lst)
+		free_envvar_lst(&(*minishell)->envvar_lst);
+	if ((*minishell)->token_lst)
+		free_token_lst(&(*minishell)->token_lst);
+	if ((*minishell)->cmd_lst)
+		free_cmd_lst(&(*minishell)->cmd_lst);
+	ft_free_split(&(*minishell)->envp);
+	ft_free_ptrs(1, minishell);
 }

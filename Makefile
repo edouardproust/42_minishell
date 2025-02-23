@@ -17,6 +17,12 @@ C_FILES = debug.c \
 	env/utils.c \
 	env/ops.c \
 	env/path.c \
+	cmd_list.c \
+	tokenize.c \
+	token_handlers.c \
+	tokens_utils.c \
+	parser.c \
+	parser_utils.c \
 	execute/parent_process.c \
 	execute/child_process.c \
 	execute/executables.c \
@@ -28,6 +34,7 @@ C_FILES = debug.c \
 	execute/builtins/export.c \
 	execute/builtins/pwd.c \
 	execute/builtins/unset.c \
+	general_utils.c \
 
 SRCS = $(addprefix $(C_DIR)/,$(C_FILES))
 

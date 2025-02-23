@@ -39,4 +39,8 @@ int	main(void)
 
 	printf("s='%s'\nc='%c'\nindex=%d\n", s, c, ft_strchri(s, c));
 }
+<<<<<<< HEAD
 */
+=======
+*/
+>>>>>>> main

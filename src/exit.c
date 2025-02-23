@@ -17,6 +17,6 @@ void	exit_minishell(int exit_code, t_minishell *minishell, char *fmt, ...)
 
 	va_start(args, fmt);
 	put_error_va(fmt, args);
-	free_minishell(minishell);
+	free_minishell(&minishell);
 	exit(exit_code % 256);
 }
