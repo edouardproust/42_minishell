@@ -82,17 +82,17 @@ char	*get_exec_path(char *progname, t_minishell *minishell)
 	{
 		abspath = check_duplicate_abspath(progname);
 		if (abspath == NULL)
-			exit_minishell(E_CMDNOTEXEC, &minishell, progname);
+			exit_minishell(E_CMDNOTEXEC, minishell, progname);
 	}
 	else
 	{
 		dirnames = split_env_path(minishell);
 		if (dirnames == NULL)
-			exit_minishell(E_CMDNOTFOUND, &minishell, progname);
+			exit_minishell(E_CMDNOTFOUND, minishell, progname);
 		abspath = find_abspath(dirnames, progname);
 		ft_free_split(&dirnames);
 		if (abspath == NULL)
-			exit_minishell(E_CMDNOTFOUND, &minishell, progname);
+			exit_minishell(E_CMDNOTFOUND, minishell, progname);
 	}
 	return (abspath);
 }
