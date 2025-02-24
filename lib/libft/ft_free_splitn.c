@@ -39,8 +39,4 @@ void	ft_free_splitn(char ***matrix, int n)
 
 /**
  * To compile: Test this function via ft_matrix_dup.c
-<<<<<<< HEAD
  */
-=======
- */
->>>>>>> main

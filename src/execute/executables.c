@@ -15,5 +15,5 @@ void	run_executable(t_cmd *cmd, t_minishell *minishell)
 
 	exec_path = get_exec_path(cmd->args[0], minishell);
 	execve(exec_path, cmd->args, minishell->envp);
-	exit(E_CMDNOTFOUND);
+	exit(E_CMDNOTEXEC);
 }

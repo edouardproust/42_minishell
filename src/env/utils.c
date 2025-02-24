@@ -1,6 +1,30 @@
 #include "minishell.h"
 
 /**
+ * Checks if a string represents a relative or absolute path.
+ * 
+ * The strings represents a path:
+ * - if it start by: /, ./ or ../
+ * - or if it contains a / anywhere
+ * 
+ * @param s The string to check. If `NULL` or empty, returns `FALSE`.
+ * @return t_bool `TRUE` if the string represents an path..
+ */
+t_bool	is_path(char *s)
+{
+	if (!s || s[0] == '\0')
+		return (FALSE);
+	if ((s[0] == '.' && s[1] == '/')
+		|| (s[0] == '.' && s[1] == '.' && s[2] == '/'))
+		return (TRUE);
+	if (s[0] == '/')
+        return (TRUE);
+	if (ft_strchr(s, '/') != NULL)
+        return (TRUE);
+	return (FALSE);
+}
+
+/**
  * Get the value of an environment variable from its name.
  * 
  * This function is searching through the member

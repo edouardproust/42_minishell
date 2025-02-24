@@ -190,17 +190,3 @@ void	debug_envp(char **envp)
 	}
 	ft_fprintf(fd, "────────────────────────────────────\n\n");
 }
-
-void	debug_envp(char **envp)
-{
-	int	fd = STDERR_FILENO;
-	ft_fprintf(fd, "╭────────────────────────────────╮\n");
-	ft_fprintf(fd, "│ envp                           │\n");
-	ft_fprintf(fd, "╰────────────────────────────────╯\n");
-	while (*envp)
-	{
-		ft_fprintf(fd, "%s\n", *envp);
-		envp++;
-	}
-	ft_fprintf(fd, "────────────────────────────────────\n\n");
-}

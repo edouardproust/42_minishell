@@ -29,6 +29,7 @@ enum e_token
 };
 
 /* Exit codes */
+# define E_CRITICAL 2
 # define E_CMDWRONGARG 2
 # define E_CMDNOTEXEC 126
 # define E_CMDNOTFOUND 127
@@ -71,16 +72,18 @@ typedef struct s_cmd
 
 typedef struct s_minishell
 {
+	char		*input;
 	char		**envp;
 	t_envvar	*envvar_lst;
 	t_token		*token_lst;
 	t_cmd		*cmd_lst;
+	int			exit_code;
 }	t_minishell;
 
 typedef struct s_builtin
 {
 	char	*name;
-	int		(*fn)(char **args, t_minishell *minishell);
+	int		(*fn)(char **args, t_minishell *ms);
 	int		affects_state;
 }	t_builtin;
 
@@ -94,7 +97,7 @@ void		put_error_va(char *fmt, va_list args);
 void		put_error(char *fmt, ...);
 
 /* Memory */
-void		free_minishell(t_minishell **minishell);
+void		free_minishell(t_minishell **ms);
 void		free_token_lst(t_token **token_lst);
 t_envvar	*free_envvar_node(t_envvar **node);
 void		free_envvar_lst(t_envvar **var_lst);
@@ -105,13 +108,13 @@ void		close_fd(int fd);
 void		flush_fds(void);
 
 /* Exit */
-void		exit_minishell(int exit_code, t_minishell *minishell,
-				char *fmt, ...);
+void		exit_minishell(int exit_code, t_minishell *ms, char *fmt, ...);
 
 /* Env */
-char		*get_env_value(char *var_name, t_minishell *minishell);
-t_envvar	*init_envvars(t_minishell *minishell);
-int			update_envp(t_minishell *minishell);
+char		*get_env_value(char *var_name, t_minishell *ms);
+t_envvar	*init_envvars(t_minishell *ms);
+t_bool		is_path(char *s);
+int			update_envp(t_minishell *ms);
 t_envvar	*envvar_new(char *var);
 int			envvar_addoneback(t_envvar **lst, t_envvar *new);
 int			envvar_deleteone(t_envvar **lst, t_envvar *node);
@@ -119,20 +122,17 @@ int			envvar_updateone(t_envvar *node, char *new_value);
 t_envvar	*envvar_findbyname(t_envvar *lst, char *name);
 
 /* Parsing */
-void		init_cmd_lst(char *input, t_minishell *minishell);
+void		init_cmd_lst(char *input, t_minishell *ms);
 t_cmd		*cmd_new(t_cmd *prev_cmd);
 void		add_arg_to_cmd(t_cmd *cmd, char *arg);
-int			parse_tokens(t_minishell *minishell);
-void		handle_token_type(t_token **cur_token, t_cmd **cur_cmd,
-				t_minishell *minishell);
+int			parse_tokens(t_minishell *ms);
+void		handle_token_type(t_token **cur_token, t_cmd **cur_cmd, t_minishell *ms);
 void		handle_input_redirection(t_token **cur_token, t_cmd **cur_cmd,
-				t_minishell *minishell);
+				t_minishell *ms);
 void		handle_output_redirection(t_token **cur_token, t_cmd **cur_cmd,
-				t_minishell *minishell);
-void		handle_word(t_token **cur_token, t_cmd **cur_cmd,
-				t_minishell *minishell);
-void		handle_pipe(t_token **cur_token, t_cmd **cur_cmd,
-				t_minishell *minishell);
+				t_minishell *ms);
+void		handle_word(t_token **cur_token, t_cmd **cur_cmd, t_minishell *ms);
+void		handle_pipe(t_token **cur_token, t_cmd **cur_cmd, t_minishell *ms);
 
 /* Tokenization */
 t_token		*tokenizer(char *input);
@@ -142,25 +142,25 @@ t_token		*create_word_token(char *input, int *index);
 void		token_addback(t_token **tokens, t_token *new);
 
 /* Execute */
-void		execute_cmd_lst(t_minishell *minishell);
-char		*get_exec_path(char *arg, t_minishell *minishell);
+void		execute_cmd_lst(t_minishell *ms);
+char		*get_exec_path(char *arg, t_minishell *ms);
 pid_t		run_in_child_process(t_builtin *builtin, t_cmd *cmd,
-				t_minishell *minishell);
+				t_minishell *ms);
 
 /* Executables */
-void		run_executable(t_cmd *cmd, t_minishell *minishell);
+void		run_executable(t_cmd *cmd, t_minishell *ms);
 
 /* Builtins */
 t_builtin	*get_builtin(char *progname);
 void		run_builtin(t_bool in_child_process, t_builtin *builtin, char **args,
-				t_minishell *minishell);
-int			do_echo(char **args, t_minishell *minishell);
-int			do_cd(char **args, t_minishell *minishell);
-int			do_pwd(char **args, t_minishell *minishell);
-int			do_export(char **args, t_minishell *minishell);
-int			do_unset(char **args, t_minishell *minishell);
-int			do_env(char **args, t_minishell *minishell);
-int			do_exit(char **args, t_minishell *minishell);
+				t_minishell *ms);
+int			do_echo(char **args, t_minishell *ms);
+int			do_cd(char **args, t_minishell *ms);
+int			do_pwd(char **args, t_minishell *ms);
+int			do_export(char **args, t_minishell *ms);
+int			do_unset(char **args, t_minishell *ms);
+int			do_env(char **args, t_minishell *ms);
+int			do_exit(char **args, t_minishell *ms);
 
 /* Utils */
 int			is_special_char(char c);

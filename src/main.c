@@ -7,24 +7,67 @@
  * @return the t_minishell struct
  * @note Exit program on memory allocation failure.
  */
-static	t_minishell	*init_minishell(char **envp)
+t_minishell	*init_minishell(char **envp)
 {
 	t_minishell	*minishell;
 
 	minishell = malloc(sizeof(t_minishell));
 	if (!minishell)
-		exit_minishell(EXIT_FAILURE, NULL, "failed to initialize");
+		exit_minishell(E_CRITICAL, NULL, "failed to initialize");
 	minishell->token_lst = NULL;
 	minishell->cmd_lst = NULL;
+	minishell->exit_code = 0;
 	minishell->envp = ft_matrix_dup(envp);
 	if (!minishell->envp)
-		exit_minishell(EXIT_FAILURE, minishell, "failed to copy environment");
+		exit_minishell(E_CRITICAL, minishell, "failed to copy environment");
 	minishell->envvar_lst = init_envvars(minishell);
 	if (!minishell->envvar_lst)
-		exit_minishell(EXIT_FAILURE, minishell,
+		exit_minishell(E_CRITICAL, minishell,
 			"failed to initialize environment variables");
 	return (minishell);
 }
+
+/**
+ * Main - Get size of readline's leak
+ * Run `valgrind ./minishell`
+ *
+int	main(void)
+{
+	char	*input;
+
+	while (1)
+	{
+		input = readline("readline_test$ ");
+		if (ft_strncmp("exit", input, 5) == 0)
+		{
+			ft_printf("exit\n");
+			ft_free_ptrs(1, &input);
+			exit(EXIT_SUCCESS);
+		}
+		ft_printf("input: \"%s\"\n", input);
+		ft_free_ptrs(1, &input);
+	}
+	return (EXIT_SUCCESS);
+}
+*/
+
+/**
+ * Main - Debug version (skip readline to check leaks)
+ *
+int	main(int ac, char **av, char **envp)
+{
+	t_minishell	*minishell;
+	char		*input;
+
+	(void)av;
+	minishell = init_minishell(envp);
+	input = "<test/infile tail -n +4 | grep a | sort | uniq -c | sort -nr | head -n 3";
+	init_cmd_lst(input, minishell);
+	execute_cmd_lst(minishell);
+	free_minishell(&minishell);
+	return (EXIT_SUCCESS);
+}
+*/
 
 /**
  * Minishell entry point.
@@ -36,16 +79,24 @@ static	t_minishell	*init_minishell(char **envp)
  */
 int	main(int ac, char **av, char **envp)
 {
-	t_minishell	*minishell;
-	char		*input;
+	t_minishell	*ms;
 
 	(void)av;
 	if (ac > 1)
 		return (EXIT_FAILURE); //TODO Deal with non-interactive mode
-	minishell = init_minishell(envp);
-	input = "<test/infile tail -n +4 | grep a | sort | uniq -c | sort -nr | head -n 3";
-	init_cmd_lst(input, minishell);
-	execute_cmd_lst(minishell);
-	free_minishell(&minishell);
+	ms = init_minishell(envp);
+	while (1)
+	{
+		ms->input = readline("minishell$ ");
+		if (!ms->input) {
+			put_error("readline");
+			continue ;
+		}
+		init_cmd_lst(ms->input, ms);
+		ft_free_ptrs(1, &ms->input);
+		execute_cmd_lst(ms);
+		free_cmd_lst(&ms->cmd_lst);
+	}
+	free_minishell(&ms);
 	return (EXIT_SUCCESS);
 }

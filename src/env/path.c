@@ -1,47 +1,59 @@
 #include "minishell.h"
 
 /**
- * Get the list of directories containing executables.
+ * Duplicates executable path if accessible.
  * 
- * @param minishell Struct containing global Minishell data, including the 
- * 	environment variables list (`envvar_lst`) to search into.
- * @return An array of directories (strings)
- * @note The list is null-terminated.
+ * @param progpath Executable path to validate.
+ * @return Copy of path if accessible, NULL otherwise.
+ * @note - On access failure: returns NULL, errno set by access().
+ *       - On malloc failure: exits process.
  */
-static char	**split_env_path(t_minishell *minishell)
+static char	*dup_valid_path(char *progpath, t_minishell *minishell)
 {
-	char	*path_val;
+	char	*path;
 
-	path_val = get_env_value("PATH", minishell);
-	if (path_val == NULL)
-		return (set_errno(ENOENT), NULL);
-	return (ft_split(path_val, ':'));
-}
-
-/**
- * Duplicate the executable absolute path if it is accessible.
- * 
- * @param progpath The executable absolute path
- * @return A copy of the absolute path if accessible, NULL otherwise.
- */
-static char	*check_duplicate_abspath(char *progpath)
-{
 	if (access(progpath, X_OK) == -1)
 		return (NULL);
-	return (ft_strdup(progpath));
+	path = ft_strdup(progpath);
+	if (!path)
+		exit_minishell(EXIT_FAILURE, minishell, progpath);
+	return (path);
 }
 
 /**
- * Find the absolute path for the given executable name, in the list of
- * directories containing executables.
+ * Constructs and validates a relative path (./progname).
  * 
- * @param dirnames Array of directories (strings) containing executables
- * @param progname Name of the executable
- * @return The asbolute path of the executable. NULL in case of
- *  string join or path access failure, or not found executable.
- * @note Set errno to ENOENT in case of failure
+ * @param progname Executable name.
+ * @return "./progname" if executable, NULL otherwise.
+ * @note - On access failure: returns NULL, errno set by access().
+ *       - On malloc failure: exits process.
  */
-static char	*find_abspath(char **dirnames, char *progname)
+static char	*get_valid_relpath(char *progname, t_minishell *minishell)
+{
+	char	*relpath;
+
+	relpath = ft_strjoin("./", progname);
+	if (!relpath)
+		exit_minishell(EXIT_FAILURE, minishell, progname);
+	if (access(relpath, X_OK) == -1)
+	{
+		ft_free_ptrs(1, &relpath);
+		return (NULL);
+	}
+	return (relpath);
+}
+
+/**
+ * Searches directories for an executable (dir/progname).
+ * 
+ * @param dirnames Directories to search (from PATH).
+ * @param progname Executable name.
+ * @return Valid path if found and executable, NULL otherwise.
+ * @note - On access failure (EACCES): returns NULL, errno preserved.
+ *       - If no valid path found: returns NULL, errno set to 0.
+ *       - On malloc failure: exits process.
+ */
+static char	*find_abspath(char **dirnames, char *progname, t_minishell *minishell)
 {
 	char	*abspath_tmp;
 	int		i;
@@ -50,49 +62,72 @@ static char	*find_abspath(char **dirnames, char *progname)
 	while (dirnames[i] != NULL)
 	{
 		abspath_tmp = ft_strglue(dirnames[i], "/", progname);
-		if (abspath_tmp == NULL)
-		{
-			ft_free_ptrs(1, &abspath_tmp);
-			return (set_errno(ENOENT), NULL);
-		}
+		if (!abspath_tmp)
+			exit_minishell(EXIT_FAILURE, minishell, progname);
 		if (access(abspath_tmp, X_OK) == 0)
 			return (abspath_tmp);
 		ft_free_ptrs(1, &abspath_tmp);
+		if (errno == EACCES)
+			return (NULL);
 		i++;
 	}
-	errno = ENOENT;
+	set_errno(0);
 	return (NULL);
 }
 
 /**
- * Get the absolute execution path for the given executable name.
+ * Searches PATH directories for an executable.
  * 
- * @param progname Name of the executable
- * @param minishell Struct containing global Minishell data, including the 
- * 	environment variables list (`envvar_lst`). This list contains the PATH var. 
- * @return The absolute path of the executable. NULL in case it is not found
- *  or an error occured during the search.
+ * @param envpath_value Colon-separated PATH string.
+ * @return Valid path if found, NULL otherwise.
+ * @note - On malloc failure (split): exits process.
+ *       - Calls find_abspath() for actual search.
+ */
+char	*find_abspath_in_envvars(char *progname, char *envpath_value,
+	t_minishell *minishell)
+{
+	char	**dirnames;
+	char	*path;
+
+	dirnames = ft_split(envpath_value, ':');
+	if (!dirnames)
+		exit_minishell(EXIT_FAILURE, minishell, progname);
+	path = find_abspath(dirnames, progname, minishell);
+	ft_free_split(&dirnames);
+	return (path);
+}
+
+/**
+ * Resolves executable path (absolute, relative, or PATH search).
+ * 
+ * @param progname Executable name/path.
+ * @return Malloc'd path string (caller must free).
+ * @note - On critical errors (malloc): exits process.
+ *       - On access/not found errors: exits with E_CMDNOTEXEC/E_CMDNOTFOUND.
  */
 char	*get_exec_path(char *progname, t_minishell *minishell)
 {
-	char	*abspath;
-	char	**dirnames;
+	char	*path;
+	char	*envpath_value;
 
-	if (progname[0] == '/')
-	{
-		abspath = check_duplicate_abspath(progname);
-		if (abspath == NULL)
-			exit_minishell(E_CMDNOTEXEC, minishell, progname);
-	}
+	if (is_path (progname))
+		path = dup_valid_path(progname, minishell);
 	else
 	{
-		dirnames = split_env_path(minishell);
-		if (dirnames == NULL)
-			exit_minishell(E_CMDNOTFOUND, minishell, progname);
-		abspath = find_abspath(dirnames, progname);
-		ft_free_split(&dirnames);
-		if (abspath == NULL)
-			exit_minishell(E_CMDNOTFOUND, minishell, progname);
+		envpath_value = get_env_value("PATH", minishell);
+		if (!envpath_value || *envpath_value == '\0')
+			path = get_valid_relpath(progname, minishell);
+		else
+			path = find_abspath_in_envvars(progname, envpath_value, minishell);
 	}
-	return (abspath);
+	if (!path)
+	{
+		if (errno == EACCES)
+			exit_minishell(E_CMDNOTEXEC, minishell, progname);
+		else if (errno == ENOENT)
+			exit_minishell(E_CMDNOTFOUND, minishell, progname);
+		else if (errno == 0)
+			exit_minishell(E_CMDNOTFOUND, minishell, "command not found");
+	}
+	return (path);
 }
