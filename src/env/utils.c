@@ -18,9 +18,9 @@ t_bool	is_path(char *s)
 		|| (s[0] == '.' && s[1] == '.' && s[2] == '/'))
 		return (TRUE);
 	if (s[0] == '/')
-        return (TRUE);
+		return (TRUE);
 	if (ft_strchr(s, '/') != NULL)
-        return (TRUE);
+		return (TRUE);
 	return (FALSE);
 }
 

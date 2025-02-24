@@ -53,7 +53,8 @@ static char	*get_valid_relpath(char *progname, t_minishell *minishell)
  *       - If no valid path found: returns NULL, errno set to 0.
  *       - On malloc failure: exits process.
  */
-static char	*find_abspath(char **dirnames, char *progname, t_minishell *minishell)
+static char	*find_abspath(char **dirnames, char *progname,
+	t_minishell *minishell)
 {
 	char	*abspath_tmp;
 	int		i;

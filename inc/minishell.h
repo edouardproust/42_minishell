@@ -126,7 +126,8 @@ void		init_cmd_lst(char *input, t_minishell *ms);
 t_cmd		*cmd_new(t_cmd *prev_cmd);
 void		add_arg_to_cmd(t_cmd *cmd, char *arg);
 int			parse_tokens(t_minishell *ms);
-void		handle_token_type(t_token **cur_token, t_cmd **cur_cmd, t_minishell *ms);
+void		handle_token_type(t_token **cur_token, t_cmd **cur_cmd,
+				t_minishell *ms);
 void		handle_input_redirection(t_token **cur_token, t_cmd **cur_cmd,
 				t_minishell *ms);
 void		handle_output_redirection(t_token **cur_token, t_cmd **cur_cmd,
@@ -152,8 +153,8 @@ void		run_executable(t_cmd *cmd, t_minishell *ms);
 
 /* Builtins */
 t_builtin	*get_builtin(char *progname);
-void		run_builtin(t_bool in_child_process, t_builtin *builtin, char **args,
-				t_minishell *ms);
+void		run_builtin(t_bool in_child_process, t_builtin *builtin,
+				char **args, t_minishell *ms);
 int			do_echo(char **args, t_minishell *ms);
 int			do_cd(char **args, t_minishell *ms);
 int			do_pwd(char **args, t_minishell *ms);

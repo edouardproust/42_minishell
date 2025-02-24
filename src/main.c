@@ -61,7 +61,8 @@ int	main(int ac, char **av, char **envp)
 
 	(void)av;
 	minishell = init_minishell(envp);
-	input = "<test/infile tail -n +4 | grep a | sort | uniq -c | sort -nr | head -n 3";
+	input = "<test/infile tail -n +4 | grep a | sort | uniq -c | sort -nr \
+		| head -n 3";
 	init_cmd_lst(input, minishell);
 	execute_cmd_lst(minishell);
 	free_minishell(&minishell);
@@ -88,7 +89,8 @@ int	main(int ac, char **av, char **envp)
 	while (1)
 	{
 		ms->input = readline("minishell$ ");
-		if (!ms->input) {
+		if (!ms->input)
+		{
 			put_error("readline");
 			continue ;
 		}

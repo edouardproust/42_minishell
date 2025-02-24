@@ -7,10 +7,10 @@
  * @param cmd Struct of the command to execute
  * @param minishell Struct containing global Minishell data (to be freed
  *  in case of failure)
- * @return void
+ * @return int EXIT_SUCCESS or EXIT_FAILURE
  * @note Exit on: pipe failure, open failure
  */
-static void	setup_io(t_cmd *cmd, t_minishell *minishell)
+static int	setup_io(t_cmd *cmd, t_minishell *minishell)
 {
 	if (cmd->next)
 	{
@@ -23,7 +23,7 @@ static void	setup_io(t_cmd *cmd, t_minishell *minishell)
 	{
 		cmd->fdin = open(cmd->infile, O_RDONLY);
 		if (cmd->fdin == -1)
-			exit_minishell(EXIT_FAILURE, minishell, cmd->infile);
+			return (put_error(cmd->infile), EXIT_FAILURE);
 	}
 	if (cmd->next)
 		cmd->fdout = cmd->pipe[1];
@@ -31,8 +31,9 @@ static void	setup_io(t_cmd *cmd, t_minishell *minishell)
 	{
 		cmd->fdout = open(cmd->outfile, O_WRONLY | O_CREAT | O_TRUNC, 0644);
 		if (cmd->fdout == -1)
-			exit_minishell(EXIT_FAILURE, minishell, cmd->outfile);
+			return (put_error(cmd->outfile), EXIT_FAILURE);
 	}
+	return (EXIT_SUCCESS);
 }
 
 /**
@@ -85,42 +86,65 @@ static void	wait_for_processes(t_minishell *minishell)
 		{
 			waitpid(cmd->pid, &status, 0);
 			if (WIFEXITED(status))
-                minishell->exit_code = WEXITSTATUS(status);
+				minishell->exit_code = WEXITSTATUS(status);
 		}
 		cmd = cmd->next;
 	}
 }
 
 /**
+ * Execute one command (t_cmd).
+ * 
+ * If setup_io() fails, don't execute cmd and set ms->exit_code
+ * on EXIT_FAILURE.
+ * If is a builtin that does not affect state and with no pipes,
+ * run it in parent process, else run builtin or executable in 
+ * child process.
+ * 
+ * @param cmd The command to execute
+ * @param ms Struct containing global Minishell data (to be 
+ *  freed in case of failure)
+ * @return EXIT_SUCCESS or EXIT_FAILURE
+ */
+static void	execute_cmd(t_cmd *cmd, t_minishell *ms)
+{
+	t_builtin	*builtin;
+
+	if (cmd->args && cmd->args[0] && cmd->args[0][0] != '\0')
+	{
+		if (setup_io(cmd, ms) == EXIT_FAILURE)
+			ms->exit_code = EXIT_FAILURE;
+		else
+		{
+			builtin = get_builtin(cmd->args[0]);
+			if (builtin && builtin->affects_state && !cmd->next && !cmd->prev)
+				run_builtin(FALSE, builtin, cmd->args, ms);
+			else
+				cmd->pid = run_in_child_process(builtin, cmd, ms);
+			cleanup_io(cmd);
+		}
+	}
+}
+
+/**
  * Execute each t_cmd of the list one by one.
  * 
- * @param minishell Struct containing global Minishell data (to be 
+ * @param ms Struct containing global Minishell data (to be 
  *  freed in case of failure)
  * @return void
  * @note Exit on: incorrect input, function call exit
  */
-void	execute_cmd_lst(t_minishell *minishell)
+void	execute_cmd_lst(t_minishell *ms)
 {
 	t_cmd		*cmd;
-	t_builtin	*builtin;
 
-	if (!minishell || !minishell->cmd_lst)
+	if (!ms || !ms->cmd_lst)
 		exit_minishell(EXIT_FAILURE, NULL, "Incorrect parsed command");
-	cmd = minishell->cmd_lst;
+	cmd = ms->cmd_lst;
 	while (cmd)
 	{
-		if (cmd->args != NULL && cmd->args[0] != NULL
-			&& ft_strlen(cmd->args[0]) != 0)
-		{
-			setup_io(cmd, minishell);
-			builtin = get_builtin(cmd->args[0]);
-			if (builtin && builtin->affects_state && !cmd->next && !cmd->prev)
-				run_builtin(FALSE, builtin, cmd->args, minishell);
-			else
-				cmd->pid = run_in_child_process(builtin, cmd, minishell);
-			cleanup_io(cmd);
-		}
+		execute_cmd(cmd, ms);
 		cmd = cmd->next;
 	}
-	wait_for_processes(minishell);
+	wait_for_processes(ms);
 }
