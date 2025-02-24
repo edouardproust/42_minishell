@@ -12,30 +12,31 @@
 
 #include "libft.h"
 
-/*
- * Frees a 2D array of pointers (e.g. an array of strings char**).
- * The array must be NULL-terminated.
- */
-void	ft_free_split(char ***array)
-{
-	char	**element;
+/**
+ * Frees a matrix (array of string) entirely.
 
-	if (!array || !*array)
+ * The array must be NULL-terminated.
+ * @param array	Dynamic allocated array of strings. It must be NULL-terminated
+ */
+void	ft_free_split(char ***matrix)
+{
+	char	**str_ptr;
+
+	if (!matrix || !*matrix)
 		return ;
-	element =  *array;
-	while (*element)
-	{
-		free(*element);
-		*element = NULL;
-		element++;
-	}
-	free(*array);
-	*array = NULL;
+	str_ptr = *matrix;
+	while (*str_ptr)
+		free(*str_ptr++);
+	free(*matrix);
+	*matrix = NULL;
 }
 
+/**
+ * To compile:
+ * `cc -Werror -Wextra -Wall ft_free_split.c ft_split.c ft_substr.c
+ * ft_strdup.c ft_strlcpy.c ft_strlen.c ft_memcpy.c && valgrind ./a.out`
+ */
 /*
-//cc -Werror -Wextra -Wall ft_free_split.c ft_split.c ft_substr.c ft_strdup.c ft_strlcpy.c ft_strlen.c ft_memcpy.c && ./a.out
-
 #include <stdio.h>
 
 int	main(void)

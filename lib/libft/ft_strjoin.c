@@ -19,7 +19,7 @@ char	*ft_strjoin(const char *s1, const char *s2)
 	int		j;
 
 	if (!s1 && !s2)
-		return (NULL);
+		return (ft_strdup(""));
 	if (!s1)
 		return (ft_strdup(s2));
 	if (!s2)
