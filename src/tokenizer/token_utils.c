@@ -18,8 +18,18 @@ t_token	*token_new(char *value, int type)
 
 /* 
  * Creates a word token from the input string starting at `index`.
- * Loops inside the input string and checks for quote chars.
- * Returns: A new word token or NULL if allocation fails.
+ *
+ * - Identifies a sequence of non-special 
+ *   and non-whitespace characters as a word.
+ * - If a quote character is found, `skip_quotes()` is used to handle it.
+ * - Uses `ft_substr()` to extract the word,
+ *   then removes quotes with `remove_quotes()`.
+ * - Creates a new token with type `TOKEN_WORD`.
+ *
+ * @param input The input string to process.
+ * @param index Pointer to the current position in the input string.
+ * @param unmatched_quote Pointer to track if an unmatched quote is found.
+ * @return A new word token or NULL if allocation fails.
  */
 t_token	*create_word_token(char *input, int *index, char *unmatched_quote)
 {

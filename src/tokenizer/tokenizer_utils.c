@@ -1,8 +1,14 @@
 #include "minishell.h"
-
+/* 
+ * Returns a static list of tokenization operators and their corresponding types.
+ * 
+ * Used in `handle_special_char()` to identify and categorize operators.
+ * 
+ * Returns: A pointer to a static array of `t_tokenize_op` structures.
+ */
 t_tokenize_op	*get_tokenize_ops(void)
 {
-	static	t_tokenize_op	tokenize_ops[] = {
+	static t_tokenize_op	tokenize_ops[] = {
 //	{"<<", TOKEN_HEREDOC},
 //  {">>", TOKEN_APPEND},
 	{"<", TOKEN_REDIR_IN},
@@ -14,6 +20,15 @@ t_tokenize_op	*get_tokenize_ops(void)
 	return (tokenize_ops);
 }
 
+/* 
+ * Handles special characters (`|`, `<`, `>`).
+ *
+ * - Compares the input string with predefined token patterns.
+ * - Creates a token of the corresponding type if a match is found.
+ * - Updates the input index accordingly.
+ * 
+ * Returns: A new token (`t_token *`) or NULL if no match is found.
+ */
 t_token	*handle_special_char(char *input, int *i)
 {
 	t_tokenize_op	*ops;
@@ -37,6 +52,14 @@ t_token	*handle_special_char(char *input, int *i)
 	return (NULL);
 }
 
+/* 
+ * Determines whether the next token is a special character or a word.
+ *
+ * - Calls `handle_special_char()` if the character is a special token.
+ * - Calls `create_word_token()` otherwise.
+ * 
+ * Returns: A newly allocated token (`t_token *`).
+ */
 t_token	*handle_token_creation(char *input, int *i, char *unmatched_quote)
 {
 	if (is_special_char(input[*i]))
@@ -44,6 +67,14 @@ t_token	*handle_token_creation(char *input, int *i, char *unmatched_quote)
 	return (create_word_token(input, i, unmatched_quote));
 }
 
+/* 
+ * Handles tokenization errors, such as unmatched quotes.
+ * 
+ * - Frees the token list if an error is encountered.
+ * - Exits the minishell with an appropriate error message.
+ * 
+ * Returns: Always returns 0.
+ */
 int	handle_token_error(t_token **token_lst, char unmatched_quote,
 	t_minishell *minishell)
 {

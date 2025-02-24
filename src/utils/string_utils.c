@@ -1,6 +1,7 @@
 #include "minishell.h"
 /* 
  * Checks if the character is a special character (|, <, >).
+ * Used to differentiate between operators and words in tokenization.
  * Returns: 1 if special char, 0 otherwise.
  */
 int	is_special_char(char c)
@@ -9,8 +10,8 @@ int	is_special_char(char c)
 }
 
 /* 
- * Checks if the character is a space.
- * Returns: 1 if it is a space, 0 otherwise).
+ * Checks if the character is a whitespace (space, tab, newline, etc.).
+ * Returns: 1 if it is a whitespace, 0 otherwise).
  */
 int	is_space_char(char c)
 {
@@ -19,6 +20,7 @@ int	is_space_char(char c)
 
 /*
  * Checks if the character is a quote symbol.
+ * Used to determine whether a word token is enclosed in quotes.
  * Returns: 1 if quote char, 0 otherwise.
  */
 int	is_quote_char(char c)
@@ -26,6 +28,10 @@ int	is_quote_char(char c)
 	return (c == '\'' || c == '"');
 }
 
+/* 
+ * Skips all leading whitespace characters in the input string.
+ * Advances the `i` index to the next non-whitespace character.
+ */
 void	skip_whitespaces(char *input, int *i)
 {
 	while (input[*i] == ' ' || (input[*i] >= 9 && input[*i] <= 13))

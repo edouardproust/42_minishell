@@ -1,13 +1,12 @@
 #include "minishell.h"
 /* 
- * Parses a list of tokens and converts them into a linked list of commands.
+ * Parses a list of tokens and builds a linked list of commands.
  *
- * - Initializes the parsing process by setting up the necessary variables.
- * - Creates a new command structure to hold the parsed tokens.
- * - Iterates over the tokens, processing them according to their type.
- * - Links the new commands to the command list.
+ * - Initializes the command list (`cmd_lst`).
+ * - Iterates through tokens, processing each one using `handle_token_type()`.
+ * - Exits if an error occurs.
  * 
- * Returns: A linked list of parsed t_cmd structures, or NULL if parsing fails.
+ * Returns: EXIT_SUCCESS on success, or EXIT_FAILURE on failure.
  */
 //TODO (A) Implement append and heredoc logic types.
 int	parse_tokens(t_minishell *minishell)

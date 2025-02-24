@@ -1,5 +1,11 @@
 #include "minishell.h"
-
+/* 
+ * Returns a static list of parsing operators and their corresponding handlers.
+ *
+ * Used in `handle_token_type()` to determine how to process tokens.
+ * 
+ * Returns: A pointer to a static array of `t_parse_op` structures.
+ */
 t_parse_op	*get_parse_ops(void)
 {
 	static t_parse_op	parse_ops[] = {
@@ -11,14 +17,14 @@ t_parse_op	*get_parse_ops(void)
 	{TOKEN_WORD, handle_word},
 	{0, NULL}
 	};
+
 	return (parse_ops);
 }
 
 /* 
- * Iterates through tokens and handles each token based on its type.
- * For each token type (input redirection, output redirection, word, or pipe),
- * the appropriate handler function is called.
- * - Handles redirections (input/output), pipes, and arguments.
+ * Processes tokens based on their type using appropriate handler functions
+ * - Calls handlers for redirections (`<`, `>`), pipes (`|`), and words.
+ * - If an unknown token is encountered, exits with an error.
  */
 void	handle_token_type(t_token **cur_token, t_cmd **cur_cmd,
 	t_minishell *minishell)
