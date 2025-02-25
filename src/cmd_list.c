@@ -13,11 +13,12 @@
  * tokenization failed.
  * @TODO Check error messages
  */
-void	init_cmd_lst(char *input, t_minishell *minishell)
+void	init_cmd_lst(t_minishell *minishell)
 {
 	t_token	*tokens;
 
-	tokens = tokenizer(input);
+	tokens = tokenizer(minishell->input);
+	ft_free_ptrs(1, &minishell->input);
 	if (!tokens)
 		exit_minishell(EXIT_FAILURE, minishell, NULL);
 	minishell->token_lst = tokens;

@@ -70,6 +70,22 @@ int	main(int ac, char **av, char **envp)
 }
 */
 
+static void	set_input(t_minishell *minishell)
+{
+	set_errno(EXIT_SUCCESS);
+	minishell->input = readline("minishell$ ");
+	if (!minishell->input)
+	{
+		if (errno != EXIT_SUCCESS)
+			put_error("readline");
+		else
+		{
+			ft_printf("exit\n");
+			exit_minishell(EXIT_SUCCESS, minishell, NULL);
+		}
+	}
+}
+
 /**
  * Minishell entry point.
  * 
@@ -80,25 +96,19 @@ int	main(int ac, char **av, char **envp)
  */
 int	main(int ac, char **av, char **envp)
 {
-	t_minishell	*ms;
+	t_minishell	*minishell;
 
 	(void)av;
 	if (ac > 1)
 		return (EXIT_FAILURE); //TODO Deal with non-interactive mode
-	ms = init_minishell(envp);
+	minishell = init_minishell(envp);
 	while (1)
 	{
-		ms->input = readline("minishell$ ");
-		if (!ms->input)
-		{
-			put_error("readline");
-			continue ;
-		}
-		init_cmd_lst(ms->input, ms);
-		ft_free_ptrs(1, &ms->input);
-		execute_cmd_lst(ms);
-		free_cmd_lst(&ms->cmd_lst);
+		set_input(minishell);
+		init_cmd_lst(minishell);
+		execute_cmd_lst(minishell);
+		free_cmd_lst(&minishell->cmd_lst);
 	}
-	free_minishell(&ms);
+	free_minishell(&minishell);
 	return (EXIT_SUCCESS);
 }

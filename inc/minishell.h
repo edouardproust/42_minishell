@@ -122,7 +122,7 @@ int			envvar_updateone(t_envvar *node, char *new_value);
 t_envvar	*envvar_findbyname(t_envvar *lst, char *name);
 
 /* Parsing */
-void		init_cmd_lst(char *input, t_minishell *minishell);
+void		init_cmd_lst(t_minishell *minishell);
 t_cmd		*cmd_new(t_cmd *prev_cmd);
 void		add_arg_to_cmd(t_cmd *cmd, char *arg);
 int			parse_tokens(t_minishell *minishell);
