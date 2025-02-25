@@ -1,0 +1,5 @@
+User rights for this file are 644.
+This allow to test EACCES errno in case of trying to execute this file:
+
+minishell$ ./test/eacces 
+minishell: ./test/eacces: Permission denied

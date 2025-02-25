@@ -1,5 +1,4 @@
 #include "minishell.h"
-//#include "debug.h" //DEBUG
 
 /**
  * Creates a list of commands from the input string.
@@ -14,16 +13,16 @@
  * tokenization failed.
  * @TODO Check error messages
  */
-void	init_cmd_lst(char *input, t_minishell *minishell)
+void	init_cmd_lst(t_minishell *minishell)
 {
 	t_token	*tokens;
 
-	tokens = tokenizer(input, minishell);
+	tokens = tokenizer(minishell);
+	ft_free_ptrs(1, &minishell->input);
 	if (!tokens)
 		exit_minishell(EXIT_FAILURE, minishell, NULL);
 	minishell->token_lst = tokens;
 	if (parse_tokens(minishell) == EXIT_FAILURE)
 		exit_minishell(EXIT_FAILURE, minishell, NULL);
-	//debug_tokens(minishell->token_lst); //DEBUG
 	free_token_lst(&minishell->token_lst);
 }

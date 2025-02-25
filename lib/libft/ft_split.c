@@ -46,20 +46,6 @@ static size_t	ft_partlen(char const *s, int i, char sep)
 	return (len);
 }
 
-static void	*ft_free(char **strs, int count)
-{
-	int	i;
-
-	i = 0;
-	while (i < count)
-	{
-		free(strs[i]);
-		i++;
-	}
-	free(strs);
-	return (NULL);
-}
-
 char	**ft_split(char const *s, char sep)
 {
 	char	**split;
@@ -81,7 +67,7 @@ char	**ft_split(char const *s, char sep)
 		part_len = ft_partlen(s, i, sep);
 		split[part] = ft_substr(s, i, part_len);
 		if (!split[part])
-			return (ft_free(split, i));
+			return (ft_free_splitn(&split, part), NULL);
 		part++;
 		i += part_len;
 	}

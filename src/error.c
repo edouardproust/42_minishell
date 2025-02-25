@@ -8,7 +8,7 @@
  */
 void	set_errno(int err_no)
 {
-	if (err_no > 0)
+	if (err_no >= 0)
 		errno = err_no;
 }
 

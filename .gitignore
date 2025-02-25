@@ -8,5 +8,4 @@ src/obj
 *.swo
 .vscode
 test/outfile
-src/t_main.c
-src/minishell.h
+test/log

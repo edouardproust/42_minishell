@@ -1,5 +1,11 @@
 #include "minishell.h"
 
+/**
+ * Close a file descriptor if it is not a standard one.
+ * 
+ * @param fd File descriptor
+ * @return void
+ */
 void	close_fd(int fd)
 {
 	if (fd > STDERR_FILENO)
@@ -7,7 +13,8 @@ void	close_fd(int fd)
 }
 
 /**
- * Close any fd up to FD_LIMIT, except standard ones.
+ * Close all file descriptors fd up to FD_LIMIT,
+ * except standard ones.
  * 
  * @return void
  */
