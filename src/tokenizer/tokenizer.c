@@ -14,13 +14,14 @@
  * @return The head of the token list (`t_token *`), or NULL if an error
  *  occurs during tokenization.
  */
-t_token	*tokenizer(char *input, t_minishell *minishell)
+t_token	*tokenizer(t_minishell *minishell)
 {
+	char	*input;
 	t_token	*new_token;
 	char	unmatched_quote;
 	int		i;
 
-	minishell->token_lst = NULL;
+	input = minishell->input;
 	i = 0;
 	unmatched_quote = 0;
 	while (input[i])

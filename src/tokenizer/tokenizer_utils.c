@@ -74,6 +74,7 @@ t_token	*handle_token_creation(char *input, int *i, char *unmatched_quote)
  * - Exits the minishell with an appropriate error message.
  * 
  * Returns: Always returns 0.
+ * //TODO Interactive mode in case of unmatching quotes?
  */
 int	handle_token_error(t_token **token_lst, char unmatched_quote,
 	t_minishell *minishell)
@@ -81,7 +82,8 @@ int	handle_token_error(t_token **token_lst, char unmatched_quote,
 	free_token_lst(token_lst);
 	if (unmatched_quote)
 		exit_minishell(EXIT_FAILURE, minishell,
-			"unexpected EOF while looking for matching `%c'");
+			"unexpected EOF while looking for matching `%c'",
+			unmatched_quote);
 	else
 		exit_minishell(EXIT_FAILURE, minishell, NULL);
 	return (0);
