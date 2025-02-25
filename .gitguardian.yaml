@@ -1,0 +1,6 @@
+paths:
+  - "src/execute/builtins/pwd.c"
+matches:
+  - name: "generic_password"
+    match: "pwd"
+    exclude: true
