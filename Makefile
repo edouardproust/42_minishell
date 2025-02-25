@@ -18,13 +18,16 @@ C_FILES = debug.c \
 	env/path.c \
 	env/utils.c \
 	cmd_list.c \
-	tokenize.c \
-	token_handlers.c \
-	tokens_utils.c \
-	parser.c \
-	parser_utils.c \
+	utils/string_utils.c \
+	tokenizer/tokenizer.c \
+	tokenizer/tokenizer_utils.c \
+	tokenizer/token_utils.c \
+	tokenizer/quote_handler.c \
+	parser/parser.c \
+	parser/parser_utils.c \
+	parser/cmd_utils.c \
+	parser/token_handlers.c \
 	execute.c \
-	general_utils.c \
 
 SRCS = $(addprefix $(C_DIR)/,$(C_FILES))
 
