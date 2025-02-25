@@ -9,13 +9,17 @@
 void	handle_pipe(t_token **cur_token, t_cmd **cur_cmd,
 	t_minishell *minishell)
 {
-	if (!(*cur_token)->next || (*cur_token)->next->type == TOKEN_PIPE)
+	t_token	*token;
+
+	token = *cur_token;
+	if (!(token)->next || token->next->type == TOKEN_PIPE)
 		exit_minishell(EXIT_FAILURE, minishell,
 			"syntax error near unexpected token `|'");
 	(*cur_cmd)->next = cmd_new((*cur_cmd));
 	if (!(*cur_cmd)->next)
 		exit_minishell(EXIT_FAILURE, minishell, NULL);
 	(*cur_cmd) = (*cur_cmd)->next;
+	*cur_token = token->next;
 }
 
 /**
@@ -25,17 +29,20 @@ void	handle_pipe(t_token **cur_token, t_cmd **cur_cmd,
  * - Copies the file name to the current command's infile field.
  * @TODO Check malloc error message (for now on NULL)
  */
-void	handle_input_redirection(t_token **cur_token, t_cmd **cur_cmd,
+void	handle_redir_in(t_token **cur_token, t_cmd **cur_cmd,
 	t_minishell *minishell)
 {
-	if (!(*cur_token)->next || (*cur_token)->next->type != TOKEN_WORD)
+	t_token	*token;
+
+	token = *cur_token;
+	if (!token->next || token->next->type != TOKEN_WORD)
 		exit_minishell(EXIT_FAILURE, minishell,
 			"syntax error near unexpected token `newline'");
 	ft_free_ptrs(1, &(*cur_cmd)->infile);
-	(*cur_cmd)->infile = ft_strdup((*cur_token)->next->value);
+	(*cur_cmd)->infile = ft_strdup(token->next->value);
 	if (!(*cur_cmd)->infile)
 		exit_minishell(EXIT_FAILURE, minishell, NULL);
-	(*cur_token) = (*cur_token)->next;
+	(*cur_token) = token->next->next;
 }
 
 /**
@@ -45,17 +52,20 @@ void	handle_input_redirection(t_token **cur_token, t_cmd **cur_cmd,
  * - Copies the file name to the current command's outfile field.
  * @TODO Check malloc error message (for now on NULL)
  */
-void	handle_output_redirection(t_token **cur_token, t_cmd **cur_cmd,
+void	handle_redir_out(t_token **cur_token, t_cmd **cur_cmd,
 	t_minishell *minishell)
 {
-	if (!(*cur_token)->next || (*cur_token)->next->type != TOKEN_WORD)
+	t_token	*token;
+
+	token = *cur_token;
+	if (!token->next || token->next->type != TOKEN_WORD)
 		exit_minishell(EXIT_FAILURE, minishell,
 			"syntax error near unexpected token `newline'");
 	ft_free_ptrs(1, &(*cur_cmd)->outfile);
-	(*cur_cmd)->outfile = ft_strdup((*cur_token)->next->value);
+	(*cur_cmd)->outfile = ft_strdup(token->next->value);
 	if (!(*cur_cmd)->outfile)
 		exit_minishell(EXIT_FAILURE, minishell, NULL);
-	(*cur_token) = (*cur_token)->next;
+	(*cur_token) = token->next->next;
 }
 
 /**
@@ -67,10 +77,13 @@ void	handle_output_redirection(t_token **cur_token, t_cmd **cur_cmd,
 void	handle_word(t_token **cur_token, t_cmd **cur_cmd,
 	t_minishell *minishell)
 {
+	t_token	*token;
 	char	*arg_copy;
 
-	arg_copy = ft_strdup((*cur_token)->value);
+	token = *cur_token;
+	arg_copy = ft_strdup(token->value);
 	if (!arg_copy)
 		exit_minishell(EXIT_FAILURE, minishell, NULL);
 	add_arg_to_cmd(*cur_cmd, arg_copy);
+	*cur_token = token->next;
 }

@@ -94,7 +94,7 @@ static void	set_input(t_minishell *minishell)
  * @param envp Array containing the environment variables on program startup
  * @return EXIT_SUCCESS or EXIT_FAILURE 
  */
-int	main(int ac, char **av, char **envp)
+/*int	main(int ac, char **av, char **envp)
 {
 	t_minishell	*minishell;
 
@@ -102,6 +102,7 @@ int	main(int ac, char **av, char **envp)
 	if (ac > 1)
 		return (EXIT_FAILURE); //TODO Deal with non-interactive mode
 	minishell = init_minishell(envp);
+<<<<<<< HEAD
 	while (1)
 	{
 		set_input(minishell);
@@ -109,6 +110,42 @@ int	main(int ac, char **av, char **envp)
 		execute_cmd_lst(minishell);
 		free_cmd_lst(&minishell->cmd_lst);
 	}
+=======
+//	input = "<test/infile tail -n +4 | grep a | sort | uniq -c | sort -nr | head -n 3";
+	input = "echo ''hello''";
+	init_cmd_lst(input, minishell);
+	execute_cmd_lst(minishell);
+>>>>>>> main
 	free_minishell(&minishell);
 	return (EXIT_SUCCESS);
+}*/
+//TODO : Erase this function after accepting the pull request
+int main(int ac, char **av, char **envp) {
+    t_minishell *minishell;
+    char *input;
+
+    (void)ac;
+    (void)av;
+
+    minishell = init_minishell(envp);
+    if (!minishell)
+        exit(EXIT_FAILURE);
+
+    while (1) {
+        input = readline("minishell$ ");
+        if (!input)
+            exit(EXIT_SUCCESS);
+        if (ft_strlen(input) == 0) {
+            free(input);
+            continue;
+        }
+        add_history(input);
+		init_cmd_lst(input, minishell);
+		if (minishell->cmd_lst != NULL)
+            execute_cmd_lst(minishell);
+        free(input);
+		free_cmd_lst(&minishell->cmd_lst);
+    }
+	free_minishell(&minishell);
+    return (EXIT_SUCCESS);
 }
