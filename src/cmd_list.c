@@ -1,5 +1,4 @@
 #include "minishell.h"
-//#include "debug.h" //DEBUG
 
 /**
  * Creates a list of commands from the input string.
@@ -25,6 +24,5 @@ void	init_cmd_lst(t_minishell *minishell)
 	minishell->token_lst = tokens;
 	if (parse_tokens(minishell) == EXIT_FAILURE)
 		exit_minishell(EXIT_FAILURE, minishell, NULL);
-	//debug_tokens(minishell->token_lst); //DEBUG
 	free_token_lst(&minishell->token_lst);
 }

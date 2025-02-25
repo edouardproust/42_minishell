@@ -6,6 +6,7 @@
  * @param args (not used) Array of arguments passed to pwd.
  * @param minishell (not used) Struct containing global Minishell data.
  * @return EXIT_SUCCESS on success. EXIT_FAILURE on failure.
+ * @note The quotes around args are removed during tokenization.
  */
 int	do_pwd(char **args, t_minishell *minishell)
 {
