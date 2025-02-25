@@ -12,8 +12,8 @@ t_parse_op	*get_parse_ops(void)
 	{TOKEN_PIPE, handle_pipe},
 	{TOKEN_REDIR_IN, handle_redir_in},
 	{TOKEN_REDIR_OUT, handle_redir_out},
-//	{TOKEN_HEREDOC, handle_heredoc},
-//	{TOKEN_APPEND, handle_append},
+	{TOKEN_HEREDOC, handle_heredoc},
+	{TOKEN_APPEND, handle_append},
 	{TOKEN_WORD, handle_word},
 	{0, NULL}
 	};

@@ -9,8 +9,8 @@
 t_tokenize_op	*get_tokenize_ops(void)
 {
 	static t_tokenize_op	tokenize_ops[] = {
-//	{"<<", TOKEN_HEREDOC},
-//  {">>", TOKEN_APPEND},
+	{"<<", TOKEN_HEREDOC},
+	{">>", TOKEN_APPEND},
 	{"<", TOKEN_REDIR_IN},
 	{">", TOKEN_REDIR_OUT},
 	{"|", TOKEN_PIPE},
