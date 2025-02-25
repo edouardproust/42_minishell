@@ -41,19 +41,25 @@ int	do_export(char **args, t_minishell *minishell)
 {
 	t_envvar	*data;
 	t_envvar	*found_node;
+	int			i;
 
-	if (ft_matrix_size(args) < 2)
+	if (ft_matrix_size(args) == 1)
 		return (put_export_vars(minishell->envvar_lst));
-	data = envvar_new(args[1]);
-	if (!data)
-		return (EXIT_FAILURE);
-	found_node = envvar_findbyname(minishell->envvar_lst, data->name);
-	if (found_node)
+	i = 1;
+	while (args[i])
 	{
-		envvar_updateone(found_node, data->value);
-		free_envvar_node(&data);
+		data = envvar_new(args[i]);
+		if (!data)
+			return (EXIT_FAILURE);
+		found_node = envvar_findbyname(minishell->envvar_lst, data->name);
+		if (found_node)
+		{
+			envvar_updateone(found_node, data->value);
+			free_envvar_node(&data);
+		}
+		else
+			envvar_addoneback(&minishell->envvar_lst, data);
+		i++;
 	}
-	else
-		envvar_addoneback(&minishell->envvar_lst, data);
 	return (update_envp(minishell));
 }
