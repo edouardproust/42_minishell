@@ -16,7 +16,6 @@ static int	duplicate_fd(int oldfd, int newfd)
 	close(oldfd);
 	return (EXIT_SUCCESS);
 }
-
 /**
  * Redirect input and output for the current command if necessary.
  *

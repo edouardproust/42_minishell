@@ -21,7 +21,6 @@ t_token	*tokenizer(t_minishell *minishell)
 	char	unmatched_quote;
 	int		i;
 
-	minishell->token_lst = NULL;
 	input = minishell->input;
 	i = 0;
 	unmatched_quote = 0;

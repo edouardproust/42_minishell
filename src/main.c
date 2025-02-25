@@ -14,6 +14,7 @@ t_minishell	*init_minishell(char **envp)
 	minishell = malloc(sizeof(t_minishell));
 	if (!minishell)
 		exit_minishell(E_CRITICAL, NULL, "failed to initialize");
+	minishell->input = NULL;
 	minishell->token_lst = NULL;
 	minishell->cmd_lst = NULL;
 	minishell->exit_code = 0;
