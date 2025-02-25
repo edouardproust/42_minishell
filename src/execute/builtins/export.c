@@ -36,7 +36,6 @@ static int	put_export_vars(t_envvar *lst)
         name++;
     }
  * @note The quotes around args are removed during tokenization.
- * eg. `$"export" 'VAR=value'` -> args: {"unset","VAR=value"} // TODO
  */
 int	do_export(char **args, t_minishell *minishell)
 {

@@ -8,7 +8,6 @@
  * 	environment variables list (`envvar_lst`) and the environment array (`envp`).
  * @return EXIT_SUCCESS on success. EXIT_FAILURE on failure.
  * @note The quotes around args are removed during tokenization phase.
- * eg. `$"cd" '"'..'"'` -> args: {"cd",""\"..\""} // TODO
  */
 int	do_cd(char **args, t_minishell *minishell)
 {

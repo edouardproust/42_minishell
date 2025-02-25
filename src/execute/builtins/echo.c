@@ -29,7 +29,6 @@ t_bool	handle_option_n(char **args, int *i)
  * @param minishell (not used) Struct containing global Minishell data.
  * @return EXIT_SUCCESS on success. EXIT_FAILURE on failure.
  * @note The quotes around args are removed during tokenization.
- * eg. `$"echo" 'Hello world'` -> args: {"echo","Hello world"} // TODO
  */
 int	do_echo(char **args, t_minishell *minishell)
 {
