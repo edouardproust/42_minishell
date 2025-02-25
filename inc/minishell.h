@@ -150,7 +150,7 @@ void			handle_pipe(t_token **cur_token, t_cmd **cur_cmd,
 					t_minishell *minishell);
 
 /* Tokenization */
-t_token			*tokenizer(char *input, t_minishell *minishell);
+t_token			*tokenizer(t_minishell *minishell);
 t_token			*token_new(char *value, int type);
 t_tokenize_op	*get_tokenize_ops(void);
 t_token			*handle_special_char(char *input, int *i);

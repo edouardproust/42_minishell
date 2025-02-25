@@ -17,6 +17,7 @@ C_FILES = debug.c \
 	env/utils.c \
 	env/ops.c \
 	env/path.c \
+	cmd_list.c \
 	tokenizer/tokenizer.c \
 	tokenizer/tokenizer_utils.c \
 	tokenizer/token_utils.c \

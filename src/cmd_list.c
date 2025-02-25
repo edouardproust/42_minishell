@@ -18,7 +18,7 @@ void	init_cmd_lst(t_minishell *minishell)
 {
 	t_token	*tokens;
 
-	tokens = tokenizer(minishell->input);
+	tokens = tokenizer(minishell);
 	ft_free_ptrs(1, &minishell->input);
 	if (!tokens)
 		exit_minishell(EXIT_FAILURE, minishell, NULL);
