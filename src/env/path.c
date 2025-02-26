@@ -5,13 +5,16 @@
  * 
  * @param progpath Executable path to validate.
  * @return Copy of path if accessible, NULL otherwise.
- * @note - On access failure: returns NULL, errno set by access().
- *       - On malloc failure: exits process.
+ * @note	- If is a directory: returns NULL, and set errno to EISDIR
+ * 			- On access failure: returns NULL, errno set by access().
+ *			- On malloc failure: exits process.
  */
 static char	*dup_valid_path(char *progpath, t_minishell *minishell)
 {
 	char	*path;
 
+	if (is_directory(progpath))
+		return (set_errno(EISDIR), NULL);
 	if (access(progpath, X_OK) == -1)
 		return (NULL);
 	path = ft_strdup(progpath);
@@ -25,8 +28,8 @@ static char	*dup_valid_path(char *progpath, t_minishell *minishell)
  * 
  * @param progname Executable name.
  * @return "./progname" if executable, NULL otherwise.
- * @note - On access failure: returns NULL, errno set by access().
- *       - On malloc failure: exits process.
+ * @note	- On access failure: returns NULL, errno set by access().
+ *			- On malloc failure: exits process.
  */
 static char	*get_valid_relpath(char *progname, t_minishell *minishell)
 {
@@ -60,7 +63,7 @@ static char	*find_abspath(char **dirnames, char *progname,
 	int		i;
 
 	i = 0;
-	while (dirnames[i] != NULL)
+	while (progname[0] != '\0' && dirnames[i] != NULL)
 	{
 		abspath_tmp = ft_strglue(dirnames[i], "/", progname);
 		if (!abspath_tmp)
@@ -111,6 +114,7 @@ char	*get_exec_path(char *progname, t_minishell *minishell)
 	char	*path;
 	char	*envpath_value;
 
+	path = NULL;
 	if (is_path (progname))
 		path = dup_valid_path(progname, minishell);
 	else
@@ -123,12 +127,13 @@ char	*get_exec_path(char *progname, t_minishell *minishell)
 	}
 	if (!path)
 	{
-		if (errno == EACCES)
-			exit_minishell(E_CMDNOTEXEC, minishell, progname);
-		else if (errno == ENOENT)
+		if (errno == ENOENT)
 			exit_minishell(E_CMDNOTFOUND, minishell, progname);
 		else if (errno == 0)
-			exit_minishell(E_CMDNOTFOUND, minishell, "%s: command not found", progname);
+			exit_minishell(E_CMDNOTFOUND, minishell, "%s: command not found",
+				progname);
+		else
+			exit_minishell(E_CMDNOTEXEC, minishell, progname);
 	}
 	return (path);
 }

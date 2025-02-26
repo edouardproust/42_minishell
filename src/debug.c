@@ -89,8 +89,7 @@ void	debug_cmd(t_cmd *cmd, char *label)
 	after = "\n";
 	ft_fprintf(o, "%sargs: ", before);
 	i = 0;
-	if (cmd->args != NULL && cmd->args[0] != NULL
-		&& ft_strlen(cmd->args[0]) != 0)
+	if (cmd->args != NULL && cmd->args[0] != NULL)
 	{
 		while (cmd->args[i] != NULL)
 		{
