@@ -25,6 +25,25 @@ t_bool	is_path(char *s)
 }
 
 /**
+ * Checks if a path matches with an existing directory.
+ * 
+ * @param s The path to check. If `NULL` or empty, returns `FALSE`.
+ * @return t_bool `TRUE` if the path is a valid directory.
+ */
+t_bool	is_directory(char *path)
+{
+	struct stat	path_stat;
+	int			res;
+
+	if (!path || path[0] == '\0')
+		return (FALSE);
+	res = stat(path, &path_stat);
+	if (res == 0 && S_ISDIR(path_stat.st_mode))
+		return (TRUE);
+	return (FALSE);
+}
+
+/**
  * Get the value of an environment variable from its name.
  * 
  * This function is searching through the member

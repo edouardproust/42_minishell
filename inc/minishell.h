@@ -9,6 +9,7 @@
 # include <readline/history.h>
 # include <sys/wait.h>
 # include <signal.h>
+# include <sys/stat.h> 
 
 /****************************************/
 /* Macros and Enums                     */
@@ -96,7 +97,6 @@ typedef struct s_builtin
 {
 	char	*name;
 	int		(*fn)(char **args, t_minishell *minishell);
-	int		affects_state;
 }	t_builtin;
 
 /****************************************/
@@ -125,6 +125,7 @@ void			exit_minishell(int exit_code, t_minishell *minishell, char *fmt, ...);
 /* Env */
 char			*get_env_value(char *var_name, t_minishell *minishell);
 t_envvar		*init_envvars(t_minishell *minishell);
+t_bool			is_directory(char *path);
 t_bool			is_path(char *s);
 int				update_envp(t_minishell *minishell);
 t_envvar		*envvar_new(char *var);

@@ -114,17 +114,17 @@ static void	execute_cmd(t_cmd *cmd, t_minishell *ms)
 {
 	t_builtin	*builtin;
 
-	if (cmd->args && cmd->args[0] && cmd->args[0][0] != '\0')
+	if (cmd->args)
 	{
 		if (setup_io(cmd, ms) == EXIT_FAILURE)
 			ms->exit_code = EXIT_FAILURE;
 		else
 		{
 			builtin = get_builtin(cmd->args[0]);
-			if (builtin && builtin->affects_state && !cmd->next && !cmd->prev)
-				run_builtin(FALSE, builtin, cmd->args, ms);
-			else
+			if (cmd->prev || cmd->next || !builtin)
 				cmd->pid = run_in_child_process(builtin, cmd, ms);
+			else
+				run_builtin(FALSE, builtin, cmd->args, ms);
 			cleanup_io(cmd);
 		}
 	}
