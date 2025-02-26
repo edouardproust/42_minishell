@@ -21,7 +21,7 @@ t_tokenize_op	*get_tokenize_ops(void)
 }
 
 /* 
- * Handles special characters (`|`, `<`, `>`).
+ * Handles special characters (`|`, `<`, `>`, `<<`, `>>`).
  *
  * - Compares the input string with predefined token patterns.
  * - Creates a token of the corresponding type if a match is found.
