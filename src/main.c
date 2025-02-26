@@ -102,6 +102,7 @@ int	main(int ac, char **av, char **envp)
 	(void)av;
 	if (ac > 1)
 		return (EXIT_FAILURE); //TODO Deal with non-interactive mode
+	init_signals();
 	minishell = init_minishell(envp);
 	while (1)
 	{

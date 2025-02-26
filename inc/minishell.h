@@ -8,6 +8,7 @@
 # include <readline/readline.h>
 # include <readline/history.h>
 # include <sys/wait.h>
+# include <signal.h>
 
 /****************************************/
 /* Macros and Enums                     */
@@ -131,6 +132,9 @@ int				envvar_addoneback(t_envvar **lst, t_envvar *new);
 int				envvar_deleteone(t_envvar **lst, t_envvar *node);
 int				envvar_updateone(t_envvar *node, char *new_value);
 t_envvar		*envvar_findbyname(t_envvar *lst, char *name);
+
+/* Signals */
+void			init_signals(void);
 
 /* Parsing */
 void			init_cmd_lst(t_minishell *minishell);

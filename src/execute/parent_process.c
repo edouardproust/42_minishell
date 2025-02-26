@@ -84,9 +84,13 @@ static void	wait_for_processes(t_minishell *minishell)
 	{
 		if (cmd->pid > 0)
 		{
-			waitpid(cmd->pid, &status, 0);
-			if (WIFEXITED(status))
-				minishell->exit_code = WEXITSTATUS(status);
+			if (waitpid(cmd->pid, &status, 0) > 0)
+			{
+				if (WIFEXITED(status))
+					minishell->exit_code = WEXITSTATUS(status);
+				else if (WIFSIGNALED(status))
+					minishell->exit_code = 128 + WTERMSIG(status);
+			}
 		}
 		cmd = cmd->next;
 	}
