@@ -9,24 +9,24 @@
 t_builtin	*get_builtin(char *progname)
 {
 	static t_builtin	builtins[] = {
-	{"echo", do_echo, FALSE},
-	{"cd", do_cd, TRUE},
-	{"pwd", do_pwd, FALSE},
-	{"export", do_export, TRUE},
-	{"unset", do_unset, TRUE},
-	{"env", do_env, FALSE},
-	{"exit", do_exit, TRUE}
+	{"echo", do_echo},
+	{"cd", do_cd},
+	{"pwd", do_pwd},
+	{"export", do_export},
+	{"unset", do_unset},
+	{"env", do_env},
+	{"exit", do_exit}
 	};
 	size_t				lst_size;
 	size_t				progname_len;
 	size_t				i;
 
-	lst_size = sizeof(builtins) / sizeof(builtins[0]);
 	progname_len = ft_strlen(progname);
+	lst_size = sizeof(builtins) / sizeof(builtins[0]);
 	i = 0;
 	while (i < lst_size)
 	{
-		if (ft_strncmp(builtins[i].name, progname, progname_len) == 0)
+		if (ft_strncmp(builtins[i].name, progname, progname_len + 1) == 0)
 			return (&builtins[i]);
 		i++;
 	}
