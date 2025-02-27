@@ -88,11 +88,12 @@ static void	wait_for_processes(t_minishell *ms)
 			pid = waitpid(cmd->pid, &status, 0);
 			if (pid == -1 && errno == EINTR && is_signal(SIGINT))
 			{
-                kill_all_children(ms);
-                ms->exit_code = 128 + SIGINT;
-                while (waitpid(-1, &status, WNOHANG) > 0);
-                return ;
-            }
+				kill_all_children(ms);
+				ms->exit_code = 128 + SIGINT;
+				while (waitpid(-1, &status, WNOHANG) > 0)
+					;
+				return ;
+			}
 			else if (WIFEXITED(status))
 				ms->exit_code = WEXITSTATUS(status);
 			else if (WIFSIGNALED(status))
