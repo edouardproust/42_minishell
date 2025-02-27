@@ -198,3 +198,11 @@ void	debug_envp(char **envp)
 	}
 	ft_fprintf(fd, "────────────────────────────────────\n\n");
 }
+
+void	debug_killed_process(t_cmd *cmd)
+{
+	int	fd;
+
+	fd = STDERR_FILENO;
+	ft_fprintf(fd, "[kill process %d]\n", cmd->pid);
+}

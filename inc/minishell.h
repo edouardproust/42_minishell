@@ -135,7 +135,9 @@ int				envvar_updateone(t_envvar *node, char *new_value);
 t_envvar		*envvar_findbyname(t_envvar *lst, char *name);
 
 /* Signals */
-void			init_signals(void);
+void			init_signal_handlers(void);
+t_bool			is_signal(int check);
+void			kill_all_children(t_minishell *ms);
 
 /* Parsing */
 void			init_cmd_lst(t_minishell *minishell);

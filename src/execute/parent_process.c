@@ -74,23 +74,29 @@ static void	cleanup_io(t_cmd *cmd)
  * @return void
  * @note Exit on: a process exits with code > E_ERRMAX
  */
-static void	wait_for_processes(t_minishell *minishell)
+static void	wait_for_processes(t_minishell *ms)
 {
 	t_cmd	*cmd;
 	int		status;
+	pid_t	pid;
 
-	cmd = minishell->cmd_lst;
+	cmd = ms->cmd_lst;
 	while (cmd)
 	{
 		if (cmd->pid > 0)
 		{
-			if (waitpid(cmd->pid, &status, 0) > 0)
+			pid = waitpid(cmd->pid, &status, 0);
+			if (pid == -1 && errno == EINTR && is_signal(SIGINT))
 			{
-				if (WIFEXITED(status))
-					minishell->exit_code = WEXITSTATUS(status);
-				else if (WIFSIGNALED(status))
-					minishell->exit_code = 128 + WTERMSIG(status);
-			}
+                kill_all_children(ms);
+                ms->exit_code = 128 + SIGINT;
+                while (waitpid(-1, &status, WNOHANG) > 0);
+                return ;
+            }
+			else if (WIFEXITED(status))
+				ms->exit_code = WEXITSTATUS(status);
+			else if (WIFSIGNALED(status))
+				ms->exit_code = 128 + WTERMSIG(status);
 		}
 		cmd = cmd->next;
 	}
