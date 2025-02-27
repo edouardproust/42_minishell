@@ -31,6 +31,7 @@ C_FILES = debug.c \
 	parser/handlers/handle_redir_out.c \
 	parser/handlers/handle_redir_append.c \
 	parser/handlers/handle_redir_heredoc.c \
+	parser/heredoc.c \
 	execute/parent_process.c \
 	execute/child_process.c \
 	execute/executables.c \

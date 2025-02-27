@@ -38,7 +38,7 @@ static int	setup_io(t_cmd *cmd, t_minishell *minishell)
 
 /**
  * Closes unnecessary file descriptors for the current command in the
- * parent process.
+ * parent process and removes temporary heredoc files.
  * 
  * This ensures that the reference count for each file descriptor is
  * decremented, allowing EOF to be triggered when the child process closes 
@@ -64,6 +64,12 @@ static void	cleanup_io(t_cmd *cmd)
 		close_fd(cmd->pipe[1]);
 	if (cmd->prev)
 		close_fd(cmd->prev->pipe[0]);
+	if (cmd->heredoc_tmpfile)
+	{
+		unlink(cmd->heredoc_tmpfile);
+		free(cmd->heredoc_tmpfile);
+		cmd->heredoc_tmpfile = NULL;
+	}
 }
 
 /**
@@ -128,7 +134,10 @@ static void	execute_cmd(t_cmd *cmd, t_minishell *ms)
 
 /**
  * Execute each t_cmd of the list one by one.
- * 
+ *
+ * Checks if a command has a heredoc, it is processed before execution.
+ * Once all heredocs are processed, each command is executed one by one.
+ *
  * @param ms Struct containing global Minishell data (to be 
  *  freed in case of failure)
  * @return void
@@ -140,6 +149,8 @@ void	execute_cmd_lst(t_minishell *ms)
 
 	if (!ms || !ms->cmd_lst)
 		exit_minishell(EXIT_FAILURE, NULL, "Incorrect parsed command");
+	if (process_all_heredocs(ms) != EXIT_SUCCESS)
+		return ;
 	cmd = ms->cmd_lst;
 	while (cmd)
 	{
