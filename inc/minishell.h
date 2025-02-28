@@ -62,8 +62,11 @@ typedef struct s_cmd
 	char			**args;
 	char			*infile;
 	char			*outfile;
+	t_bool			outfile_append;
 	int				*pipe;
+	int				saved_stdin;
 	int				fdin;
+	int				saved_stdout;
 	int				fdout;
 	pid_t			pid;
 	struct s_cmd	*prev;
@@ -170,12 +173,14 @@ void			execute_cmd_lst(t_minishell *minishell);
 char			*get_exec_path(char *arg, t_minishell *minishell);
 pid_t			run_in_child_process(t_builtin *builtin, t_cmd *cmd,
 				t_minishell *minishell);
+int				handle_redirections(t_cmd *cmd);
+int				duplicate_fd(int oldfd, int newfd);
 
 /* Executables */
 void			run_executable(t_cmd *cmd, t_minishell *minishell);
 
 /* Builtins */
-t_builtin		*get_builtin(char *progname);
+t_builtin		*get_builtin(t_cmd *cmd);
 void			run_builtin(t_bool in_child_process, t_builtin *builtin,
 					char **args, t_minishell *minishell);
 int				do_echo(char **args, t_minishell *minishell);

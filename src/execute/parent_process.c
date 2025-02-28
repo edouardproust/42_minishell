@@ -10,30 +10,97 @@
  * @return int EXIT_SUCCESS or EXIT_FAILURE
  * @note Exit on: pipe failure, open failure
  */
-static int	setup_io(t_cmd *cmd, t_minishell *minishell)
+static void	setup_pipe(t_cmd *cmd, t_minishell *minishell)
 {
+	if (cmd->prev)
+		cmd->fdin = cmd->prev->pipe[0];
 	if (cmd->next)
 	{
 		if (pipe(cmd->pipe) == -1)
 			exit_minishell(EXIT_FAILURE, minishell, "pipe");
+		cmd->fdout = cmd->pipe[1];
 	}
-	if (cmd->prev)
-		cmd->fdin = cmd->prev->pipe[0];
-	else if (cmd->infile)
+}
+
+/**
+ * Duplicate a file descriptor and close it once duplicated.
+ *
+ * @param oldfd File descriptor to duplicate
+ * @param newfd Destination file descriptor
+ * @return: EXIT_FAILURE if dup2 fails. EXIT_SUCCESS otherwise.
+ */
+int	duplicate_fd(int oldfd, int newfd)
+{
+	if (oldfd == newfd)
+		return (EXIT_SUCCESS);
+	if (dup2(oldfd, newfd) == -1)
+		return (EXIT_FAILURE);
+	close(oldfd);
+	return (EXIT_SUCCESS);
+}
+
+/**
+ * Redirect input and output for the current command if necessary.
+ */
+int	handle_redirections(t_cmd *cmd)
+{
+	if (cmd->infile)
 	{
 		cmd->fdin = open(cmd->infile, O_RDONLY);
 		if (cmd->fdin == -1)
 			return (put_error(cmd->infile), EXIT_FAILURE);
+		else if (duplicate_fd(cmd->fdin, STDIN_FILENO) == EXIT_FAILURE)
+			return (put_error("dup2"), EXIT_FAILURE);
 	}
-	if (cmd->next)
-		cmd->fdout = cmd->pipe[1];
-	else if (cmd->outfile)
+	if (cmd->outfile)
 	{
-		cmd->fdout = open(cmd->outfile, O_WRONLY | O_CREAT | O_TRUNC, 0644);
+		if (cmd->outfile_append == TRUE)
+			cmd->fdout = open(cmd->outfile, O_WRONLY | O_CREAT | O_APPEND, 0644);
+		else
+			cmd->fdout = open(cmd->outfile, O_WRONLY | O_CREAT | O_TRUNC, 0644);
 		if (cmd->fdout == -1)
 			return (put_error(cmd->outfile), EXIT_FAILURE);
+		else if (duplicate_fd(cmd->fdout, STDOUT_FILENO) == EXIT_FAILURE)
+			return (put_error("dup2"), EXIT_FAILURE);
 	}
 	return (EXIT_SUCCESS);
+}
+
+static int	handle_redirections_in_parent(t_cmd *cmd, t_minishell *ms)
+{
+	if (cmd->infile)
+	{
+		cmd->saved_stdin = dup(STDIN_FILENO);
+		if (cmd->saved_stdin == -1)
+			exit_minishell(EXIT_FAILURE, ms, "dup");
+	}
+	if (cmd->outfile)
+	{
+		cmd->saved_stdout = dup(STDOUT_FILENO);
+		if (cmd->saved_stdout == -1)
+		{
+			if (cmd->saved_stdin != -1)
+				close(cmd->saved_stdin);
+			exit_minishell(EXIT_FAILURE, ms, "dup");
+		}
+	}
+	return (handle_redirections(cmd));
+}
+
+static void	restore_redirections(t_cmd *cmd, t_minishell *ms)
+{
+	if (cmd->infile && cmd->saved_stdin != -1)
+	{
+		if (dup2(cmd->saved_stdin, STDIN_FILENO) == -1)
+			exit_minishell(EXIT_FAILURE, ms, "dup2");
+		close(cmd->saved_stdin);
+	}
+	if (cmd->outfile && cmd->saved_stdout != -1)
+	{
+		if (dup2(cmd->saved_stdout, STDOUT_FILENO) == -1)
+			exit_minishell(EXIT_FAILURE, ms, "dup2");
+		close(cmd->saved_stdout);
+	}
 }
 
 /**
@@ -45,8 +112,6 @@ static int	setup_io(t_cmd *cmd, t_minishell *minishell)
  * its end of the pipe.
  * 
  * Closes:
- * - cmd->fdin if an input file is specified
- * - cmd->fdout if an output file is specified
  * - The write end of the pipe if created for this command
  * - The read end of the pipe if created for the previous command
  * 
@@ -56,10 +121,6 @@ static int	setup_io(t_cmd *cmd, t_minishell *minishell)
  */
 static void	cleanup_io(t_cmd *cmd)
 {
-	if (cmd->infile)
-		close_fd(cmd->fdin);
-	if (cmd->outfile)
-		close_fd(cmd->fdout);
 	if (cmd->next)
 		close_fd(cmd->pipe[1]);
 	if (cmd->prev)
@@ -94,36 +155,23 @@ static void	wait_for_processes(t_minishell *minishell)
 
 /**
  * Execute one command (t_cmd).
- * 
- * If setup_io() fails, don't execute cmd and set ms->exit_code
- * on EXIT_FAILURE.
- * If is a builtin that does not affect state and with no pipes,
- * run it in parent process, else run builtin or executable in 
- * child process.
- * 
- * @param cmd The command to execute
- * @param ms Struct containing global Minishell data (to be 
- *  freed in case of failure)
- * @return EXIT_SUCCESS or EXIT_FAILURE
+ * //TODO comment
  */
-static void	execute_cmd(t_cmd *cmd, t_minishell *ms)
+static void execute_cmd(t_cmd *cmd, t_minishell *ms)
 {
-	t_builtin	*builtin;
+    t_builtin *builtin;
 
-	if (cmd->args)
+    setup_pipe(cmd, ms);
+    builtin = get_builtin(cmd);
+    if (cmd->prev || cmd->next || !builtin)
+        cmd->pid = run_in_child_process(builtin, cmd, ms);
+	else
 	{
-		if (setup_io(cmd, ms) == EXIT_FAILURE)
-			ms->exit_code = EXIT_FAILURE;
-		else
-		{
-			builtin = get_builtin(cmd->args[0]);
-			if (cmd->prev || cmd->next || !builtin)
-				cmd->pid = run_in_child_process(builtin, cmd, ms);
-			else
-				run_builtin(FALSE, builtin, cmd->args, ms);
-			cleanup_io(cmd);
-		}
+		if (handle_redirections_in_parent(cmd, ms) == EXIT_SUCCESS)
+			run_builtin(FALSE, builtin, cmd->args, ms);
+		restore_redirections(cmd, ms);
 	}
+    cleanup_io(cmd);
 }
 
 /**

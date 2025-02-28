@@ -13,12 +13,15 @@ t_cmd	*cmd_new(t_cmd *prev_cmd)
 	cmd->args = NULL;
 	cmd->infile = NULL;
 	cmd->outfile = NULL;
+	cmd->outfile_append = FALSE;
 	cmd->pipe = malloc(sizeof(int) * 2);
 	if (!cmd->pipe)
 		return (free(cmd), NULL);
 	cmd->pipe[0] = -1;
 	cmd->pipe[1] = -1;
+	cmd->saved_stdin = -1;
 	cmd->fdin = STDIN_FILENO;
+	cmd->saved_stdout = -1;
 	cmd->fdout = STDOUT_FILENO;
 	cmd->pid = -1;
 	cmd->prev = prev_cmd;

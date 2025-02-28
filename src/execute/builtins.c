@@ -6,7 +6,7 @@
  * @param progname Name of the builtin
  * @return ptr to the matching t_builtin, NULL if no match
  */
-t_builtin	*get_builtin(char *progname)
+t_builtin	*get_builtin(t_cmd *cmd)
 {
 	static t_builtin	builtins[] = {
 	{"echo", do_echo},
@@ -18,9 +18,13 @@ t_builtin	*get_builtin(char *progname)
 	{"exit", do_exit}
 	};
 	size_t				lst_size;
+	char				*progname;
 	size_t				progname_len;
 	size_t				i;
 
+	if (ft_matrix_size(cmd->args) == 0)
+		return (NULL);
+	progname = cmd->args[0];
 	progname_len = ft_strlen(progname);
 	lst_size = sizeof(builtins) / sizeof(builtins[0]);
 	i = 0;
