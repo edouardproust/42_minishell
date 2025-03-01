@@ -1,18 +1,5 @@
 #include "minishell.h"
 
-static void	handle_pipes(t_cmd *cmd, t_minishell *minishell)
-{
-	int	exit_code;
-
-	exit_code = EXIT_SUCCESS;	
-	if (cmd->fdin != -1 && cmd->fdin != STDIN_FILENO)
-		exit_code = duplicate_fd(cmd->fdin, STDIN_FILENO);
-	if (cmd->fdout != -1 && cmd->fdout != STDOUT_FILENO)
-		exit_code = duplicate_fd(cmd->fdout, STDOUT_FILENO);
-	if (exit_code != EXIT_SUCCESS)
-		exit_minishell(exit_code, minishell, "dup2");
-}
-
 /**
  * Create a child process and run a builtin or an executable in it.
  *
@@ -33,8 +20,8 @@ pid_t	run_in_child_process(t_builtin *builtin, t_cmd *cmd,
 		exit_minishell(EXIT_FAILURE, minishell, "fork");
 	if (pid == 0)
 	{
-		handle_pipes(cmd, minishell);
-		if (handle_redirections(cmd) == EXIT_FAILURE)
+		setup_pipe_ends(cmd, minishell);
+		if (setup_redirections(cmd) == EXIT_FAILURE)
 			exit_minishell(EXIT_FAILURE, minishell, NULL);
 		if (ft_matrix_size(cmd->args) == 0)
 			exit_minishell(EXIT_SUCCESS, minishell, NULL);

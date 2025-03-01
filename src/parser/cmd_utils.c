@@ -13,7 +13,6 @@ t_cmd	*cmd_new(t_cmd *prev_cmd)
 	cmd->args = NULL;
 	cmd->infile = NULL;
 	cmd->outfile = NULL;
-	cmd->outfile_append = FALSE;
 	cmd->pipe = malloc(sizeof(int) * 2);
 	if (!cmd->pipe)
 		return (free(cmd), NULL);

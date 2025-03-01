@@ -10,7 +10,6 @@ C_DIR = src
 C_FILES = debug.c \
 	main.c \
 	free.c \
-	close.c \
 	exit.c \
 	error.c \
 	env/init.c \
@@ -28,8 +27,10 @@ C_FILES = debug.c \
 	parser/token_handlers.c \
 	execute/parent_process.c \
 	execute/child_process.c \
-	execute/executables.c \
-	execute/builtins.c \
+	execute/pipe.c \
+	execute/redirection.c \
+	execute/executable.c \
+	execute/builtin.c \
 	execute/builtins/cd.c \
 	execute/builtins/echo.c \
 	execute/builtins/env.c \
@@ -38,6 +39,7 @@ C_FILES = debug.c \
 	execute/builtins/pwd.c \
 	execute/builtins/unset.c \
 	utils/string_utils.c \
+	utils/fd_utils.c \
 
 SRCS = $(addprefix $(C_DIR)/,$(C_FILES))
 

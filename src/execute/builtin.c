@@ -1,6 +1,28 @@
 #include "minishell.h"
 
 /**
+ * Inititalise the builtins list and return it.
+ * 
+ * @param void
+ * @return The initialized builtins list
+ */
+static t_builtin	*get_builtin_lst(void)
+{
+	static t_builtin	builtin_lst[] = {
+	{"echo", do_echo},
+	{"cd", do_cd},
+	{"pwd", do_pwd},
+	{"export", do_export},
+	{"unset", do_unset},
+	{"env", do_env},
+	{"exit", do_exit},
+	{NULL, NULL}
+	};
+
+	return (builtin_lst);
+}
+
+/**
  * Retrieve the t_builtin of the given builtin name.
  *
  * @param progname Name of the builtin
@@ -8,30 +30,21 @@
  */
 t_builtin	*get_builtin(t_cmd *cmd)
 {
-	static t_builtin	builtins[] = {
-	{"echo", do_echo},
-	{"cd", do_cd},
-	{"pwd", do_pwd},
-	{"export", do_export},
-	{"unset", do_unset},
-	{"env", do_env},
-	{"exit", do_exit}
-	};
-	size_t				lst_size;
-	char				*progname;
-	size_t				progname_len;
-	size_t				i;
+	t_builtin	*builtin_lst;
+	char		*progname;
+	size_t		progname_len;
+	size_t		i;
 
 	if (ft_matrix_size(cmd->args) == 0)
 		return (NULL);
 	progname = cmd->args[0];
 	progname_len = ft_strlen(progname);
-	lst_size = sizeof(builtins) / sizeof(builtins[0]);
+	builtin_lst = get_builtin_lst();
 	i = 0;
-	while (i < lst_size)
+	while (builtin_lst[i].name)
 	{
-		if (ft_strncmp(builtins[i].name, progname, progname_len + 1) == 0)
-			return (&builtins[i]);
+		if (ft_strncmp(builtin_lst[i].name, progname, progname_len + 1) == 0)
+			return (&builtin_lst[i]);
 		i++;
 	}
 	return (NULL);
