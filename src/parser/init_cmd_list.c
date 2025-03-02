@@ -20,7 +20,7 @@ void	init_cmd_lst(t_minishell *minishell)
 	tokens = tokenizer(minishell);
 	ft_free_ptrs(1, &minishell->input);
 	if (!tokens)
-		exit_minishell(EXIT_FAILURE, minishell, NULL);
+		return ;
 	minishell->token_lst = tokens;
 	if (parse_tokens(minishell) == EXIT_FAILURE)
 		exit_minishell(EXIT_FAILURE, minishell, NULL);
