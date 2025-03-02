@@ -105,8 +105,10 @@ int	main(int ac, char **av, char **envp)
 	minishell = init_minishell(envp);
 	while (1)
 	{
-		set_input(minishell);
+		set_input(minishell);	
 		init_cmd_lst(minishell);
+		if (minishell->cmd_lst == NULL)
+			continue ;
 		execute_cmd_lst(minishell);
 		free_cmd_lst(&minishell->cmd_lst);
 	}
