@@ -154,9 +154,9 @@ void			handle_word(t_token **cur_token, t_cmd **cur_cmd,
 					t_minishell *minishell);
 void			handle_pipe(t_token **cur_token, t_cmd **cur_cmd,
 					t_minishell *minishell);
-void    		handle_redir_heredoc(t_token **cur_token, t_cmd **cur_cmd,
+void			handle_redir_heredoc(t_token **cur_token, t_cmd **cur_cmd,
 					t_minishell *minishell);
-void   			handle_redir_append(t_token **cur_token, t_cmd **cur_cmd,
+void			handle_redir_append(t_token **cur_token, t_cmd **cur_cmd,
 					t_minishell *minishell);
 
 /* Tokenization */

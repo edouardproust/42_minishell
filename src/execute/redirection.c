@@ -21,7 +21,8 @@ int	setup_redirections(t_cmd *cmd)
 	if (cmd->outfile)
 	{
 		if (cmd->append)
-			cmd->fdout = open(cmd->outfile, O_WRONLY | O_CREAT | O_APPEND, 0644);
+			cmd->fdout = open(cmd->outfile,
+					O_WRONLY | O_CREAT | O_APPEND, 0644);
 		else
 			cmd->fdout = open(cmd->outfile, O_WRONLY | O_CREAT | O_TRUNC, 0644);
 		if (cmd->fdout == -1)

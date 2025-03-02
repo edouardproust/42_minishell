@@ -118,5 +118,5 @@ void	cleanup_heredoc(t_minishell *ms)
 			cmd->heredoc_tmpfile = NULL;
 		}
 		cmd = cmd->next;
-	}	
+	}
 }

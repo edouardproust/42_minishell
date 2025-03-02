@@ -23,7 +23,8 @@ t_parse_op	*get_parse_ops(void)
 
 /* 
  * Processes tokens based on their type using appropriate handler functions
- * - Calls handlers for redirections (`<`, `>`, `<<`, `<<`), pipes (`|`), and words.
+ * - Calls handlers for redirections (`<`, `>`, `<<`, `<<`),
+ *   pipes (`|`), and words.
  * - If an unknown token is encountered, exits with an error.
  */
 void	handle_token_type(t_token **cur_token, t_cmd **cur_cmd,
