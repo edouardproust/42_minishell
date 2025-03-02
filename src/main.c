@@ -108,6 +108,7 @@ int	main(int ac, char **av, char **envp)
 		set_input(minishell);
 		init_cmd_lst(minishell);
 		execute_cmd_lst(minishell);
+		cleanup_heredoc(minishell);
 		free_cmd_lst(&minishell->cmd_lst);
 	}
 	free_minishell(&minishell);

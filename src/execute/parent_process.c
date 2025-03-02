@@ -35,7 +35,7 @@ static void	wait_for_processes(t_minishell *minishell)
  * `run_in_child_process` function.
  * Otherwise, the builtin is ran directly in the parent process. In this case,
  * stdin and stdout fds are saved before execution, and are restored after.
- * Finaly, close the pipe if one was created for this command.
+ * Finaly, close the pipe/hereodc if one was created for this command.
 
  * @return void
  */

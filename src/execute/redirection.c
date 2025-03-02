@@ -20,7 +20,10 @@ int	setup_redirections(t_cmd *cmd)
 	}
 	if (cmd->outfile)
 	{
-		cmd->fdout = open(cmd->outfile, O_WRONLY | O_CREAT | O_TRUNC, 0644);
+		if (cmd->append)
+			cmd->fdout = open(cmd->outfile, O_WRONLY | O_CREAT | O_APPEND, 0644);
+		else
+			cmd->fdout = open(cmd->outfile, O_WRONLY | O_CREAT | O_TRUNC, 0644);
 		if (cmd->fdout == -1)
 			return (put_error(cmd->outfile), EXIT_FAILURE);
 		else if (ft_dup2(cmd->fdout, STDOUT_FILENO) == EXIT_FAILURE)

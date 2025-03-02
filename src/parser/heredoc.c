@@ -67,7 +67,7 @@ int	process_heredoc(t_cmd *cmd)
 		write(tmp_fd, "\n", 1);
 		free(line);
 	}
-	close_fd(tmp_fd);
+	ft_close(&tmp_fd);
 	cmd->infile = ft_strdup(tmp_file);
 	cmd->heredoc_tmpfile = ft_strdup(tmp_file);
 	return (EXIT_SUCCESS);
@@ -99,4 +99,24 @@ int	process_all_heredocs(t_minishell *ms)
 		cmd = cmd->next;
 	}
 	return (EXIT_SUCCESS);
+}
+
+/*
+ * Deletes heredoc_tmpfile and cleans up the relevant resources.
+ */
+void	cleanup_heredoc(t_minishell *ms)
+{
+	t_cmd	*cmd;
+
+	cmd = ms->cmd_lst;
+	while (cmd)
+	{
+		if (cmd->heredoc_tmpfile)
+		{
+			unlink(cmd->heredoc_tmpfile);
+			free(cmd->heredoc_tmpfile);
+			cmd->heredoc_tmpfile = NULL;
+		}
+		cmd = cmd->next;
+	}	
 }
