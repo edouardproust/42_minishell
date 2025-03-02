@@ -29,7 +29,10 @@ static int	setup_io(t_cmd *cmd, t_minishell *minishell)
 		cmd->fdout = cmd->pipe[1];
 	else if (cmd->outfile)
 	{
-		cmd->fdout = open(cmd->outfile, O_WRONLY | O_CREAT | O_TRUNC, 0644);
+		if (cmd->append)
+			cmd->fdout = open(cmd->outfile, O_WRONLY | O_CREAT | O_APPEND, 0644);
+		else
+			cmd->fdout = open(cmd->outfile, O_WRONLY | O_CREAT | O_TRUNC, 0644);
 		if (cmd->fdout == -1)
 			return (put_error(cmd->outfile), EXIT_FAILURE);
 	}
