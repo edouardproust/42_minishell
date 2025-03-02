@@ -29,7 +29,9 @@ t_cmd	*cmd_new(t_cmd *prev_cmd)
 		return (free(cmd), NULL);
 	cmd->pipe[0] = -1;
 	cmd->pipe[1] = -1;
+	cmd->saved_stdin = -1;
 	cmd->fdin = STDIN_FILENO;
+	cmd->saved_stdout = -1;
 	cmd->fdout = STDOUT_FILENO;
 	cmd->pid = -1;
 	cmd->prev = prev_cmd;

@@ -96,6 +96,7 @@ void	free_cmd_lst(t_cmd **cmd_lst)
  */
 void	free_minishell(t_minishell **ms)
 {
+	flush_fds();
 	if (!ms || !*ms)
 		return ;
 	if ((*ms)->envvar_lst)

@@ -1,81 +1,6 @@
 #include "minishell.h"
 
 /**
- * Update cmd->fdin and cmd->fdout if the current t_cmd contains an infile
- * or an outfile.
- * 
- * @param cmd Struct of the command to execute
- * @param minishell Struct containing global Minishell data (to be freed
- *  in case of failure)
- * @return int EXIT_SUCCESS or EXIT_FAILURE
- * @note Exit on: pipe failure, open failure
- */
-static int	setup_io(t_cmd *cmd, t_minishell *minishell)
-{
-	if (cmd->next)
-	{
-		if (pipe(cmd->pipe) == -1)
-			exit_minishell(EXIT_FAILURE, minishell, "pipe");
-	}
-	if (cmd->prev)
-		cmd->fdin = cmd->prev->pipe[0];
-	else if (cmd->infile)
-	{
-		cmd->fdin = open(cmd->infile, O_RDONLY);
-		if (cmd->fdin == -1)
-			return (put_error(cmd->infile), EXIT_FAILURE);
-	}
-	if (cmd->next)
-		cmd->fdout = cmd->pipe[1];
-	else if (cmd->outfile)
-	{
-		if (cmd->append)
-			cmd->fdout = open(cmd->outfile, O_WRONLY | O_CREAT | O_APPEND, 0644);
-		else
-			cmd->fdout = open(cmd->outfile, O_WRONLY | O_CREAT | O_TRUNC, 0644);
-		if (cmd->fdout == -1)
-			return (put_error(cmd->outfile), EXIT_FAILURE);
-	}
-	return (EXIT_SUCCESS);
-}
-
-/**
- * Closes unnecessary file descriptors for the current command in the
- * parent process and removes temporary heredoc files.
- * 
- * This ensures that the reference count for each file descriptor is
- * decremented, allowing EOF to be triggered when the child process closes 
- * its end of the pipe.
- * 
- * Closes:
- * - cmd->fdin if an input file is specified
- * - cmd->fdout if an output file is specified
- * - The write end of the pipe if created for this command
- * - The read end of the pipe if created for the previous command
- * 
- * @param cmd Struct of the command to execute
- * @return void
- * @note Exit on: None
- */
-static void	cleanup_io(t_cmd *cmd)
-{
-	if (cmd->infile)
-		close_fd(cmd->fdin);
-	if (cmd->outfile)
-		close_fd(cmd->fdout);
-	if (cmd->next)
-		close_fd(cmd->pipe[1]);
-	if (cmd->prev)
-		close_fd(cmd->prev->pipe[0]);
-	if (cmd->heredoc_tmpfile)
-	{
-		unlink(cmd->heredoc_tmpfile);
-		free(cmd->heredoc_tmpfile);
-		cmd->heredoc_tmpfile = NULL;
-	}
-}
-
-/**
  * Wait for all processes to finish and handle exit codes. 
  *
  * @param minishell Struct containing global Minishell data (to be 
@@ -104,43 +29,42 @@ static void	wait_for_processes(t_minishell *minishell)
 /**
  * Execute one command (t_cmd).
  * 
- * If setup_io() fails, don't execute cmd and set ms->exit_code
- * on EXIT_FAILURE.
- * If is a builtin that does not affect state and with no pipes,
- * run it in parent process, else run builtin or executable in 
- * child process.
- * 
- * @param cmd The command to execute
- * @param ms Struct containing global Minishell data (to be 
- *  freed in case of failure)
- * @return EXIT_SUCCESS or EXIT_FAILURE
+ * Create a pipe if the cmd is followed by another. 
+ * If a pipe has been created or the cmd's first does not correspond to a
+ * builtin, the execution happens in a child process via the
+ * `run_in_child_process` function.
+ * Otherwise, the builtin is ran directly in the parent process. In this case,
+ * stdin and stdout fds are saved before execution, and are restored after.
+ * Finaly, close the pipe if one was created for this command.
+
+ * @return void
  */
 static void	execute_cmd(t_cmd *cmd, t_minishell *ms)
 {
 	t_builtin	*builtin;
 
-	if (cmd->args)
+	init_pipe_if(cmd, ms);
+	builtin = get_builtin(cmd);
+	if (cmd->prev || cmd->next || !builtin)
+		cmd->pid = run_in_child_process(builtin, cmd, ms);
+	else
 	{
-		if (setup_io(cmd, ms) == EXIT_FAILURE)
-			ms->exit_code = EXIT_FAILURE;
-		else
-		{
-			builtin = get_builtin(cmd->args[0]);
-			if (cmd->prev || cmd->next || !builtin)
-				cmd->pid = run_in_child_process(builtin, cmd, ms);
-			else
-				run_builtin(FALSE, builtin, cmd->args, ms);
-			cleanup_io(cmd);
-		}
+		save_stdin_stdout(cmd, ms);
+		if (setup_redirections(cmd) == EXIT_SUCCESS)
+			run_builtin(FALSE, builtin, cmd->args, ms);
+		restore_stdin_stdout(cmd, ms);
 	}
+	close_pipe_if(cmd);
 }
 
 /**
  * Execute each t_cmd of the list one by one.
  *
  * Checks if a command has a heredoc, it is processed before execution.
- * Once all heredocs are processed, each command is executed one by one.
  *
+ * Loop over the commands list, calling `execute_cmd`. Then wait for each process
+ * to finish.
+ * 
  * @param ms Struct containing global Minishell data (to be 
  *  freed in case of failure)
  * @return void
