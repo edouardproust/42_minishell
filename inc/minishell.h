@@ -64,7 +64,9 @@ typedef struct s_cmd
 	char			*infile;
 	char			*outfile;
 	int				*pipe;
+	int				saved_stdin;
 	int				fdin;
+	int				saved_stdout;
 	int				fdout;
 	pid_t			pid;
 	struct s_cmd	*prev;
@@ -115,12 +117,9 @@ t_envvar		*free_envvar_node(t_envvar **node);
 void			free_envvar_lst(t_envvar **var_lst);
 void			free_cmd_lst(t_cmd **cmd_lst);
 
-/* File descriptors */
-void			close_fd(int fd);
-void			flush_fds(void);
-
 /* Exit */
-void			exit_minishell(int exit_code, t_minishell *minishell, char *fmt, ...);
+void			exit_minishell(int exit_code, t_minishell *minishell,
+					char *fmt, ...);
 
 /* Env */
 char			*get_env_value(char *var_name, t_minishell *minishell);
@@ -175,13 +174,24 @@ char			*remove_quotes(char *str);
 void			execute_cmd_lst(t_minishell *minishell);
 char			*get_exec_path(char *arg, t_minishell *minishell);
 pid_t			run_in_child_process(t_builtin *builtin, t_cmd *cmd,
-				t_minishell *minishell);
+					t_minishell *minishell);
+int				setup_redirections(t_cmd *cmd);
+
+/* Pipes and redirections */
+void			init_pipe_if(t_cmd *cmd, t_minishell *minishell);
+void			setup_pipe_ends(t_cmd *cmd, t_minishell *minishell);
+void			close_pipe_if(t_cmd *cmd);
+int				setup_redirections(t_cmd *cmd);
+void			save_stdin_stdout(t_cmd *cmd, t_minishell *minishell);
+void			restore_stdin_stdout(t_cmd *cmd, t_minishell *minishell);
 
 /* Executables */
 void			run_executable(t_cmd *cmd, t_minishell *minishell);
+void			setup_pipe_ends(t_cmd *cmd, t_minishell *minishell);
+void			close_pipe_if(t_cmd *cmd);
 
 /* Builtins */
-t_builtin		*get_builtin(char *progname);
+t_builtin		*get_builtin(t_cmd *cmd);
 void			run_builtin(t_bool in_child_process, t_builtin *builtin,
 					char **args, t_minishell *minishell);
 int				do_echo(char **args, t_minishell *minishell);
@@ -192,7 +202,13 @@ int				do_unset(char **args, t_minishell *minishell);
 int				do_env(char **args, t_minishell *minishell);
 int				do_exit(char **args, t_minishell *minishell);
 
-/* Utils */
+/* File descriptors */
+int				ft_dup(int src_fd, int *dst_fd);
+int				ft_dup2(int oldfd, int newfd);
+void			ft_close(int *fd);
+void			flush_fds(void);
+
+/* Strings */
 int				is_special_char(char c);
 int				is_space_char(char c);
 int				is_quote_char(char c);
