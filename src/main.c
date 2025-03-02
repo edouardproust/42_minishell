@@ -81,7 +81,7 @@ static void	set_input(t_minishell *minishell)
 			put_error("readline");
 		else
 		{
-			ft_printf("exit\n");
+			ft_printf("exit\n"); //TODO Check at school if it displays exit or not
 			exit_minishell(EXIT_SUCCESS, minishell, NULL);
 		}
 	}
