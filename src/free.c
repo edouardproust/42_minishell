@@ -99,14 +99,14 @@ void	free_minishell(t_minishell **ms)
 	flush_fds();
 	if (!ms || !*ms)
 		return ;
-	if ((*ms)->envvar_lst)
-		free_envvar_lst(&(*ms)->envvar_lst);
 	if ((*ms)->input)
 		ft_free_ptrs(1, &(*ms)->input);
+	ft_free_split(&(*ms)->envp);
+	if ((*ms)->envvar_lst)
+		free_envvar_lst(&(*ms)->envvar_lst);
 	if ((*ms)->token_lst)
 		free_token_lst(&(*ms)->token_lst);
 	if ((*ms)->cmd_lst)
 		free_cmd_lst(&(*ms)->cmd_lst);
-	ft_free_split(&(*ms)->envp);
 	ft_free_ptrs(1, ms);
 }

@@ -81,10 +81,11 @@ static void	set_input(t_minishell *minishell)
 			put_error("readline");
 		else
 		{
-			ft_printf("exit\n"); //TODO Check at school if it displays exit or not
+			ft_printf("exit\n");
 			exit_minishell(EXIT_SUCCESS, minishell, NULL);
 		}
 	}
+	update_exit_code_if_signal(minishell);
 }
 
 /**
@@ -102,7 +103,7 @@ int	main(int ac, char **av, char **envp)
 	(void)av;
 	if (ac > 1)
 		return (EXIT_FAILURE); //TODO Deal with non-interactive mode
-	init_signal_handlers();
+	set_sigint_sigquit(rl_sigint_handler, SIG_IGN);
 	minishell = init_minishell(envp);
 	while (1)
 	{

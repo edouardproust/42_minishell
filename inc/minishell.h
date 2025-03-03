@@ -134,9 +134,14 @@ int				envvar_updateone(t_envvar *node, char *new_value);
 t_envvar		*envvar_findbyname(t_envvar *lst, char *name);
 
 /* Signals */
-void			init_signal_handlers(void);
-t_bool			is_signal(int check);
+void			set_sigint_sigquit(__sighandler_t sigint_handler, __sighandler_t sigquit_handler);
+void			rl_sigint_handler(int signal);
+void			exec_sigint_handler(int signal);
+void			update_exit_code_if_signal(t_minishell *ms);
+void			put_signal_message(int status);
 void			kill_all_children(t_minishell *ms);
+int				get_and_reset_signal(void);
+t_bool			ft_signal(int signum, void (*handler)(int));
 
 /* Parsing */
 void			init_cmd_lst(t_minishell *minishell);
