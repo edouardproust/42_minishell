@@ -63,6 +63,9 @@ typedef struct s_cmd
 	char			**args;
 	char			*infile;
 	char			*outfile;
+	char			*heredoc_del;
+	char			*heredoc_tmpfile;
+	int				append;
 	int				*pipe;
 	int				saved_stdin;
 	int				fdin;
@@ -75,12 +78,12 @@ typedef struct s_cmd
 
 typedef struct s_minishell
 {
-	char		*input;
-	char		**envp;
-	t_envvar	*envvar_lst;
-	t_token		*token_lst;
-	t_cmd		*cmd_lst;
-	int			exit_code;
+	char			*input;
+	char			**envp;
+	t_envvar		*envvar_lst;
+	t_token			*token_lst;
+	t_cmd			*cmd_lst;
+	sig_atomic_t	exit_code;
 }	t_minishell;
 
 typedef struct s_tokenize_op
@@ -137,7 +140,6 @@ t_envvar		*envvar_findbyname(t_envvar *lst, char *name);
 void			set_sigint_sigquit(__sighandler_t sigint_handler, __sighandler_t sigquit_handler);
 void			rl_sigint_handler(int signal);
 void			exec_sigint_handler(int signal);
-void			update_exit_code_if_signal(t_minishell *ms);
 void			put_signal_message(int status);
 void			kill_all_children(t_minishell *ms);
 int				get_and_reset_signal(void);
@@ -149,6 +151,7 @@ t_cmd			*cmd_new(t_cmd *prev_cmd);
 void			add_arg_to_cmd(t_cmd *cmd, char *arg);
 int				parse_tokens(t_minishell *minishell);
 t_parse_op		*get_parse_ops(void);
+void			cleanup_heredoc(t_minishell *ms);
 void			handle_token_type(t_token **cur_token, t_cmd **cur_cmd,
 					t_minishell *minishell);
 void			handle_redir_in(t_token **cur_token, t_cmd **cur_cmd,

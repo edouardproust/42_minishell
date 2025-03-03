@@ -27,6 +27,7 @@ C_FILES = debug.c \
 	parser/parser_utils.c \
 	parser/cmd_utils.c \
 	parser/token_handlers.c \
+	parser/heredoc.c \
 	execute/parent_process.c \
 	execute/child_process.c \
 	execute/pipe.c \

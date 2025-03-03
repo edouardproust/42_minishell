@@ -85,7 +85,7 @@ static void	set_input(t_minishell *minishell)
 			exit_minishell(EXIT_SUCCESS, minishell, NULL);
 		}
 	}
-	update_exit_code_if_signal(minishell);
+	get_and_reset_signal();
 }
 
 /**

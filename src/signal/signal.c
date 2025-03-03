@@ -4,7 +4,7 @@ static volatile sig_atomic_t	g_signal = 0;
 
 int	get_and_reset_signal(void)
 {
-	int	sig;
+	sig_atomic_t	sig;
 	
 	sig = g_signal;
 	g_signal = 0;

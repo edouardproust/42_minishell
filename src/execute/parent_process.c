@@ -1,10 +1,11 @@
 #include "minishell.h"
 
-static t_bool	check_and_handle_wait_intr(t_minishell *ms,
+static t_bool	handle_signaled_parent_process(t_minishell *ms,
 	pid_t pid, int *status)
 {
 	if (pid == -1 && errno == EINTR)
 	{
+		cleanup_heredoc(ms);
 		kill_all_children(ms);
 		ms->exit_code = E_SIGBASE + get_and_reset_signal();
 		while (waitpid(-1, status, WNOHANG) > 0)
@@ -34,18 +35,20 @@ static void	wait_for_processes(t_minishell *ms)
 		if (cmd->pid > 0)
 		{
 			pid = waitpid(cmd->pid, &status, 0);
-			if (check_and_handle_wait_intr(ms, pid, &status))
+			if (handle_signaled_parent_process(ms, pid, &status))
 				return ;
 			else if (WIFEXITED(status))
 				ms->exit_code = WEXITSTATUS(status);
 			else if (WIFSIGNALED(status))
 			{
+				cleanup_heredoc(ms);
 				put_signal_message(status);
 				ms->exit_code = E_SIGBASE + WTERMSIG(status);
 			}
 		}
 		cmd = cmd->next;
 	}
+
 }
 
 /**
@@ -104,6 +107,5 @@ void	execute_cmd_lst(t_minishell *ms)
 		cmd = cmd->next;
 	}
 	wait_for_processes(ms);
-	update_exit_code_if_signal(ms);
 	set_sigint_sigquit(rl_sigint_handler, SIG_IGN);
 }
