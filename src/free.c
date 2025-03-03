@@ -77,11 +77,13 @@ void	free_cmd_lst(t_cmd **cmd_lst)
 	{
 		ft_free_split(&cur_cmd->args);
 		nxt_cmd = cur_cmd->next;
-		ft_free_ptrs(4,
+		ft_free_ptrs(5,
 			&cur_cmd->infile,
 			&cur_cmd->outfile,
-			&cur_cmd->pipe,
-			&cur_cmd);
+			&cur_cmd->heredoc_del,
+			&cur_cmd->heredoc_tmpfile,
+			&cur_cmd->pipe);
+		free(cur_cmd);
 		cur_cmd = nxt_cmd;
 	}
 	*cmd_lst = NULL;

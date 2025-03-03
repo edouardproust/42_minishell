@@ -19,7 +19,6 @@ static int	generate_unique_file(char *tmp_file)
 	char		*num_str;
 	int			fd;
 
-	counter = 0;
 	while (1)
 	{
 		num_str = ft_itoa(counter++);
@@ -28,6 +27,7 @@ static int	generate_unique_file(char *tmp_file)
 		base = "/tmp/minishell_heredoc_";
 		ft_strlcpy(tmp_file, base, 256);
 		ft_strlcat(tmp_file, num_str, 256);
+		free(num_str);
 		if (access(tmp_file, F_OK) == -1)
 		{
 			fd = open(tmp_file, O_WRONLY | O_CREAT | O_EXCL, 0600);
@@ -55,7 +55,7 @@ static int	read_heredoc(int tmp_fd, t_cmd *cmd)
 	while (1)
 	{
 		line = readline("> ");
-		if (!line || ft_strncmp(line, cmd->heredoc_del, ft_strlen(line)) == 0)
+		if (ft_strcmp(line, cmd->heredoc_del) == 0)
 		{
 			free(line);
 			break ;
