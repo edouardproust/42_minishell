@@ -17,6 +17,7 @@ void	handle_redir_out(t_token **cur_token, t_cmd **cur_cmd,
 			"syntax error near unexpected token `newline'");
 	ft_free_ptrs(1, &(*cur_cmd)->outfile);
 	(*cur_cmd)->outfile = ft_strdup(token->next->value);
+	(*cur_cmd)->append = 0;
 	if (!(*cur_cmd)->outfile)
 		exit_minishell(EXIT_FAILURE, minishell, NULL);
 	(*cur_token) = token->next->next;

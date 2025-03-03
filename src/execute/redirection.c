@@ -12,14 +12,16 @@ int	setup_redirections(t_cmd *cmd)
 {
 	if (cmd->infile)
 	{
+		ft_close(&cmd->fdin);
 		cmd->fdin = open(cmd->infile, O_RDONLY);
 		if (cmd->fdin == -1)
 			return (put_error(cmd->infile), EXIT_FAILURE);
-		else if (ft_dup2(cmd->fdin, STDIN_FILENO) == EXIT_FAILURE)
+		if (ft_dup2(cmd->fdin, STDIN_FILENO) == EXIT_FAILURE)
 			return (put_error("dup2"), EXIT_FAILURE);
 	}
 	if (cmd->outfile)
 	{
+		ft_close(&cmd->fdout);
 		if (cmd->append)
 			cmd->fdout = open(cmd->outfile,
 					O_WRONLY | O_CREAT | O_APPEND, 0644);
@@ -27,7 +29,7 @@ int	setup_redirections(t_cmd *cmd)
 			cmd->fdout = open(cmd->outfile, O_WRONLY | O_CREAT | O_TRUNC, 0644);
 		if (cmd->fdout == -1)
 			return (put_error(cmd->outfile), EXIT_FAILURE);
-		else if (ft_dup2(cmd->fdout, STDOUT_FILENO) == EXIT_FAILURE)
+		if (ft_dup2(cmd->fdout, STDOUT_FILENO) == EXIT_FAILURE)
 			return (put_error("dup2"), EXIT_FAILURE);
 	}
 	return (EXIT_SUCCESS);
