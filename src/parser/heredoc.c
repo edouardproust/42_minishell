@@ -43,6 +43,8 @@ static int	generate_unique_file(char *tmp_file)
  * Continuously reads input from the user until the heredoc delimiter 
  * (cmd->heredoc_del) is encountered. Each input line is written to the 
  * temporary file. If the delimiter is encountered, input stops.
+ * - If CTRL + D is pressed during the heredoc input process, the 
+ * 	program will return an error.
  * 
  * @param tmp_fd File descriptor for the temporary heredoc file.
  * @param cmd Pointer to the command struct containing the heredoc delimiter.
@@ -56,7 +58,13 @@ static int	read_heredoc(int tmp_fd, t_cmd *cmd)
 	{
 		line = readline("> ");
 		if (!line)
+		{
+			set_errno(0);
+			put_error("warning: here-document at line %d delimited by "
+				"end of file (wanted `%s')", cmd->heredoc_start,
+				cmd->heredoc_del);
 			break ;
+		}
 		if (ft_strcmp(line, cmd->heredoc_del) == 0)
 		{
 			free(line);
@@ -90,6 +98,8 @@ int	process_heredoc(t_cmd *cmd)
 		return (EXIT_FAILURE);
 	read_heredoc(tmp_fd, cmd);
 	ft_close(&tmp_fd);
+	if (!cmd->heredoc_del || ft_strcmp(cmd->heredoc_del, "") == 0)
+		return (unlink(tmp_file), EXIT_FAILURE);
 	cmd->infile = ft_strdup(tmp_file);
 	cmd->heredoc_tmpfile = ft_strdup(tmp_file);
 	if (!cmd->infile || !cmd->heredoc_tmpfile)

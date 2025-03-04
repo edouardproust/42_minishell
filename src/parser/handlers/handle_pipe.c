@@ -1,5 +1,12 @@
 #include "minishell.h"
-
+/**
+ * Determines the error message for invalid pipe syntax.
+ * 
+ * @param token Current token being processed.
+ * @return "|" if the next token is missing or another pipe, otherwise returns
+ *         the unexpected token's value.
+ * @note Static helper for `handle_pipe`.
+ */
 static char	*pipe_error(t_token *token)
 {
 	if (!token->next)

@@ -8,6 +8,7 @@ static void	init_cmd_redir(t_cmd *cmd)
 	cmd->outfile = NULL;
 	cmd->heredoc_del = NULL;
 	cmd->heredoc_tmpfile = NULL;
+	cmd->heredoc_start = 0;
 	cmd->append = 0;
 }
 

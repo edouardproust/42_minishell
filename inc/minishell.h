@@ -64,6 +64,7 @@ typedef struct s_cmd
 	char			*outfile;
 	char			*heredoc_del;
 	char			*heredoc_tmpfile;
+	int				heredoc_start;
 	int				append;
 	int				*pipe;
 	int				saved_stdin;
@@ -83,6 +84,7 @@ typedef struct s_minishell
 	t_token		*token_lst;
 	t_cmd		*cmd_lst;
 	int			exit_code;
+	int			input_line;
 }	t_minishell;
 
 typedef struct s_tokenize_op

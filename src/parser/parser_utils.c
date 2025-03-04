@@ -21,7 +21,6 @@ t_parse_op	*get_parse_ops(void)
 	return (parse_ops);
 }
 
-
 /* 
  * Processes tokens based on their type using appropriate handler functions
  * - Calls handlers for redirections (`<`, `>`, `<<`, `<<`),
@@ -53,6 +52,13 @@ int	handle_token_type(t_token **cur_token, t_cmd **cur_cmd,
 	return (EXIT_FAILURE);
 }
 
+/**
+ * Determines the error message for invalid redirection syntax.
+ * 
+ * @param token Current token (e.g., `<`, `>`, `<<`, `>>`).
+ * @return "newline" if no token follows, "|" for unexpected pipes.
+ * 
+ */
 char	*redir_error(t_token *token)
 {
 	if (!token->next)
@@ -61,4 +67,3 @@ char	*redir_error(t_token *token)
 		return ("|");
 	return (token->next->value);
 }
-

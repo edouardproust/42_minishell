@@ -26,5 +26,6 @@ int	handle_redir_heredoc(t_token **cur_token, t_cmd **cur_cmd,
 	if (!(*cur_cmd)->heredoc_del)
 		exit_minishell(EXIT_FAILURE, minishell, NULL);
 	*cur_token = token->next->next;
+	(*cur_cmd)->heredoc_start = minishell->input_line;
 	return (EXIT_SUCCESS);
 }
