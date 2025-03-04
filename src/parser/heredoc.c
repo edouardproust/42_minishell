@@ -27,7 +27,7 @@ static int	generate_unique_file(char *tmp_file)
 		base = "/tmp/minishell_heredoc_";
 		ft_strlcpy(tmp_file, base, 256);
 		ft_strlcat(tmp_file, num_str, 256);
-		free(num_str);
+		ft_free(1, &num_str);
 		if (access(tmp_file, F_OK) == -1)
 		{
 			fd = open(tmp_file, O_WRONLY | O_CREAT | O_EXCL, 0600);
@@ -57,12 +57,12 @@ static int	read_heredoc(int tmp_fd, t_cmd *cmd)
 		line = readline("> ");
 		if (ft_strcmp(line, cmd->heredoc_del) == 0)
 		{
-			free(line);
+			ft_free(1, &line);
 			break ;
 		}
 		write(tmp_fd, line, ft_strlen(line));
 		write(tmp_fd, "\n", 1);
-		free(line);
+		ft_free(1, &line);
 	}
 	return (EXIT_SUCCESS);
 }
@@ -93,8 +93,8 @@ int	process_heredoc(t_cmd *cmd)
 	if (!cmd->infile || !cmd->heredoc_tmpfile)
 	{
 		unlink(tmp_file);
-		free(cmd->infile);
-		free(cmd->heredoc_tmpfile);
+		ft_free(1, &cmd->infile);
+		ft_free(1, &cmd->heredoc_tmpfile);
 		cmd->infile = NULL;
 		cmd->heredoc_tmpfile = NULL;
 		return (EXIT_FAILURE);
@@ -143,7 +143,7 @@ void	cleanup_heredoc(t_minishell *ms)
 		if (cmd->heredoc_tmpfile)
 		{
 			unlink(cmd->heredoc_tmpfile);
-			free(cmd->heredoc_tmpfile);
+			ft_free(1, &cmd->heredoc_tmpfile);
 			cmd->heredoc_tmpfile = NULL;
 		}
 		cmd = cmd->next;

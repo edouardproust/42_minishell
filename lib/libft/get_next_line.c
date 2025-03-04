@@ -22,18 +22,18 @@ static char	*read_into_stash(int fd, char *buffer, char **stash)
 	{
 		br = read(fd, buffer, BUFFER_SIZE);
 		if (br < 0)
-			return (ft_free_ptrs(2, &buffer, stash));
+			return (ft_free(2, &buffer, stash));
 		if (br > 0)
 		{
 			buffer[br] = '\0';
 			new_stash = ft_strjoin(*stash, buffer);
 			if (!new_stash)
-				return (ft_free_ptrs(2, &buffer, stash));
+				return (ft_free(2, &buffer, stash));
 			free(*stash);
 			*stash = new_stash;
 		}
 	}
-	ft_free_ptrs(1, &buffer);
+	ft_free(1, &buffer);
 	return (*stash);
 }
 
@@ -49,9 +49,9 @@ static char	*extract_line_from_stash(char **stash)
 		i--;
 	line = ft_substr(*stash, 0, i + 1);
 	if (!line)
-		return (ft_free_ptrs(1, stash));
+		return (ft_free(1, stash));
 	if (ft_strlen(line) == 0)
-		return (ft_free_ptrs(2, &line, stash));
+		return (ft_free(2, &line, stash));
 	return (line);
 }
 
@@ -62,9 +62,9 @@ static char	*cleanup_stash_after_extract(char **stash, int line_len)
 
 	len = ft_strlen(*stash);
 	if (len == line_len)
-		return (ft_free_ptrs(1, stash));
+		return (ft_free(1, stash));
 	tmp = ft_substr(*stash, line_len, len);
-	ft_free_ptrs(1, stash);
+	ft_free(1, stash);
 	return (tmp);
 }
 
@@ -78,7 +78,7 @@ char	*get_next_line(int fd)
 		return (NULL);
 	buffer = malloc((BUFFER_SIZE + 1) * sizeof(char));
 	if (!buffer)
-		return (ft_free_ptrs(1, &stash[fd]));
+		return (ft_free(1, &stash[fd]));
 	buffer[0] = '\0';
 	stash[fd] = read_into_stash(fd, buffer, &stash[fd]);
 	if (!stash[fd])

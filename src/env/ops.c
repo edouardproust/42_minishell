@@ -28,13 +28,13 @@ t_envvar	*envvar_new(char *var)
 	else
 		node->name = ft_substr(var, 0, equal_sign_index);
 	if (!node->name)
-		return (ft_free_ptrs(1, &node), NULL);
+		return (ft_free(1, &node), NULL);
 	if (equal_sign_index < 0)
 		node->value = ft_strdup("");
 	else
 		node->value = ft_substr(var, equal_sign_index + 1, ft_strlen(var));
 	if (!node->value)
-		return (ft_free_ptrs(2, &node->name, &node), NULL);
+		return (ft_free(2, &node->name, &node), NULL);
 	return (node);
 }
 
@@ -113,7 +113,7 @@ int	envvar_updateone(t_envvar *node, char *new_value)
 {
 	if (!node || !new_value)
 		return (EXIT_FAILURE);
-	ft_free_ptrs(1, &node->value);
+	ft_free(1, &node->value);
 	node->value = ft_strdup(new_value);
 	if (!node->value)
 		return (EXIT_FAILURE);

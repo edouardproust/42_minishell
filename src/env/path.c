@@ -40,7 +40,7 @@ static char	*get_valid_relpath(char *progname, t_minishell *minishell)
 		exit_minishell(EXIT_FAILURE, minishell, progname);
 	if (access(relpath, X_OK) == -1)
 	{
-		ft_free_ptrs(1, &relpath);
+		ft_free(1, &relpath);
 		return (NULL);
 	}
 	return (relpath);
@@ -70,7 +70,7 @@ static char	*find_abspath(char **dirnames, char *progname,
 			exit_minishell(EXIT_FAILURE, minishell, progname);
 		if (access(abspath_tmp, X_OK) == 0)
 			return (abspath_tmp);
-		ft_free_ptrs(1, &abspath_tmp);
+		ft_free(1, &abspath_tmp);
 		if (errno == EACCES)
 			return (NULL);
 		i++;

@@ -42,11 +42,11 @@ int	main(void)
 		if (ft_strncmp("exit", input, 5) == 0)
 		{
 			ft_printf("exit\n");
-			ft_free_ptrs(1, &input);
+			ft_free(1, &input);
 			exit(EXIT_SUCCESS);
 		}
 		ft_printf("input: \"%s\"\n", input);
-		ft_free_ptrs(1, &input);
+		ft_free(1, &input);
 	}
 	return (EXIT_SUCCESS);
 }
