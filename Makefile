@@ -16,15 +16,21 @@ C_FILES = debug.c \
 	env/utils.c \
 	env/ops.c \
 	env/path.c \
-	cmd_list.c \
 	tokenizer/tokenizer.c \
 	tokenizer/tokenizer_utils.c \
 	tokenizer/token_utils.c \
 	tokenizer/quote_handler.c \
+	parser/init_cmd_list.c \
 	parser/parser.c \
 	parser/parser_utils.c \
 	parser/cmd_utils.c \
-	parser/token_handlers.c \
+	parser/handlers/handle_word.c \
+	parser/handlers/handle_pipe.c \
+	parser/handlers/handle_redir_in.c \
+	parser/handlers/handle_redir_out.c \
+	parser/handlers/handle_redir_append.c \
+	parser/handlers/handle_redir_heredoc.c \
+	parser/heredoc.c \
 	execute/parent_process.c \
 	execute/child_process.c \
 	execute/pipe.c \

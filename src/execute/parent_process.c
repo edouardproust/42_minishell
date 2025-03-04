@@ -59,7 +59,9 @@ static void	execute_cmd(t_cmd *cmd, t_minishell *ms)
 
 /**
  * Execute each t_cmd of the list one by one.
- * 
+ *
+ * Checks if a command has a heredoc, it is processed before execution.
+ *
  * Loop over the commands list, calling `execute_cmd`. Then wait for each process
  * to finish.
  * 
@@ -74,6 +76,8 @@ void	execute_cmd_lst(t_minishell *ms)
 
 	if (!ms || !ms->cmd_lst)
 		exit_minishell(EXIT_FAILURE, NULL, "Incorrect parsed command");
+	if (process_all_heredocs(ms) != EXIT_SUCCESS)
+		return ;
 	cmd = ms->cmd_lst;
 	while (cmd)
 	{

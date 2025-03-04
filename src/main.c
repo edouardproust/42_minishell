@@ -110,6 +110,7 @@ int	main(int ac, char **av, char **envp)
 		if (minishell->cmd_lst == NULL)
 			continue ;
 		execute_cmd_lst(minishell);
+		cleanup_heredoc(minishell);
 		free_cmd_lst(&minishell->cmd_lst);
 	}
 	free_minishell(&minishell);

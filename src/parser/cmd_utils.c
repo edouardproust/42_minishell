@@ -1,5 +1,17 @@
 #include "minishell.h"
 /*
+* Initializes redirection-related fields in the t_cmd structure.
+*/
+static void	init_cmd_redir(t_cmd *cmd)
+{
+	cmd->infile = NULL;
+	cmd->outfile = NULL;
+	cmd->heredoc_del = NULL;
+	cmd->heredoc_tmpfile = NULL;
+	cmd->append = 0;
+}
+
+/*
 * Creates a new command structure with default values.
 * Returns: A new t_cmd structure or NULL if malloc fails.
 */
@@ -11,8 +23,7 @@ t_cmd	*cmd_new(t_cmd *prev_cmd)
 	if (!cmd)
 		return (NULL);
 	cmd->args = NULL;
-	cmd->infile = NULL;
-	cmd->outfile = NULL;
+	init_cmd_redir(cmd);
 	cmd->pipe = malloc(sizeof(int) * 2);
 	if (!cmd->pipe)
 		return (free(cmd), NULL);
