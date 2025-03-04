@@ -19,9 +19,9 @@ int	do_pwd(char **args, t_minishell *minishell)
 		return (put_error("pwd: getcwd"), EXIT_FAILURE);
 	if (ft_printf("%s\n", path) < 0)
 	{
-		ft_free_ptrs(1, &path);
+		ft_free(1, &path);
 		return (put_error("pwd: ft_printf"), EXIT_FAILURE);
 	}
-	ft_free_ptrs(1, &path);
+	ft_free(1, &path);
 	return (EXIT_SUCCESS);
 }

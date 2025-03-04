@@ -1,7 +1,7 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_free_ptrs.c                                     :+:      :+:    :+:   */
+/*   ft_free.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: eproust <contact@edouardproust.dev>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
@@ -12,7 +12,7 @@
 
 #include "libft.h"
 
-void	*ft_free_ptrs(int count, ...)
+void	*ft_free(int count, ...)
 {
 	va_list	args;
 	void	**ptr;
@@ -43,7 +43,7 @@ int main()
 	if (!test)
         return (1);
     printf("Before free: %s\n", test);
-    ft_free_ptrs(1, &test);
+    ft_free(1, &test);
     printf("After free: %s\n", test);
     return (0);
 }

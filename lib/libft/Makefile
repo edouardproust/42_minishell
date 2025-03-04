@@ -7,7 +7,7 @@ SRCS = get_next_line.c \
 	ft_calloc.c \
 	ft_exit.c \
 	ft_fprintf.c \
-	ft_free_ptrs.c \
+	ft_free.c \
 	ft_free_split.c \
 	ft_free_splitn.c \
 	ft_isalnum.c \
