@@ -11,6 +11,7 @@
 ### Features
 - Variables expansion
 - Browse commands history (arrows up and down)
+- Deal with non-interactive mode (in main.c)
 - (optional) Bonus:
 	- && and || with parenthesis for priorities
 	- Wildcards * should work for the current working directory.
@@ -28,6 +29,7 @@
 - Fds leaks (in all case senarios)
 - exit codes (in all case senarios)
 - error messages (in all case senarios)
+- Search for any "TODO" and "DEBUG" and fix / remove them
 
 ## How to use?
 
