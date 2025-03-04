@@ -99,14 +99,13 @@ int	process_heredoc(t_cmd *cmd)
 	read_heredoc(tmp_fd, cmd);
 	ft_close(&tmp_fd);
 	if (!cmd->heredoc_del || ft_strcmp(cmd->heredoc_del, "") == 0)
-		return (unlink(tmp_file), EXIT_FAILURE);
+		return (unlink(tmp_file), ft_free(1, &cmd->heredoc_del), EXIT_FAILURE);
 	cmd->infile = ft_strdup(tmp_file);
 	cmd->heredoc_tmpfile = ft_strdup(tmp_file);
 	if (!cmd->infile || !cmd->heredoc_tmpfile)
 	{
 		unlink(tmp_file);
-		free(cmd->infile);
-		free(cmd->heredoc_tmpfile);
+		ft_free(2, &cmd->infile, &cmd->heredoc_tmpfile);
 		cmd->infile = NULL;
 		cmd->heredoc_tmpfile = NULL;
 		return (EXIT_FAILURE);
@@ -155,7 +154,7 @@ void	cleanup_heredoc(t_minishell *ms)
 		if (cmd->heredoc_tmpfile)
 		{
 			unlink(cmd->heredoc_tmpfile);
-			free(cmd->heredoc_tmpfile);
+			ft_free(1, &cmd->heredoc_tmpfile);
 			cmd->heredoc_tmpfile = NULL;
 		}
 		cmd = cmd->next;
