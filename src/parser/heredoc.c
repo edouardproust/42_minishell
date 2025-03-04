@@ -27,7 +27,7 @@ static int	generate_unique_file(char *tmp_file)
 		base = "/tmp/minishell_heredoc_";
 		ft_strlcpy(tmp_file, base, 256);
 		ft_strlcat(tmp_file, num_str, 256);
-		ft_free(num_str);
+		ft_free(1, &num_str);
 		if (access(tmp_file, F_OK) == -1)
 		{
 			fd = open(tmp_file, O_WRONLY | O_CREAT | O_EXCL, 0600);
