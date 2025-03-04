@@ -21,13 +21,14 @@ t_parse_op	*get_parse_ops(void)
 	return (parse_ops);
 }
 
+
 /* 
  * Processes tokens based on their type using appropriate handler functions
  * - Calls handlers for redirections (`<`, `>`, `<<`, `<<`),
  *   pipes (`|`), and words.
  * - If an unknown token is encountered, exits with an error.
  */
-void	handle_token_type(t_token **cur_token, t_cmd **cur_cmd,
+int	handle_token_type(t_token **cur_token, t_cmd **cur_cmd,
 	t_minishell *minishell)
 {
 	t_parse_op	*parse_ops;
@@ -41,10 +42,23 @@ void	handle_token_type(t_token **cur_token, t_cmd **cur_cmd,
 	{
 		if (parse_ops[i].type == type)
 		{
-			parse_ops[i].handler(cur_token, cur_cmd, minishell);
-			return ;
+			if (parse_ops[i].handler
+				(cur_token, cur_cmd, minishell) == EXIT_FAILURE)
+				return (EXIT_FAILURE);
+			return (EXIT_SUCCESS);
 		}
 		i++;
 	}
 	exit_minishell(EXIT_FAILURE, minishell, NULL);
+	return (EXIT_FAILURE);
 }
+
+char	*redir_error(t_token *token)
+{
+	if (!token->next)
+		return ("newline");
+	if (token->next->type == TOKEN_PIPE)
+		return ("|");
+	return (token->next->value);
+}
+

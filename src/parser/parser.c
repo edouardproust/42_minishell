@@ -1,4 +1,15 @@
 #include "minishell.h"
+
+static int	parse_cleanup(t_minishell *minishell, int status)
+{
+	if (status == EXIT_FAILURE)
+	{
+		free_token_lst(&minishell->token_lst);
+		free_cmd_lst(&minishell->cmd_lst);
+	}
+	return (status);
+}
+
 /* 
  * Parses a list of tokens and builds a linked list of commands.
  *
@@ -15,22 +26,20 @@ int	parse_tokens(t_minishell *minishell)
 	t_cmd	*cur_cmd;
 	t_token	*prev_token;
 
-	if (!minishell->token_lst)
-		return (EXIT_FAILURE);
 	minishell->cmd_lst = cmd_new(NULL);
 	if (!minishell->cmd_lst)
-		exit_minishell(EXIT_FAILURE, minishell, NULL);
+		return (parse_cleanup(minishell, EXIT_FAILURE));
 	cur_token = minishell->token_lst;
 	cur_cmd = minishell->cmd_lst;
 	while (cur_token)
 	{
 		prev_token = cur_token;
-		handle_token_type(&cur_token, &cur_cmd, minishell);
+		if (handle_token_type(&cur_token, &cur_cmd, minishell)
+			== EXIT_FAILURE)
+		return (parse_cleanup(minishell, EXIT_FAILURE));
 		if (cur_token == prev_token)
-		{
 			exit_minishell(EXIT_FAILURE, minishell, NULL);
-			return (EXIT_FAILURE);
-		}
+
 	}
 	return (EXIT_SUCCESS);
 }
