@@ -78,7 +78,7 @@ static int	read_heredoc(int tmp_fd, t_cmd *cmd)
  * @return EXIT_SUCCESS on success, EXIT_FAILURE if file creation or memory 
  * allocation fails.
  */
-int	process_heredoc(t_cmd *cmd)
+static int	process_heredoc_in_child(t_cmd *cmd)
 {
 	char	tmp_file[256];
 	int		tmp_fd;
@@ -100,6 +100,29 @@ int	process_heredoc(t_cmd *cmd)
 		return (EXIT_FAILURE);
 	}
 	return (EXIT_SUCCESS);
+}
+
+int	process_heredoc(t_cmd *cmd)
+{
+	int	status;
+
+    pid_t pid = fork();
+    if (pid < 0) {
+		perror("fork");
+		return (1); // TODO
+	}
+	if (pid == 0) {
+		signal(SIGINT, SIG_DFL);
+		exit(process_heredoc_in_child(cmd));
+    } else {
+        waitpid(pid, &status, 0);
+        if (WIFSIGNALED(status)) {
+            printf("Heredoc was interrupted by signal %d\n", WTERMSIG(status));
+        } else {
+            printf("Heredoc completed successfully\n");
+        }
+    }
+    return 0;
 }
 
 /**
