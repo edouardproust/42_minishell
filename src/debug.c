@@ -139,9 +139,9 @@ void	debug_cmd_lst(t_cmd *cmd_lst)
 	{
 		a = ft_itoa(i++);
 		title = ft_strjoin("cmd", a);
-		free(a);
+		ft_free(1, &a);
 		debug_cmd(cmd, title);
-		free(title);
+		ft_free(1, &title);
 		if (cmd->next)
 			ft_printf("\t\t▼\n");
 		cmd = cmd->next;

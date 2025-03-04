@@ -21,7 +21,7 @@ char	*ft_strglue(char *s1, char *glue, char *s2)
 	if (!tmp)
 		return (NULL);
 	glued = ft_strjoin(tmp, s2);
-	ft_free_ptrs(1, &tmp);
+	ft_free(1, &tmp);
 	if (!glued)
 		return (NULL);
 	return (glued);
@@ -41,7 +41,7 @@ int	main(void)
 	if (!glued)
 		return (1);
 	printf("%s\n", glued);
-	ft_free_ptrs(1, &glued);
+	ft_free(1, &glued);
 	return (0);
 }
 */

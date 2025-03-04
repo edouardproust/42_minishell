@@ -27,7 +27,7 @@ t_cmd	*cmd_new(t_cmd *prev_cmd)
 	init_cmd_redir(cmd);
 	cmd->pipe = malloc(sizeof(int) * 2);
 	if (!cmd->pipe)
-		return (free(cmd), NULL);
+		return (ft_free(1, &cmd), NULL);
 	cmd->pipe[0] = -1;
 	cmd->pipe[1] = -1;
 	cmd->saved_stdin = -1;
@@ -62,6 +62,6 @@ void	add_arg_to_cmd(t_cmd *cmd, char *arg)
 		new_args[i] = cmd->args[i];
 	new_args[count] = arg;
 	new_args[count + 1] = NULL;
-	free(cmd->args);
+	ft_free(1, &cmd->args);
 	cmd->args = new_args;
 }

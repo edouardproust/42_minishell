@@ -13,7 +13,7 @@ t_envvar	*free_envvar_node(t_envvar **var)
 	if (!var || !*var)
 		return (NULL);
 	nxt_var = (*var)->next;
-	ft_free_ptrs(3,
+	ft_free(3,
 		&(*var)->name,
 		&(*var)->value,
 		var);
@@ -53,7 +53,7 @@ void	free_token_lst(t_token **token_lst)
 	while (cur_token)
 	{
 		nxt_token = cur_token->next;
-		ft_free_ptrs(2, &cur_token->value, &cur_token);
+		ft_free(2, &cur_token->value, &cur_token);
 		cur_token = nxt_token;
 	}
 	*token_lst = NULL;
@@ -77,13 +77,13 @@ void	free_cmd_lst(t_cmd **cmd_lst)
 	{
 		ft_free_split(&cur_cmd->args);
 		nxt_cmd = cur_cmd->next;
-		ft_free_ptrs(5,
+		ft_free(6,
 			&cur_cmd->infile,
 			&cur_cmd->outfile,
 			&cur_cmd->heredoc_del,
 			&cur_cmd->heredoc_tmpfile,
-			&cur_cmd->pipe);
-		free(cur_cmd);
+			&cur_cmd->pipe,
+			&cur_cmd);
 		cur_cmd = nxt_cmd;
 	}
 	*cmd_lst = NULL;
@@ -102,13 +102,14 @@ void	free_minishell(t_minishell **ms)
 	if (!ms || !*ms)
 		return ;
 	if ((*ms)->input)
-		ft_free_ptrs(1, &(*ms)->input);
-	ft_free_split(&(*ms)->envp);
+		ft_free(1, &(*ms)->input);
+	if ((*ms)->envp)
+		ft_free_split(&(*ms)->envp);
 	if ((*ms)->envvar_lst)
 		free_envvar_lst(&(*ms)->envvar_lst);
 	if ((*ms)->token_lst)
 		free_token_lst(&(*ms)->token_lst);
 	if ((*ms)->cmd_lst)
 		free_cmd_lst(&(*ms)->cmd_lst);
-	ft_free_ptrs(1, ms);
+	ft_free(1, ms);
 }
