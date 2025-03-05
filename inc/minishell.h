@@ -64,6 +64,7 @@ typedef struct s_cmd
 	char			*outfile;
 	char			*heredoc_del;
 	char			*heredoc_tmpfile;
+	int				heredoc_start;
 	int				append;
 	int				*pipe;
 	int				saved_stdin;
@@ -83,6 +84,7 @@ typedef struct s_minishell
 	t_token		*token_lst;
 	t_cmd		*cmd_lst;
 	int			exit_code;
+	int			input_line;
 }	t_minishell;
 
 typedef struct s_tokenize_op
@@ -94,7 +96,7 @@ typedef struct s_tokenize_op
 typedef struct s_parse_op
 {
 	int		type;
-	void	(*handler)(t_token **, t_cmd **, t_minishell *);
+	int		(*handler)(t_token **, t_cmd **, t_minishell *);
 }	t_parse_op;
 
 typedef struct s_builtin
@@ -140,23 +142,24 @@ void			init_cmd_lst(t_minishell *minishell);
 t_cmd			*cmd_new(t_cmd *prev_cmd);
 void			add_arg_to_cmd(t_cmd *cmd, char *arg);
 int				parse_tokens(t_minishell *minishell);
+char			*redir_error(t_token *token);
 t_parse_op		*get_parse_ops(void);
 int				process_heredoc(t_cmd *cmd);
 int				process_all_heredocs(t_minishell *ms);
 void			cleanup_heredoc(t_minishell *ms);
-void			handle_token_type(t_token **cur_token, t_cmd **cur_cmd,
+int				handle_token_type(t_token **cur_token, t_cmd **cur_cmd,
 					t_minishell *minishell);
-void			handle_redir_in(t_token **cur_token, t_cmd **cur_cmd,
+int				handle_redir_in(t_token **cur_token, t_cmd **cur_cmd,
 					t_minishell *minishell);
-void			handle_redir_out(t_token **cur_token, t_cmd **cur_cmd,
+int				handle_redir_out(t_token **cur_token, t_cmd **cur_cmd,
 					t_minishell *minishell);
-void			handle_word(t_token **cur_token, t_cmd **cur_cmd,
+int				handle_word(t_token **cur_token, t_cmd **cur_cmd,
 					t_minishell *minishell);
-void			handle_pipe(t_token **cur_token, t_cmd **cur_cmd,
+int				handle_pipe(t_token **cur_token, t_cmd **cur_cmd,
 					t_minishell *minishell);
-void			handle_redir_heredoc(t_token **cur_token, t_cmd **cur_cmd,
+int				handle_redir_heredoc(t_token **cur_token, t_cmd **cur_cmd,
 					t_minishell *minishell);
-void			handle_redir_append(t_token **cur_token, t_cmd **cur_cmd,
+int				handle_redir_append(t_token **cur_token, t_cmd **cur_cmd,
 					t_minishell *minishell);
 
 /* Tokenization */
