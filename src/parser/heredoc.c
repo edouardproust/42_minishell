@@ -88,8 +88,8 @@ static int	process_heredoc_in_child(t_cmd *cmd)
 		return (EXIT_FAILURE);
 	read_heredoc(tmp_fd, cmd);
 	ft_close(&tmp_fd);
-	cmd->infile = ft_strdup(tmp_file);
-	cmd->heredoc_tmpfile = ft_strdup(tmp_file);
+	cmd->infile = ft_strdup(tmp_file); // TODO check failure
+	cmd->heredoc_tmpfile = ft_strdup(tmp_file); // TODO check failure
 	if (!cmd->infile || !cmd->heredoc_tmpfile)
 	{
 		unlink(tmp_file);
@@ -106,23 +106,23 @@ int	process_heredoc(t_cmd *cmd)
 {
 	int	status;
 
-    pid_t pid = fork();
-    if (pid < 0) {
-		perror("fork");
-		return (1); // TODO
+	pid_t pid = fork();
+	if (pid < 0) {
+		put_error("fork");
+		return (EXIT_FAILURE); // TODO
 	}
 	if (pid == 0) {
 		signal(SIGINT, SIG_DFL);
 		exit(process_heredoc_in_child(cmd));
-    } else {
-        waitpid(pid, &status, 0);
-        if (WIFSIGNALED(status)) {
-            printf("Heredoc was interrupted by signal %d\n", WTERMSIG(status));
-        } else {
-            printf("Heredoc completed successfully\n");
-        }
-    }
-    return 0;
+	}
+	else
+	{
+		waitpid(pid, &status, 0);
+		if (WIFSIGNALED(status)) {
+			return (E_SIGBASE + WTERMSIG(status));
+		}
+	}
+	return (EXIT_SUCCESS);
 }
 
 /**
@@ -146,7 +146,10 @@ int	process_all_heredocs(t_minishell *ms)
 		if (cmd->heredoc_del)
 		{
 			if (process_heredoc(cmd) != EXIT_SUCCESS)
+			{
 				ms->exit_code = EXIT_FAILURE;
+				return (EXIT_FAILURE);
+			}
 		}
 		cmd = cmd->next;
 	}

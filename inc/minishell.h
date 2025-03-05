@@ -139,6 +139,7 @@ t_envvar		*envvar_findbyname(t_envvar *lst, char *name);
 /* Signals */
 void			set_sigint_sigquit(__sighandler_t sigint_handler, __sighandler_t sigquit_handler);
 void			rl_sigint_handler(int signal);
+void			heredoc_sigint_handler(int signal);
 void			exec_sigint_handler(int signal);
 void			put_signal_message(int status);
 void			kill_all_children(t_minishell *ms);

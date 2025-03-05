@@ -35,11 +35,18 @@ static void	wait_for_processes(t_minishell *ms)
 		{
 			pid = waitpid(cmd->pid, &status, 0);
 			if (handle_signaled_parent_process(ms, pid, &status))
+			{
+				ft_fprintf(STDERR_FILENO, "(signaled_parent)"); //DEBUG
 				return ;
+			}
 			else if (WIFEXITED(status))
+			{
+				ft_fprintf(STDERR_FILENO, "(WIFEXITED)"); //DEBUG
 				ms->exit_code = WEXITSTATUS(status);
+			}
 			else if (WIFSIGNALED(status))
 			{
+				ft_fprintf(STDERR_FILENO, "(WIFSIGNALED)"); //DEBUG
 				put_signal_message(status);
 				ms->exit_code = E_SIGBASE + WTERMSIG(status);
 			}
@@ -98,9 +105,10 @@ void	execute_cmd_lst(t_minishell *ms)
 
 	if (!ms || !ms->cmd_lst)
 		exit_minishell(EXIT_FAILURE, NULL, "Incorrect parsed command");
-	set_sigint_sigquit(exec_sigint_handler, SIG_IGN);
+	ft_signal(SIGINT, heredoc_sigint_handler);
 	if (process_all_heredocs(ms) != EXIT_SUCCESS)
 		return ;
+	ft_signal(SIGINT, exec_sigint_handler);
 	cmd = ms->cmd_lst;
 	while (cmd)
 	{
@@ -108,5 +116,5 @@ void	execute_cmd_lst(t_minishell *ms)
 		cmd = cmd->next;
 	}
 	wait_for_processes(ms);
-	set_sigint_sigquit(rl_sigint_handler, SIG_IGN);
+	ft_signal(SIGINT, rl_sigint_handler);
 }

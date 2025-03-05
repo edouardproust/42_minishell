@@ -75,6 +75,7 @@ static void	set_input(t_minishell *minishell)
 {
 	set_errno(EXIT_SUCCESS);
 	minishell->input = readline("minishell$ ");
+	ft_fprintf(STDERR_FILENO, "(readline_loop)"); //DEBUG
 	if (!minishell->input)
 	{
 		if (errno != EXIT_SUCCESS)

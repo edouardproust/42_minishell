@@ -11,11 +11,6 @@ int	get_and_reset_signal(void)
 	return (sig);
 }
 
-void	exec_sigint_handler(int signal)
-{
-	g_signal = signal;
-}
-
 void	rl_sigint_handler(int signal)
 {
 	g_signal = signal;
@@ -25,10 +20,14 @@ void	rl_sigint_handler(int signal)
 	rl_redisplay();
 }
 
-// TODO deal with SIG_ERR when signal() fails
-void	set_sigint_sigquit(__sighandler_t sigint_handler,
-	__sighandler_t sigquit_handler)
+void	heredoc_sigint_handler(int signal)
 {
-	ft_signal(SIGINT, sigint_handler);
-	ft_signal(SIGQUIT, sigquit_handler);
+	g_signal = signal;
+	ft_printf("^C\n");
+	rl_replace_line("", 0);
+}
+
+void	exec_sigint_handler(int signal)
+{
+	g_signal = signal;
 }
