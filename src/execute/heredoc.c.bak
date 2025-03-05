@@ -113,7 +113,7 @@ int	process_heredoc(t_cmd *cmd)
 	}
 	if (pid == 0) {
 		signal(SIGINT, SIG_DFL);
-		return (process_heredoc_in_child(cmd)); //TODO return (process_heredoc_in_child(cmd));
+		exit(process_heredoc_in_child(cmd)); //TODO return (process_heredoc_in_child(cmd));
 	}
 	else
 	{

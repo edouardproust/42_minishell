@@ -10,6 +10,7 @@
 # include <sys/wait.h>
 # include <signal.h>
 # include <sys/stat.h> 
+# include <termios.h>
 
 /****************************************/
 /* Macros and Enums                     */
@@ -64,7 +65,7 @@ typedef struct s_cmd
 	char			*infile;
 	char			*outfile;
 	char			*heredoc_del;
-	char			*heredoc_tmpfile;
+	int				heredoc_fd;
 	int				append;
 	int				*pipe;
 	int				saved_stdin;
@@ -152,9 +153,9 @@ t_cmd			*cmd_new(t_cmd *prev_cmd);
 void			add_arg_to_cmd(t_cmd *cmd, char *arg);
 int				parse_tokens(t_minishell *minishell);
 t_parse_op		*get_parse_ops(void);
-int				process_heredoc(t_cmd *cmd);
-int				process_all_heredocs(t_minishell *ms);
-void			cleanup_heredoc(t_minishell *ms);
+int				process_heredoc(t_cmd *cmd, t_minishell *ms);
+//int			process_all_heredocs(t_minishell *ms); //TODO
+//void			cleanup_heredoc(t_minishell *ms); // TODO keep?
 void			handle_token_type(t_token **cur_token, t_cmd **cur_cmd,
 					t_minishell *minishell);
 void			handle_redir_in(t_token **cur_token, t_cmd **cur_cmd,
@@ -191,6 +192,7 @@ char			*get_exec_path(char *arg, t_minishell *minishell);
 pid_t			run_in_child_process(t_builtin *builtin, t_cmd *cmd,
 					t_minishell *minishell);
 int				setup_redirections(t_cmd *cmd);
+int				setup_heredoc_redirection(t_cmd *cmd);
 
 /* Pipes and redirections */
 void			init_pipe_if(t_cmd *cmd, t_minishell *minishell);

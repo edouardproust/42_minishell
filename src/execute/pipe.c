@@ -47,7 +47,7 @@ void	setup_pipe_ends(t_cmd *cmd, t_minishell *minishell)
 	if (cmd->fdout != -1 && cmd->fdout != STDOUT_FILENO)
 		exit_code = ft_dup2(cmd->fdout, STDOUT_FILENO);
 	if (exit_code != EXIT_SUCCESS)
-		exit_minishell(exit_code, minishell, "dup2");
+		exit_minishell(exit_code, minishell, "pipe: dup2"); //TODO error msg
 }
 
 /**

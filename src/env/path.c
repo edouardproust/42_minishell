@@ -127,6 +127,7 @@ char	*get_exec_path(char *progname, t_minishell *minishell)
 	}
 	if (!path)
 	{
+		ft_fprintf(STDERR_FILENO, "path:%s,errno:%d\n", path, errno); // DEBUG
 		if (errno == ENOENT)
 			exit_minishell(E_CMDNOTFOUND, minishell, progname);
 		else if (errno == 0)

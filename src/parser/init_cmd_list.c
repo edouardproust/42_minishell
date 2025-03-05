@@ -23,6 +23,6 @@ void	init_cmd_lst(t_minishell *minishell)
 		return ;
 	minishell->token_lst = tokens;
 	if (parse_tokens(minishell) == EXIT_FAILURE)
-		exit_minishell(EXIT_FAILURE, minishell, NULL);
+		exit_minishell(EXIT_FAILURE, minishell, NULL); // TODO Should we exit program here
 	free_token_lst(&minishell->token_lst);
 }

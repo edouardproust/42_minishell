@@ -75,7 +75,6 @@ static void	set_input(t_minishell *minishell)
 {
 	set_errno(EXIT_SUCCESS);
 	minishell->input = readline("minishell$ ");
-	ft_fprintf(STDERR_FILENO, "(readline_loop)"); //DEBUG
 	if (!minishell->input)
 	{
 		if (errno != EXIT_SUCCESS)
@@ -108,12 +107,11 @@ int	main(int ac, char **av, char **envp)
 	minishell = init_minishell(envp);
 	while (1)
 	{
-		set_input(minishell);	
+		set_input(minishell);
 		init_cmd_lst(minishell);
 		if (minishell->cmd_lst == NULL)
 			continue ;
 		execute_cmd_lst(minishell);
-		cleanup_heredoc(minishell);
 		free_cmd_lst(&minishell->cmd_lst);
 	}
 	free_minishell(&minishell);

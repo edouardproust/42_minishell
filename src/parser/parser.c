@@ -8,7 +8,6 @@
  * 
  * Returns: EXIT_SUCCESS on success, or EXIT_FAILURE on failure.
  */
-//TODO (A) Implement append and heredoc logic types.
 int	parse_tokens(t_minishell *minishell)
 {
 	t_token	*cur_token;
@@ -19,7 +18,7 @@ int	parse_tokens(t_minishell *minishell)
 		return (EXIT_FAILURE);
 	minishell->cmd_lst = cmd_new(NULL);
 	if (!minishell->cmd_lst)
-		exit_minishell(EXIT_FAILURE, minishell, NULL);
+		exit_minishell(EXIT_FAILURE, minishell, NULL); //TODO exit program here?
 	cur_token = minishell->token_lst;
 	cur_cmd = minishell->cmd_lst;
 	while (cur_token)

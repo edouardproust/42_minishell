@@ -1,5 +1,16 @@
 #include "minishell.h"
 
+
+static int	init_cmd_pipe(t_cmd *cmd)
+{
+	cmd->pipe = malloc(sizeof(int) * 2);
+	if (!cmd->pipe)
+		return (ft_free(1, &cmd), EXIT_FAILURE);
+	cmd->pipe[0] = -1;
+	cmd->pipe[1] = -1;
+	return (EXIT_SUCCESS);
+}
+
 /*
 * Initializes redirection-related fields in the t_cmd structure.
 */
@@ -8,8 +19,12 @@ static void	init_cmd_redir(t_cmd *cmd)
 	cmd->infile = NULL;
 	cmd->outfile = NULL;
 	cmd->heredoc_del = NULL;
-	cmd->heredoc_tmpfile = NULL;
+	cmd->heredoc_fd = -1;
 	cmd->append = 0;
+	cmd->saved_stdin = -1;
+	cmd->fdin = STDIN_FILENO;
+	cmd->saved_stdout = -1;
+	cmd->fdout = STDOUT_FILENO;
 }
 
 /*
@@ -24,21 +39,14 @@ t_cmd	*cmd_new(t_cmd *prev_cmd)
 	if (!cmd)
 		return (NULL);
 	cmd->args = NULL;
-	init_cmd_redir(cmd);
-	cmd->pipe = malloc(sizeof(int) * 2);
-	if (!cmd->pipe)
-		return (ft_free(1, &cmd), NULL);
-	cmd->pipe[0] = -1;
-	cmd->pipe[1] = -1;
-	cmd->saved_stdin = -1;
-	cmd->fdin = STDIN_FILENO;
-	cmd->saved_stdout = -1;
-	cmd->fdout = STDOUT_FILENO;
 	cmd->pid = -1;
 	cmd->prev = prev_cmd;
 	cmd->next = NULL;
 	if (cmd->prev)
 		cmd->prev->next = cmd;
+	init_cmd_redir(cmd);
+	if (init_cmd_pipe(cmd) != EXIT_SUCCESS)
+		return (NULL);
 	return (cmd);
 }
 

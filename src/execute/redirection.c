@@ -10,14 +10,20 @@
  */
 int	setup_redirections(t_cmd *cmd)
 {
+	if (cmd->heredoc_fd != -1)
+	{
+		cmd->fdin = cmd->heredoc_fd;
+		cmd->heredoc_fd = -1;
+		if (ft_dup2(cmd->fdin, STDIN_FILENO) == EXIT_FAILURE)
+			return (put_error("heredoc: dup2"), EXIT_FAILURE);
+	}
 	if (cmd->infile)
 	{
-		ft_close(&cmd->fdin);
 		cmd->fdin = open(cmd->infile, O_RDONLY);
 		if (cmd->fdin == -1)
 			return (put_error(cmd->infile), EXIT_FAILURE);
 		if (ft_dup2(cmd->fdin, STDIN_FILENO) == EXIT_FAILURE)
-			return (put_error("dup2"), EXIT_FAILURE);
+			return (put_error("%s: dup2", cmd->infile), EXIT_FAILURE);
 	}
 	if (cmd->outfile)
 	{
@@ -30,7 +36,7 @@ int	setup_redirections(t_cmd *cmd)
 		if (cmd->fdout == -1)
 			return (put_error(cmd->outfile), EXIT_FAILURE);
 		if (ft_dup2(cmd->fdout, STDOUT_FILENO) == EXIT_FAILURE)
-			return (put_error("dup2"), EXIT_FAILURE);
+			return (put_error("%s: dup2", cmd->outfile), EXIT_FAILURE);
 	}
 	return (EXIT_SUCCESS);
 }
