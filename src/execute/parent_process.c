@@ -106,7 +106,7 @@ void	execute_cmd_lst(t_minishell *ms)
 	if (!ms || !ms->cmd_lst)
 		exit_minishell(EXIT_FAILURE, NULL, "Incorrect parsed command");
 	ft_signal(SIGINT, heredoc_sigint_handler);
-	if (process_heredoc(ms->cmd_lst, ms) != EXIT_SUCCESS)
+	if (process_all_heredocs(ms) != EXIT_SUCCESS)
 		return ;
 	ft_signal(SIGINT, exec_sigint_handler);
 	cmd = ms->cmd_lst;

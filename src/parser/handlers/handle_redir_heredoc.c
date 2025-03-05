@@ -15,9 +15,9 @@ void	handle_redir_heredoc(t_token **cur_token, t_cmd **cur_cmd,
 	if (!token->next || token->next->type != TOKEN_WORD)
 		exit_minishell(EXIT_FAILURE, minishell,
 			"syntax error near unexpected token `newline'");
-	ft_free(1, &(*cur_cmd)->heredoc_del);
-	(*cur_cmd)->heredoc_del = ft_strdup(token->next->value); // TODO free ft_strdup
-	if (!(*cur_cmd)->heredoc_del)
+	ft_free(1, &(*cur_cmd)->heredoc->delimiter);
+	(*cur_cmd)->heredoc->delimiter = ft_strdup(token->next->value); // TODO free ft_strdup
+	if (!(*cur_cmd)->heredoc->delimiter)
 		exit_minishell(EXIT_FAILURE, minishell, NULL);
 	*cur_token = token->next->next;
 }

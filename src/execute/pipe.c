@@ -39,15 +39,16 @@ void	init_pipe_if(t_cmd *cmd, t_minishell *ms)
  */
 void	setup_pipe_ends(t_cmd *cmd, t_minishell *minishell)
 {
-	int	exit_code;
-
-	exit_code = EXIT_SUCCESS;
 	if (cmd->fdin != -1 && cmd->fdin != STDIN_FILENO)
-		exit_code = ft_dup2(cmd->fdin, STDIN_FILENO);
+	{
+		if (ft_dup2(cmd->fdin, STDIN_FILENO))
+			exit_minishell(EXIT_FAILURE, minishell, "pipe (in): dup2");
+	}
 	if (cmd->fdout != -1 && cmd->fdout != STDOUT_FILENO)
-		exit_code = ft_dup2(cmd->fdout, STDOUT_FILENO);
-	if (exit_code != EXIT_SUCCESS)
-		exit_minishell(exit_code, minishell, "pipe: dup2"); //TODO error msg
+	{
+		if (ft_dup2(cmd->fdout, STDOUT_FILENO))
+			exit_minishell(EXIT_FAILURE, minishell, "pipe (out): dup2");
+	}
 }
 
 /**

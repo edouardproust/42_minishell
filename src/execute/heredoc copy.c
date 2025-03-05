@@ -1,5 +1,50 @@
 #include "minishell.h"
 
+volatile sig_atomic_t g_sigint_received = 0;
+
+static void	sigint_handler(int signal)
+{
+	(void)signal;
+	g_sigint_received = 1;
+	rl_done = 1;
+	rl_redisplay();
+	ft_printf("\n");
+	rl_replace_line("", 0);
+	rl_on_new_line();
+	kill(getpid(), SIGTERM);
+}
+
+static int	read_heredoc(t_cmd *cmd, int write_fd, t_minishell *ms)
+{
+	char	*line;
+	struct sigaction	sa;
+
+	sa.sa_handler = sigint_handler;
+	sigemptyset(&sa.sa_mask);
+	sa.sa_flags = 0;
+	sigaction(SIGINT, &sa, NULL);
+
+	while (1)
+	{
+		line = readline("> ");
+		if (g_sigint_received)
+		{
+			if (line)
+				ft_free(1, &line);
+			ft_close(&write_fd);
+			flush_fds();
+			exit_minishell(EXIT_FAILURE, ms, NULL);
+		}
+		if (!line)
+			return (ft_free(1, &line), EXIT_FAILURE);
+		if (ft_strcmp(line, cmd->heredoc->delimiter) == 0)
+			return (ft_free(1, &line), EXIT_SUCCESS);
+		if (ft_fprintf(write_fd, "%s\n", line) == -1)
+			return (ft_free(1, &line), EXIT_FAILURE);
+		ft_free(1, &line);
+	}
+	return (EXIT_SUCCESS);
+}
 /**
  * Reads heredoc input until delimiter, writing to pipe.
  * 
@@ -9,7 +54,7 @@
  * @param cmd Command structure containing delimiter
  * @param write_fd Pipe write end file descriptor
  * @return EXIT_SUCCESS on delimiter match, EXIT_FAILURE on error/EOF
- */
+ *
 static int	read_heredoc(t_cmd *cmd, int write_fd)
 {
 	char	*line;
@@ -27,6 +72,7 @@ static int	read_heredoc(t_cmd *cmd, int write_fd)
 	}
 	return (EXIT_SUCCESS);
 }
+	*/
 
 /**
  * Handles child process for heredoc input collection.
@@ -38,7 +84,7 @@ static void	handle_child_process(int *pipefd, t_cmd *cmd, t_minishell *ms)
 {
 	ft_close(&pipefd[0]);
 	ft_signal(SIGINT, SIG_DFL);
-	if (read_heredoc(cmd, pipefd[1]) != EXIT_SUCCESS)
+	if (read_heredoc(cmd, pipefd[1], ms) != EXIT_SUCCESS)
 		exit(EXIT_FAILURE);
 	flush_fds();
 	free_minishell(&ms);

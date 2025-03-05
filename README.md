@@ -25,11 +25,13 @@
 - (optional) "Zombie-process" architecture
 
 ### Final checks
+- Remove any `.bak` file
 - Memory leaks (in all case senarios)
 - Fds leaks (in all case senarios)
 - exit codes (in all case senarios)
 - error messages (in all case senarios)
 - Search for any "TODO" and "DEBUG" and fix / remove them
+- Do a .gitignore file that excludes `test/`, `.gitguardian.yaml`, etc.
 
 ## How to use?
 

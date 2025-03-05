@@ -1,47 +1,6 @@
 #include "minishell.h"
 
 /**
- * Sets up input and output redirections for the current command.
- * 
- * Opens files and duplicates file descriptors as needed.
- *
- * @param cmd Command to execute.
- * @return EXIT_SUCCESS on success, EXIT_FAILURE on failure.
- */
-int	setup_redirections(t_cmd *cmd)
-{
-	if (cmd->heredoc_fd != -1)
-	{
-		cmd->fdin = cmd->heredoc_fd;
-		cmd->heredoc_fd = -1;
-		if (ft_dup2(cmd->fdin, STDIN_FILENO) == EXIT_FAILURE)
-			return (put_error("heredoc: dup2"), EXIT_FAILURE);
-	}
-	if (cmd->infile)
-	{
-		cmd->fdin = open(cmd->infile, O_RDONLY);
-		if (cmd->fdin == -1)
-			return (put_error(cmd->infile), EXIT_FAILURE);
-		if (ft_dup2(cmd->fdin, STDIN_FILENO) == EXIT_FAILURE)
-			return (put_error("%s: dup2", cmd->infile), EXIT_FAILURE);
-	}
-	if (cmd->outfile)
-	{
-		ft_close(&cmd->fdout);
-		if (cmd->append)
-			cmd->fdout = open(cmd->outfile,
-					O_WRONLY | O_CREAT | O_APPEND, 0644);
-		else
-			cmd->fdout = open(cmd->outfile, O_WRONLY | O_CREAT | O_TRUNC, 0644);
-		if (cmd->fdout == -1)
-			return (put_error(cmd->outfile), EXIT_FAILURE);
-		if (ft_dup2(cmd->fdout, STDOUT_FILENO) == EXIT_FAILURE)
-			return (put_error("%s: dup2", cmd->outfile), EXIT_FAILURE);
-	}
-	return (EXIT_SUCCESS);
-}
-
-/**
  * Saves the current stdin and stdout file descriptors.
  * 
  * This function is used before proceeding to fd redirections in the parent
