@@ -1,4 +1,5 @@
 #include "minishell.h"
+
 /**
  * Generates a unique temporary file for heredoc input.
  *
@@ -21,19 +22,16 @@ static int	generate_unique_file(char *tmp_file)
 
 	while (1)
 	{
-		num_str = ft_itoa(counter++);
+		num_str = ft_itoa(counter++); // TODO free itoa
 		if (!num_str)
 			return (1);
 		base = "/tmp/minishell_heredoc_";
-		ft_strlcpy(tmp_file, base, 256);
-		ft_strlcat(tmp_file, num_str, 256);
+		ft_strlcpy(tmp_file, base, 256); // TODO handle failure + free
+		ft_strlcat(tmp_file, num_str, 256); // TODO handle failure + free
 		ft_free(1, &num_str);
-		if (access(tmp_file, F_OK) == -1)
-		{
-			fd = open(tmp_file, O_WRONLY | O_CREAT | O_EXCL, 0600);
-			if (fd != -1)
-				return (fd);
-		}
+		fd = open(tmp_file, O_WRONLY | O_CREAT | O_EXCL, 0600); // TODO handlefailure
+		if (fd != -1)
+			return (fd);
 	}
 }
 
@@ -55,13 +53,17 @@ static int	read_heredoc(int tmp_fd, t_cmd *cmd)
 	while (1)
 	{
 		line = readline("> ");
+		if (!line)
+		{
+			ft_free(1, &line); // TODO useful?
+			return (EXIT_FAILURE);
+		}
 		if (ft_strcmp(line, cmd->heredoc_del) == 0)
 		{
 			ft_free(1, &line);
 			break ;
 		}
-		write(tmp_fd, line, ft_strlen(line));
-		write(tmp_fd, "\n", 1);
+		ft_fprintf(tmp_fd, "%s\n", line);
 		ft_free(1, &line);
 	}
 	return (EXIT_SUCCESS);
@@ -86,17 +88,15 @@ static int	process_heredoc_in_child(t_cmd *cmd)
 	tmp_fd = generate_unique_file(tmp_file);
 	if (tmp_fd == -1)
 		return (EXIT_FAILURE);
-	read_heredoc(tmp_fd, cmd);
+	if (read_heredoc(tmp_fd, cmd) != EXIT_SUCCESS)
+		return (EXIT_FAILURE);
 	ft_close(&tmp_fd);
-	cmd->infile = ft_strdup(tmp_file); // TODO check failure
-	cmd->heredoc_tmpfile = ft_strdup(tmp_file); // TODO check failure
+	cmd->infile = ft_strdup(tmp_file);
+	cmd->heredoc_tmpfile = ft_strdup(tmp_file);
 	if (!cmd->infile || !cmd->heredoc_tmpfile)
 	{
 		unlink(tmp_file);
-		ft_free(1, &cmd->infile);
-		ft_free(1, &cmd->heredoc_tmpfile);
-		cmd->infile = NULL;
-		cmd->heredoc_tmpfile = NULL;
+		ft_free(2, &cmd->infile, &cmd->heredoc_tmpfile);
 		return (EXIT_FAILURE);
 	}
 	return (EXIT_SUCCESS);
@@ -113,14 +113,15 @@ int	process_heredoc(t_cmd *cmd)
 	}
 	if (pid == 0) {
 		signal(SIGINT, SIG_DFL);
-		exit(process_heredoc_in_child(cmd));
+		return (process_heredoc_in_child(cmd)); //TODO return (process_heredoc_in_child(cmd));
 	}
 	else
 	{
 		waitpid(pid, &status, 0);
-		if (WIFSIGNALED(status)) {
+		if (WIFEXITED(status))
+			return (WEXITSTATUS(status));
+		if (WIFSIGNALED(status))
 			return (E_SIGBASE + WTERMSIG(status));
-		}
 	}
 	return (EXIT_SUCCESS);
 }
@@ -139,15 +140,17 @@ int	process_heredoc(t_cmd *cmd)
 int	process_all_heredocs(t_minishell *ms)
 {
 	t_cmd	*cmd;
+	int		exit_code;
 
 	cmd = ms->cmd_lst;
 	while (cmd)
 	{
 		if (cmd->heredoc_del)
 		{
-			if (process_heredoc(cmd) != EXIT_SUCCESS)
+			exit_code = process_heredoc(cmd);
+			if (exit_code != EXIT_SUCCESS)
 			{
-				ms->exit_code = EXIT_FAILURE;
+				ms->exit_code = exit_code;
 				return (EXIT_FAILURE);
 			}
 		}
