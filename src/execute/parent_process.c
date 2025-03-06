@@ -35,19 +35,12 @@ static void	wait_for_processes(t_minishell *ms)
 		{
 			pid = waitpid(cmd->pid, &status, 0);
 			if (handle_signaled_parent_process(ms, pid, &status))
-			{
-				ft_fprintf(STDERR_FILENO, "(signaled_parent)"); //DEBUG
 				return ;
-			}
 			else if (WIFEXITED(status))
-			{
-				ft_fprintf(STDERR_FILENO, "(WIFEXITED)"); //DEBUG
 				ms->exit_code = WEXITSTATUS(status);
-			}
 			else if (WIFSIGNALED(status))
 			{
-				ft_fprintf(STDERR_FILENO, "(WIFSIGNALED)"); //DEBUG
-				put_signal_message(status);
+				put_sigquit_message(status, cmd);
 				ms->exit_code = E_SIGBASE + WTERMSIG(status);
 			}
 		}

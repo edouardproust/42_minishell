@@ -44,14 +44,12 @@ void	restore_stdin_stdout(t_cmd *cmd, t_minishell *ms)
 {
 	if (cmd->infile && cmd->saved_stdin != -1)
 	{
-		if (dup2(cmd->saved_stdin, STDIN_FILENO) == -1)
-			exit_minishell(EXIT_FAILURE, ms, "dup2");
-		ft_close(&cmd->saved_stdin);
+		if (ft_dup2(cmd->saved_stdin, STDIN_FILENO) == EXIT_FAILURE)
+		exit_minishell(EXIT_FAILURE, ms, "dup2");
 	}
 	if (cmd->outfile && cmd->saved_stdout != -1)
 	{
-		if (dup2(cmd->saved_stdout, STDOUT_FILENO) == -1)
+		if (ft_dup2(cmd->saved_stdout, STDOUT_FILENO) == EXIT_FAILURE)
 			exit_minishell(EXIT_FAILURE, ms, "dup2");
-		ft_close(&cmd->saved_stdout);
 	}
 }

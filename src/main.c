@@ -72,22 +72,26 @@ int	main(int ac, char **av, char **envp)
 }
 */
 
-static void	set_input(t_minishell *minishell)
+static void	set_input(t_minishell *ms)
 {
+	int	sig;
+
 	set_errno(EXIT_SUCCESS);
-	minishell->input = readline("minishell$ ");
-	minishell->input_line++;
-	if (!minishell->input)
+	ms->input = readline("minishell$ ");
+	ms->input_line++;
+	sig = get_and_reset_signal();
+	if (sig == SIGINT)
+		ms->exit_code = E_SIGBASE + SIGINT;
+	if (!ms->input)
 	{
 		if (errno != EXIT_SUCCESS)
 			put_error("readline");
 		else
 		{
 			ft_printf("exit\n");
-			exit_minishell(EXIT_SUCCESS, minishell, NULL);
+			exit_minishell(EXIT_SUCCESS, ms, NULL);
 		}
 	}
-	get_and_reset_signal();
 }
 
 /**

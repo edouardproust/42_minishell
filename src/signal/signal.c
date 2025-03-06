@@ -17,7 +17,7 @@ void	rl_sigint_handler(int signal)
 	ft_printf("\n");
 	rl_replace_line("", 0);
 	rl_on_new_line();
-	rl_redisplay();
+	rl_redisplay(); //TODO delete line?
 }
 
 void	heredoc_sigint_handler(int signal)

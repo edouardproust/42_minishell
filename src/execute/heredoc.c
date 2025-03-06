@@ -22,9 +22,10 @@ static int	read_heredoc(t_cmd *cmd, int write_fd)
 			if (get_and_reset_signal() == SIGINT)
 				return (ft_free(1, &line), E_SIGBASE + SIGINT);
 			put_error("warning: here-document at line %d delimited by "
-				"end of file (wanted `%s')", cmd->heredoc->start,
+				"end of file (wanted `%s')",
+				cmd->heredoc->start,
 				cmd->heredoc->delimiter);
-			return (ft_free(1, &line), E_SIGBASE + SIGINT);
+			return (EXIT_SUCCESS);
 		}
 		if (ft_strcmp(line, cmd->heredoc->delimiter) == 0)
 			return (ft_free(1, &line), EXIT_SUCCESS);
@@ -98,7 +99,7 @@ static int	process_heredoc(t_cmd *cmd, t_minishell *ms)
 	if (pipe(pipefd) == -1)
 		return (put_error("pipe"), EXIT_FAILURE);
 	pid = fork();
-	if (pid < 0) 
+	if (pid < 0)
 	{
 		ft_close(&pipefd[0]);
 		ft_close(&pipefd[1]);

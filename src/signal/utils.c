@@ -1,16 +1,24 @@
 #include "minishell.h"
 
-void	put_signal_message(int status)
+/**
+ * Display the "Quit (core cump)" on SIGQUIT to mimic bash bahaviour
+ * regarding background and foreground processes.
+ * 
+ * - Prints the message "Quit\n" only if the signaled process is the last
+ * cmd in the cmd_lst.
+ * - Adds "(core dump)" only if core dumps are activated on the machine
+ */
+void	put_sigquit_message(int status, t_cmd *cmd)
 {
 	if (WIFSIGNALED(status))
 	{
-		if (WTERMSIG(status) == SIGQUIT)
+		if (WTERMSIG(status) == SIGQUIT && !cmd->next)
 		{
 			ft_printf("Quit");
 			if (WCOREDUMP(status))
 				ft_printf(" (core dumped)");
+			ft_printf("\n");
 		}
-		ft_printf("\n");
 	}
 }
 
