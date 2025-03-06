@@ -63,6 +63,7 @@ typedef struct	s_heredoc
 {
     char	*delimiter;
     int		fd;
+	int		start;
 }	t_heredoc;
 
 typedef struct s_cmd

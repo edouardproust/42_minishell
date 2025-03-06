@@ -105,10 +105,8 @@ void	execute_cmd_lst(t_minishell *ms)
 
 	if (!ms || !ms->cmd_lst)
 		exit_minishell(EXIT_FAILURE, NULL, "Incorrect parsed command");
-	ft_signal(SIGINT, heredoc_sigint_handler);
 	if (process_all_heredocs(ms) != EXIT_SUCCESS)
 		return ;
-	ft_signal(SIGINT, exec_sigint_handler);
 	cmd = ms->cmd_lst;
 	while (cmd)
 	{
@@ -116,5 +114,4 @@ void	execute_cmd_lst(t_minishell *ms)
 		cmd = cmd->next;
 	}
 	wait_for_processes(ms);
-	ft_signal(SIGINT, rl_sigint_handler);
 }

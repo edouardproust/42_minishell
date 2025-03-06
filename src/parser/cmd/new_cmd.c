@@ -20,6 +20,7 @@ static int	init_cmd_heredoc(t_cmd *cmd)
 		return (EXIT_FAILURE);
 	cmd->heredoc->delimiter = NULL;
 	cmd->heredoc->fd = -1;
+	cmd->heredoc->start = 0;
 	return (EXIT_SUCCESS);
 }
 

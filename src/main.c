@@ -111,7 +111,9 @@ int	main(int ac, char **av, char **envp)
 		init_cmd_lst(minishell);
 		if (minishell->cmd_lst == NULL)
 			continue ;
+		ft_signal(SIGINT, exec_sigint_handler);
 		execute_cmd_lst(minishell);
+		ft_signal(SIGINT, rl_sigint_handler);
 		free_cmd_lst(&minishell->cmd_lst);
 	}
 	free_minishell(&minishell);

@@ -13,12 +13,22 @@
 static int	read_heredoc(t_cmd *cmd, int write_fd)
 {
 	char	*line;
+	int		sig;
+	int		exit_code;
 
 	while (1)
 	{
 		line = readline("> ");
 		if (!line)
-			return (ft_free(1, &line), EXIT_FAILURE);
+		{
+			if (get_and_reset_signal() == SIGINT)
+				return (ft_free(1, &line), E_SIGBASE + SIGINT);
+			return (ft_free(1, &line), E_SIGBASE + SIGINT);
+			put_error("warning: here-document at line %d delimited by "
+				"end of file (wanted `%s')", cmd->heredoc->start,
+				cmd->heredoc->delimiter);
+			return (0);
+		}
 		if (ft_strcmp(line, cmd->heredoc->delimiter) == 0)
 			return (ft_free(1, &line), EXIT_SUCCESS);
 		if (ft_fprintf(write_fd, "%s\n", line) == -1)
@@ -36,13 +46,14 @@ static int	read_heredoc(t_cmd *cmd, int write_fd)
  */
 static void	handle_child_process(int *pipefd, t_cmd *cmd, t_minishell *ms)
 {
+	int	exit_code;
+
 	ft_close(&pipefd[0]);
-	ft_signal(SIGINT, SIG_DFL);
-	if (read_heredoc(cmd, pipefd[1]) != EXIT_SUCCESS)
-		exit(EXIT_FAILURE);
+	ft_signal(SIGINT, heredoc_sigint_handler);
+	exit_code = read_heredoc(cmd, pipefd[1]);
 	flush_fds();
 	free_minishell(&ms);
-	exit(EXIT_SUCCESS);
+	exit(exit_code);
 }
 
 /**
