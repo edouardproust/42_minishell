@@ -5,7 +5,7 @@
  * - Duplicates the word and adds it to the args list of the current command.
  * @TODO Check malloc error message (for now on NULL)
  */
-void	handle_word(t_token **cur_token, t_cmd **cur_cmd,
+int	handle_word(t_token **cur_token, t_cmd **cur_cmd,
 	t_minishell *minishell)
 {
 	t_token	*token;
@@ -17,4 +17,5 @@ void	handle_word(t_token **cur_token, t_cmd **cur_cmd,
 		exit_minishell(EXIT_FAILURE, minishell, NULL);
 	add_arg_to_cmd(*cur_cmd, arg_copy);
 	*cur_token = token->next;
+	return (EXIT_SUCCESS);
 }

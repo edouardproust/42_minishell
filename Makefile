@@ -9,12 +9,14 @@ C_DIR = src
 
 C_FILES = debug.c \
 	main.c \
-	free/minishell.c \
-	free/envvar.c \
-	free/token.c \
-	free/cmd.c \
-	exit.c \
-	error.c \
+	utils/free/minishell.c \
+	utils/free/envvar.c \
+	utils/free/token.c \
+	utils/free/cmd.c \
+	utils/exit.c \
+	utils/error.c \
+	utils/string.c \
+	utils/fd.c \
 	env/init.c \
 	env/utils.c \
 	env/ops.c \
@@ -51,8 +53,6 @@ C_FILES = debug.c \
 	execute/builtins/export.c \
 	execute/builtins/pwd.c \
 	execute/builtins/unset.c \
-	utils/string_utils.c \
-	utils/fd_utils.c \
 
 SRCS = $(addprefix $(C_DIR)/,$(C_FILES))
 

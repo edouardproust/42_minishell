@@ -18,6 +18,7 @@ t_minishell	*init_minishell(char **envp)
 	minishell->token_lst = NULL;
 	minishell->cmd_lst = NULL;
 	minishell->exit_code = 0;
+	minishell->input_line = 0;
 	minishell->envp = ft_matrix_dup(envp);
 	if (!minishell->envp)
 		exit_minishell(E_CRITICAL, minishell, "failed to copy environment");
@@ -75,6 +76,7 @@ static void	set_input(t_minishell *minishell)
 {
 	set_errno(EXIT_SUCCESS);
 	minishell->input = readline("minishell$ ");
+	minishell->input_line++;
 	if (!minishell->input)
 	{
 		if (errno != EXIT_SUCCESS)
