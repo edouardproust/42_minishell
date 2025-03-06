@@ -105,7 +105,8 @@ int	main(int ac, char **av, char **envp)
 	(void)av;
 	if (ac > 1)
 		return (EXIT_FAILURE); //TODO Deal with non-interactive mode
-	set_sigint_sigquit(rl_sigint_handler, SIG_IGN);
+	ft_signal(SIGQUIT, SIG_IGN);
+	ft_signal(SIGINT, rl_sigint_handler);
 	minishell = init_minishell(envp);
 	while (1)
 	{

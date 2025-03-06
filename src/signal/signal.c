@@ -14,6 +14,7 @@ int	get_and_reset_signal(void)
 void	rl_sigint_handler(int signal)
 {
 	g_signal = signal;
+	ft_printf("\n");
 	rl_replace_line("", 0);
 	rl_on_new_line();
 	rl_redisplay();

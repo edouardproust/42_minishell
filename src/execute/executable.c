@@ -14,7 +14,8 @@ void	run_executable(t_cmd *cmd, t_minishell *minishell)
 	char	*exec_path;
 
 	exec_path = get_exec_path(cmd->args[0], minishell);
-	set_sigint_sigquit(SIG_DFL, SIG_DFL);
+	ft_signal(SIGQUIT, SIG_DFL);
+	ft_signal(SIGINT, SIG_DFL);
 	execve(exec_path, cmd->args, minishell->envp);
 	exit(E_CMDNOTEXEC);
 }

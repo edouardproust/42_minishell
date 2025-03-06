@@ -36,14 +36,6 @@ void	kill_all_children(t_minishell *ms)
 	}
 }
 
-// TODO deal with SIG_ERR when signal() fails
-void	set_sigint_sigquit(__sighandler_t sigint_handler,
-	__sighandler_t sigquit_handler)
-{
-	ft_signal(SIGINT, sigint_handler);
-	ft_signal(SIGQUIT, sigquit_handler);
-}
-
 t_bool	ft_signal(int signum, void (*handler)(int))
 {
 	struct sigaction	sa;
