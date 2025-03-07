@@ -9,6 +9,7 @@
  */
 void	free_minishell(t_minishell **ms)
 {
+	rl_clear_history();
 	flush_fds();
 	if (!ms || !*ms)
 		return ;

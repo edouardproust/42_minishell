@@ -1,7 +1,7 @@
 #include "minishell.h"
 
 /**
- * Free one t_envvar node
+ * Free one t_envvar node.
  * 
  * @param var Pointer to the node to delete (by reference)
  * @return Pointer to the next node in the list

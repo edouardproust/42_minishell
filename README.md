@@ -17,9 +17,8 @@
 	- Wildcards * should work for the current working directory.
 
 ### Fix
+- `add_history` add leaks? (Did i forget a `rl_clear_history` somewhere?)
 - Don't print `exit` in this case: `$ sleep 3000 | exit`
-- Replace `free()` by `ft_free()` (wrapper for `ft_free_ptrs(1, &ptr)`);
-- Signals (exit codes + delete /tmp/minishell_heredoc_* files)
 - Deal with more than 1 outfile or infile in a t_cmd (eg. `$ echo hello > out1 >> out2`)
 - Run ./minishell inside ./minishell
 - (optional) "Zombie-process" architecture

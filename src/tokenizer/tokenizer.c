@@ -1,5 +1,5 @@
 #include "minishell.h"
-/*
+/**
  * Tokenizes the input string into individual tokens.
  *
  * - Calls skip_whitespace in order to skip over spaces in the input string.
@@ -11,6 +11,7 @@
  * - If memory allocation fails, the token list is freed and the function
  *   returns NULL.
  *
+ * @param minishell Pointer to the minishell data structure.
  * @return The head of the token list (`t_token *`), or NULL if an error
  *  occurs during tokenization.
  */
@@ -32,7 +33,7 @@ t_token	*tokenizer(t_minishell *minishell)
 		new_token = handle_token_creation(input, &i, &unmatched_quote);
 		if (!new_token)
 			return (handle_token_error(&minishell->token_lst,
-				unmatched_quote, minishell), NULL);
+					unmatched_quote, minishell), NULL);
 		token_addback(&minishell->token_lst, new_token);
 	}
 	return (minishell->token_lst);

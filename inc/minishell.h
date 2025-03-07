@@ -59,10 +59,10 @@ typedef struct s_token
 	struct s_token	*next;
 }	t_token;
 
-typedef struct	s_heredoc
+typedef struct s_heredoc
 {
-    char	*delimiter;
-    int		fd;
+	char	*delimiter;
+	int		fd;
 	int		start;
 }	t_heredoc;
 

@@ -1,8 +1,14 @@
 #include "minishell.h"
 
-/*
-* Adds an argument to the command's arguments list.
-*/
+/**
+ * Adds an argument to the command's arguments list.
+ *
+ * @param cmd The command structure to which the argument will
+ * be added.
+ * @param arg The argument to add to the command's arguments list.
+ * @note If malloc fails, the function returns without modifying
+ * the command.
+ */
 void	add_arg_to_cmd(t_cmd *cmd, char *arg)
 {
 	int		i;

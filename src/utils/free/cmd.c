@@ -1,5 +1,11 @@
 #include "minishell.h"
 
+/**
+ * Frees a single t_cmd node and its associated resources.
+ * 
+ * @param cmd Pointer to the command node to free (by reference).
+ * @return Pointer to the next command node in the list.
+ */
 t_cmd	*free_cmd_node(t_cmd **cmd)
 {
 	t_cmd	*nxt_cmd;

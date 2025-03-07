@@ -27,6 +27,9 @@ void	put_sigquit_message(int status, t_cmd *cmd)
  * 
  * To be used in the parent process when a SIGINT signal
  * has been catched.
+ * 
+ * @param ms Struct holding global data about the program, including list
+ * of commands (t_cmd)
  */
 void	kill_all_children(t_minishell *ms)
 {
@@ -44,10 +47,17 @@ void	kill_all_children(t_minishell *ms)
 	}
 }
 
+/**
+ * Sets a signal handler for a specified signal.
+ *
+ * @param signum The signal number to set the handler for.
+ * @param handler The function to be called when the signal is received.
+ * @return TRUE if the signal handler was successfully set, FALSE otherwise.
+ */
 t_bool	ft_signal(int signum, void (*handler)(int))
 {
 	struct sigaction	sa;
-	
+
 	sa.sa_handler = handler;
 	sa.sa_flags = SA_RESTART;
 	sigemptyset(&sa.sa_mask);

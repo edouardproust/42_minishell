@@ -45,7 +45,7 @@ void	restore_stdin_stdout(t_cmd *cmd, t_minishell *ms)
 	if (cmd->infile && cmd->saved_stdin != -1)
 	{
 		if (ft_dup2(cmd->saved_stdin, STDIN_FILENO) == EXIT_FAILURE)
-		exit_minishell(EXIT_FAILURE, ms, "dup2");
+			exit_minishell(EXIT_FAILURE, ms, "dup2");
 	}
 	if (cmd->outfile && cmd->saved_stdout != -1)
 	{
