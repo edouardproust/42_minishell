@@ -168,14 +168,16 @@ t_token			*token_new(char *value, int type);
 t_tokenize_op	*get_tokenize_ops(void);
 t_token			*handle_special_char(char *input, int *i);
 t_token			*create_word_token(char *input, int *index,
-					char *unmatched_quote);
+					char *unmatched_quote, t_minishell *minishell);
 t_token			*handle_token_creation(char *input, int *i,
-					char *unmatched_quote);
+					char *unmatched_quote,t_minishell *minishell);
 int				handle_token_error(t_token **token_lst, char unmatched_quote,
 					t_minishell *minishell);
 void			token_addback(t_token **tokens, t_token *new);
 int				skip_quotes(char *input, int *index, char *unmatched_quote);
-char			*remove_quotes(char *str);
+char			*remove_quotes(char *str, t_minishell *minishell);
+int				expand_var(char *str, int *i, char *cleaned,
+					t_minishell *minishell);
 
 /* Execute */
 void			execute_cmd_lst(t_minishell *minishell);

@@ -31,7 +31,8 @@ t_token	*token_new(char *value, int type)
  * @param unmatched_quote Pointer to track if an unmatched quote is found.
  * @return A new word token or NULL if allocation fails.
  */
-t_token	*create_word_token(char *input, int *index, char *unmatched_quote)
+t_token	*create_word_token(char *input, int *index, char *unmatched_quote,
+		t_minishell *minishell)
 {
 	int		start;
 	char	*word;
@@ -50,7 +51,7 @@ t_token	*create_word_token(char *input, int *index, char *unmatched_quote)
 			(*index)++;
 	}
 	word = ft_substr(input, start, *index - start);
-	word = remove_quotes(word);
+	word = remove_quotes(word, minishell);
 	if (!word)
 		return (NULL);
 	token = token_new(word, TOKEN_WORD);

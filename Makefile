@@ -20,6 +20,7 @@ C_FILES = debug.c \
 	tokenizer/tokenizer_utils.c \
 	tokenizer/token_utils.c \
 	tokenizer/quote_handler.c \
+	tokenizer/var_utils.c \
 	parser/init_cmd_list.c \
 	parser/parser.c \
 	parser/parser_utils.c \

@@ -44,8 +44,6 @@ int	parse_tokens(t_minishell *minishell)
 		if (handle_token_type(&cur_token, &cur_cmd, minishell)
 			== EXIT_FAILURE)
 			return (parse_cleanup(minishell, EXIT_FAILURE));
-		if (cur_token == prev_token)
-			exit_minishell(EXIT_FAILURE, minishell, NULL);
 	}
 	return (EXIT_SUCCESS);
 }

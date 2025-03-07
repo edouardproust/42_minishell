@@ -60,11 +60,12 @@ t_token	*handle_special_char(char *input, int *i)
  * 
  * Returns: A newly allocated token (`t_token *`).
  */
-t_token	*handle_token_creation(char *input, int *i, char *unmatched_quote)
+t_token	*handle_token_creation(char *input, int *i, char *unmatched_quote,
+		t_minishell *minishell)
 {
 	if (is_special_char(input[*i]))
 		return (handle_special_char(input, i));
-	return (create_word_token(input, i, unmatched_quote));
+	return (create_word_token(input, i, unmatched_quote, minishell));
 }
 
 /* 
