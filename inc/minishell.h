@@ -93,6 +93,15 @@ typedef struct s_tokenize_op
 	int		type;
 }	t_tokenize_op;
 
+typedef struct s_remove
+{
+	char	*cleaned;
+	char	in_quote;
+	int		buf_size;
+	int		i;
+	int		j;
+}	t_remove;
+
 typedef struct s_parse_op
 {
 	int		type;
@@ -175,7 +184,7 @@ int				handle_token_error(t_token **token_lst, char unmatched_quote,
 					t_minishell *minishell);
 void			token_addback(t_token **tokens, t_token *new);
 int				skip_quotes(char *input, int *index, char *unmatched_quote);
-char			*remove_quotes(char *str, t_minishell *minishell);
+char			*remove_quotes_and_expand(char *str, t_minishell *minishell);
 int				expand_var(char *str, int *i, char *cleaned,
 					t_minishell *minishell);
 

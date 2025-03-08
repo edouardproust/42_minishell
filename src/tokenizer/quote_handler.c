@@ -30,6 +30,12 @@ int	skip_quotes(char *input, int *index, char *unmatched_quote)
 	return (1);
 }
 
+static void	init_remove_quotes(char **cleaned, int *buf_size, char *str)
+{
+	*buf_size = ft_strlen(str) * 2 + 1;
+	*cleaned = malloc(*buf_size);
+}
+
 /* 
  * Processes a single character while removing surrounding quotes.
  *
@@ -63,29 +69,26 @@ static void	process_quotes(char c, char *in_quote, int *i)
  * @param str The string to process.
  * @return A new string with quotes removed, or NULL if memory allocation fails.
  */
-char	*remove_quotes(char *str, t_minishell *minishell)
+char	*remove_quotes_and_expand(char *str, t_minishell *minishell)
 {
-	char	*cleaned;
-	char	in_quote;
-	int		i;
-	int		j;
+	t_remove	r;
 
-	cleaned = malloc(ft_strlen(str) + 1);
-	if (!cleaned)
+	init_remove_quotes(&r.cleaned, &r.buf_size, str);
+	if (!r.cleaned)
 		return(free(str), NULL);
-	i = 0;
-	j = 0;
-	in_quote = 0;
-	while (str[i])
+	r.i = 0;
+	r.j = 0;
+	r.in_quote = 0;
+	while (str[r.i])
 	{
-		if ((!in_quote && str[i] == '$') || (in_quote == '"' && str[i] == '$'))
-			j = j + expand_var(str, &i, &cleaned[j], minishell);
-		else if (is_quote_char(str[i]))
-			process_quotes(str[i], &in_quote, &i);
+		if ((!r.in_quote || in_quote == '"') && str[i] == '$')
+			handle_expansion(str + r.i, minishell, &r);
+		else if (is_quote_char(str[r.i]))
+			process_quotes(str[r.i], &r.in_quote, &r.i);
 		else
-			cleaned[j++] = str[i++];
+			r.cleaned[r.j++] = str[r.i++];
 	}
-	cleaned[j] = '\0';
+	cleaned[r.j] = '\0';
 	free(str);
-	return (cleaned);
+	return (r.cleaned);
 }
