@@ -47,7 +47,7 @@ int	do_exit(char **args, t_minishell *minishell)
 			return (EXIT_FAILURE);
 		}
 		else
-			minishell->exit_code = ft_atoi(args[1]);
+			exit_code = ft_atoi(args[1]);
 	}
 	exit_minishell(exit_code, minishell, NULL);
 	return (EXIT_SUCCESS);
