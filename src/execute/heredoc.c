@@ -46,8 +46,8 @@ static void	handle_child_process(int *pipefd, t_cmd *cmd, t_minishell *ms)
 {
 	int	exit_code;
 
-	ft_close(&pipefd[0]);
 	ft_signal(SIGINT, heredoc_sigint_handler);
+	ft_close(&pipefd[0]);
 	exit_code = read_heredoc(cmd, pipefd[1]);
 	flush_fds();
 	free_minishell(&ms);
@@ -66,6 +66,7 @@ static int	handle_parent_process(int pid, int *pipefd, t_cmd *cmd)
 {
 	int	status;
 
+	ft_signal(SIGINT, SIG_IGN);
 	ft_close(&pipefd[1]);
 	waitpid(pid, &status, 0);
 	if (WIFEXITED(status) && WEXITSTATUS(status) != EXIT_SUCCESS)
