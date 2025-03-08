@@ -17,6 +17,9 @@
 	- Wildcards * should work for the current working directory.
 
 ### Fix
+- `$ exit 1 2` should print `minishell: exit: too many arguments` + return a new prompt
+- `$ export ""`, should print: ``minishell: export: `': not a valid identifier``
+- `$ cd <directory>` should update `PWD` and `OLDPWD` env. vars
 - `add_history` add leaks? (Did i forget a `rl_clear_history` somewhere?)
 - Don't print `exit` in this case: `$ sleep 3000 | exit`
 - Deal with more than 1 outfile or infile in a t_cmd (eg. `$ echo hello > out1 >> out2`)
