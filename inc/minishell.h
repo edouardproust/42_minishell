@@ -8,7 +8,9 @@
 # include <readline/readline.h>
 # include <readline/history.h>
 # include <sys/wait.h>
+# include <signal.h>
 # include <sys/stat.h> 
+# include <termios.h>
 
 /****************************************/
 /* Macros and Enums                     */
@@ -57,34 +59,42 @@ typedef struct s_token
 	struct s_token	*next;
 }	t_token;
 
+typedef struct s_heredoc
+{
+	char	*delimiter;
+	int		fd;
+	int		start;
+}	t_heredoc;
+
 typedef struct s_cmd
 {
 	char			**args;
-	char			*infile;
-	char			*outfile;
-	char			*heredoc_del;
-	char			*heredoc_tmpfile;
-	int				heredoc_start;
-	int				append;
+
+	pid_t			pid;
 	int				*pipe;
 	int				saved_stdin;
-	int				fdin;
 	int				saved_stdout;
+
+	int				fdin;
 	int				fdout;
-	pid_t			pid;
+	char			*infile;
+	char			*outfile;
+	t_heredoc		*heredoc;
+	int				append;
+
 	struct s_cmd	*prev;
 	struct s_cmd	*next;
 }	t_cmd;
 
 typedef struct s_minishell
 {
-	char		*input;
-	char		**envp;
-	t_envvar	*envvar_lst;
-	t_token		*token_lst;
-	t_cmd		*cmd_lst;
-	int			exit_code;
-	int			input_line;
+	char			*input;
+	char			**envp;
+	t_envvar		*envvar_lst;
+	t_token			*token_lst;
+	t_cmd			*cmd_lst;
+	sig_atomic_t	exit_code;
+	int				input_line;
 }	t_minishell;
 
 typedef struct s_tokenize_op
@@ -116,10 +126,11 @@ void			put_error(char *fmt, ...);
 
 /* Memory */
 void			free_minishell(t_minishell **minishell);
-void			free_token_lst(t_token **token_lst);
-t_envvar		*free_envvar_node(t_envvar **node);
 void			free_envvar_lst(t_envvar **var_lst);
+t_envvar		*free_envvar_node(t_envvar **node);
+void			free_token_lst(t_token **token_lst);
 void			free_cmd_lst(t_cmd **cmd_lst);
+t_cmd			*free_cmd_node(t_cmd **cmd);
 
 /* Exit */
 void			exit_minishell(int exit_code, t_minishell *minishell,
@@ -137,6 +148,15 @@ int				envvar_deleteone(t_envvar **lst, t_envvar *node);
 int				envvar_updateone(t_envvar *node, char *new_value);
 t_envvar		*envvar_findbyname(t_envvar *lst, char *name);
 
+/* Signals */
+void			rl_sigint_handler(int signal);
+void			heredoc_sigint_handler(int signal);
+void			exec_sigint_handler(int signal);
+void			put_sigquit_message(int status, t_cmd *cmd);
+void			kill_all_children(t_minishell *ms);
+int				get_and_reset_signal(void);
+t_bool			ft_signal(int signum, void (*handler)(int));
+
 /* Parsing */
 void			init_cmd_lst(t_minishell *minishell);
 t_cmd			*cmd_new(t_cmd *prev_cmd);
@@ -144,9 +164,7 @@ void			add_arg_to_cmd(t_cmd *cmd, char *arg);
 int				parse_tokens(t_minishell *minishell);
 char			*redir_error(t_token *token);
 t_parse_op		*get_parse_ops(void);
-int				process_heredoc(t_cmd *cmd);
 int				process_all_heredocs(t_minishell *ms);
-void			cleanup_heredoc(t_minishell *ms);
 int				handle_token_type(t_token **cur_token, t_cmd **cur_cmd,
 					t_minishell *minishell);
 int				handle_redir_in(t_token **cur_token, t_cmd **cur_cmd,

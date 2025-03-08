@@ -1,0 +1,33 @@
+# Empty line
+- Ctrl-C : "^C\n" + new prompt
+- Ctrl-D : "exit\n" + exit bash
+- Ctrl-\ : Does nothing
+
+# Filled line
+- Ctrl-C : "^C\n" + new prompt
+- Ctrl-D : Does nothing
+- Ctrl-\ : Does nothing
+
+# `$ cat` or `$ grep`
+- Ctrl-C : exit cmd + "^C\n" + new prompt
+- Ctrl-D : exit cmd + "\n" + new prompt
+- Ctrl-\ : "^\Quit (core dumped)\n" + new prompt
+
+# `$ sleep 3000`
+- Ctrl-C : Exit cmd + "^C\n" + new prompt
+- Ctrl-D : Does nothing
+- Ctrl-\ : "^\Quit (core dumped)\n" + new prompt
+
+---
+
+# TODO
+
+- Ctrl-D : OK
+- Ctrl-C :
+	- "`$ cat` or `$ grep`" : "minishell$" printed 2 times when exiting a process
+	- "`$ sleep 3000`" : same as above
+- Ctrl-\ :
+	- "Empty line" : "Quit (core dumped)\n" + exit minishell
+	- "Filled line" : same as above
+	- "`$ cat` or `$ grep`" : ^\Quit (core dumped) + exit minishell
+	- "$ sleep 3000" : same as above

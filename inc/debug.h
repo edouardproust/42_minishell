@@ -14,5 +14,6 @@ void	debug_fd(char *label, int fd);
 void	debug_process(int pid, int status);
 void	debug_envvars(t_envvar *lst);
 void	debug_envp(char **envp);
+void	debug_killed_process(t_cmd *cmd);
 
 #endif

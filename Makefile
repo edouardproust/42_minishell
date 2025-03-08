@@ -9,32 +9,41 @@ C_DIR = src
 
 C_FILES = debug.c \
 	main.c \
-	free.c \
-	exit.c \
-	error.c \
+	utils/free/minishell.c \
+	utils/free/envvar.c \
+	utils/free/token.c \
+	utils/free/cmd.c \
+	utils/exit.c \
+	utils/error.c \
+	utils/string.c \
+	utils/fd.c \
 	env/init.c \
 	env/utils.c \
 	env/ops.c \
 	env/path.c \
+	signal/signal.c \
+	signal/utils.c \
 	tokenizer/tokenizer.c \
 	tokenizer/tokenizer_utils.c \
 	tokenizer/token_utils.c \
 	tokenizer/quote_handler.c \
-	parser/init_cmd_list.c \
+	parser/cmd/init_list.c \
+	parser/cmd/new_cmd.c \
+	parser/cmd/utils.c \
 	parser/parser.c \
 	parser/parser_utils.c \
-	parser/cmd_utils.c \
 	parser/handlers/handle_word.c \
 	parser/handlers/handle_pipe.c \
 	parser/handlers/handle_redir_in.c \
 	parser/handlers/handle_redir_out.c \
 	parser/handlers/handle_redir_append.c \
 	parser/handlers/handle_redir_heredoc.c \
-	parser/heredoc.c \
 	execute/parent_process.c \
 	execute/child_process.c \
 	execute/pipe.c \
-	execute/redirection.c \
+	execute/redirection/save_restore.c \
+	execute/redirection/setup.c \
+	execute/heredoc.c \
 	execute/executable.c \
 	execute/builtin.c \
 	execute/builtins/cd.c \
@@ -44,8 +53,6 @@ C_FILES = debug.c \
 	execute/builtins/export.c \
 	execute/builtins/pwd.c \
 	execute/builtins/unset.c \
-	utils/string_utils.c \
-	utils/fd_utils.c \
 
 SRCS = $(addprefix $(C_DIR)/,$(C_FILES))
 

@@ -1,41 +1,6 @@
 #include "minishell.h"
 
 /**
- * Sets up input and output redirections for the current command.
- * 
- * Opens files and duplicates file descriptors as needed.
- *
- * @param cmd Command to execute.
- * @return EXIT_SUCCESS on success, EXIT_FAILURE on failure.
- */
-int	setup_redirections(t_cmd *cmd)
-{
-	if (cmd->infile)
-	{
-		ft_close(&cmd->fdin);
-		cmd->fdin = open(cmd->infile, O_RDONLY);
-		if (cmd->fdin == -1)
-			return (put_error(cmd->infile), EXIT_FAILURE);
-		if (ft_dup2(cmd->fdin, STDIN_FILENO) == EXIT_FAILURE)
-			return (put_error("dup2"), EXIT_FAILURE);
-	}
-	if (cmd->outfile)
-	{
-		ft_close(&cmd->fdout);
-		if (cmd->append)
-			cmd->fdout = open(cmd->outfile,
-					O_WRONLY | O_CREAT | O_APPEND, 0644);
-		else
-			cmd->fdout = open(cmd->outfile, O_WRONLY | O_CREAT | O_TRUNC, 0644);
-		if (cmd->fdout == -1)
-			return (put_error(cmd->outfile), EXIT_FAILURE);
-		if (ft_dup2(cmd->fdout, STDOUT_FILENO) == EXIT_FAILURE)
-			return (put_error("dup2"), EXIT_FAILURE);
-	}
-	return (EXIT_SUCCESS);
-}
-
-/**
  * Saves the current stdin and stdout file descriptors.
  * 
  * This function is used before proceeding to fd redirections in the parent
@@ -79,14 +44,12 @@ void	restore_stdin_stdout(t_cmd *cmd, t_minishell *ms)
 {
 	if (cmd->infile && cmd->saved_stdin != -1)
 	{
-		if (dup2(cmd->saved_stdin, STDIN_FILENO) == -1)
+		if (ft_dup2(cmd->saved_stdin, STDIN_FILENO) == EXIT_FAILURE)
 			exit_minishell(EXIT_FAILURE, ms, "dup2");
-		ft_close(&cmd->saved_stdin);
 	}
 	if (cmd->outfile && cmd->saved_stdout != -1)
 	{
-		if (dup2(cmd->saved_stdout, STDOUT_FILENO) == -1)
+		if (ft_dup2(cmd->saved_stdout, STDOUT_FILENO) == EXIT_FAILURE)
 			exit_minishell(EXIT_FAILURE, ms, "dup2");
-		ft_close(&cmd->saved_stdout);
 	}
 }
