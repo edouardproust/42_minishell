@@ -10,8 +10,6 @@
 
 ### Features
 - Variables expansion
-- Browse commands history (arrows up and down)
-- Deal with non-interactive mode (in main.c)
 - (optional) Bonus:
 	- && and || with parenthesis for priorities
 	- Wildcards * should work for the current working directory.
