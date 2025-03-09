@@ -43,7 +43,10 @@ int	ft_dup2(int oldfd, int newfd)
 void	ft_close(int *fd)
 {
 	if (*fd != -1 && *fd > STDERR_FILENO)
+	{
 		close(*fd);
+		*fd = -1;
+	}
 }
 
 /**

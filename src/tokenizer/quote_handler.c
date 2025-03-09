@@ -1,5 +1,5 @@
 #include "minishell.h"
-/* 
+/** 
  * Skips over quoted sections of the input string.
  *
  * - If a quote character is encountered, it starts skipping
@@ -58,7 +58,7 @@ static void	process_quotes(char c, char *in_quote, int *i)
 	(*i)++;
 }
 
-/* 
+/**
  * Removes quotes from a string while preserving its contents.
  *
  * - Allocates memory for a new string without quotes.

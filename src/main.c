@@ -30,61 +30,35 @@ t_minishell	*init_minishell(char **envp)
 }
 
 /**
- * Main - Get size of readline's leak
- * Run `valgrind ./minishell`
+ * Reads input from the user and handles signal-related behavior.
  *
-int	main(void)
-{
-	char	*input;
-
-	while (1)
-	{
-		input = readline("readline_test$ ");
-		if (ft_strncmp("exit", input, 5) == 0)
-		{
-			ft_printf("exit\n");
-			ft_free(1, &input);
-			exit(EXIT_SUCCESS);
-		}
-		ft_printf("input: \"%s\"\n", input);
-		ft_free(1, &input);
-	}
-	return (EXIT_SUCCESS);
-}
-*/
-
-/**
- * Main - Debug version (skip readline to check leaks)
+ * - Prompts the user for input using `readline`.
+ * - Adds the input to the command history.
+ * - Handles SIGINT signals and updates the exit code accordingly.
+ * - Exits the minishell gracefully if EOF (Ctrl+D) is received.
  *
-int	main(int ac, char **av, char **envp)
+ * @param ms Pointer to the minishell data structure.
+ * @return void
+ */
+static void	set_input(t_minishell *ms)
 {
-	t_minishell	*minishell;
-	char		*input;
+	int	sig;
 
-	(void)av;
-	minishell = init_minishell(envp);
-	input = "<test/infile tail -n +4 | grep a | sort | uniq -c | sort -nr \
-		| head -n 3";
-	init_cmd_lst(input, minishell);
-	execute_cmd_lst(minishell);
-	free_minishell(&minishell);
-	return (EXIT_SUCCESS);
-}
-*/
-
-static void	set_input(t_minishell *minishell)
-{
 	set_errno(EXIT_SUCCESS);
-	minishell->input = readline("minishell$ ");
-	minishell->input_line++;
-	if (!minishell->input)
+	ms->input = readline("minishell$ ");
+	add_history(ms->input);
+	ms->input_line++;
+	sig = get_and_reset_signal();
+	if (sig == SIGINT)
+		ms->exit_code = E_SIGBASE + SIGINT;
+	if (!ms->input)
 	{
 		if (errno != EXIT_SUCCESS)
 			put_error("readline");
 		else
 		{
 			ft_printf("exit\n");
-			exit_minishell(EXIT_SUCCESS, minishell, NULL);
+			exit_minishell(EXIT_SUCCESS, ms, NULL);
 		}
 	}
 }
@@ -103,7 +77,9 @@ int	main(int ac, char **av, char **envp)
 
 	(void)av;
 	if (ac > 1)
-		return (EXIT_FAILURE); //TODO Deal with non-interactive mode
+		return (put_error("no arguments allowed."), EXIT_FAILURE);
+	ft_signal(SIGQUIT, SIG_IGN);
+	ft_signal(SIGINT, rl_sigint_handler);
 	minishell = init_minishell(envp);
 	while (1)
 	{
@@ -111,9 +87,10 @@ int	main(int ac, char **av, char **envp)
 		init_cmd_lst(minishell);
 		if (minishell->cmd_lst == NULL)
 			continue ;
+		ft_signal(SIGINT, exec_sigint_handler);
 		execute_cmd_lst(minishell);
-		cleanup_heredoc(minishell);
 		free_cmd_lst(&minishell->cmd_lst);
+		ft_signal(SIGINT, rl_sigint_handler);
 	}
 	free_minishell(&minishell);
 	return (EXIT_SUCCESS);

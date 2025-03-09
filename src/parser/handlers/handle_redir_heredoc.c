@@ -5,7 +5,6 @@
  * - Ensures that the next token is a valid word token (delimiter).
  * - Stores the delimiter in `heredoc_del` for later processing.
  * If the token sequence is invalid, it exits with a syntax error.
- * @TODO Check malloc error message (for now on NULL)
  */
 int	handle_redir_heredoc(t_token **cur_token, t_cmd **cur_cmd,
 	t_minishell *minishell)
@@ -21,11 +20,11 @@ int	handle_redir_heredoc(t_token **cur_token, t_cmd **cur_cmd,
 		return (EXIT_FAILURE);
 	}
 	ft_free(1, &(*cur_cmd)->infile);
-	ft_free(1, &(*cur_cmd)->heredoc_del);
-	(*cur_cmd)->heredoc_del = ft_strdup(token->next->value);
-	if (!(*cur_cmd)->heredoc_del)
+	ft_free(1, &(*cur_cmd)->heredoc->delimiter);
+	(*cur_cmd)->heredoc->delimiter = ft_strdup(token->next->value);
+	if (!(*cur_cmd)->heredoc->delimiter)
 		exit_minishell(EXIT_FAILURE, minishell, NULL);
 	*cur_token = token->next->next;
-	(*cur_cmd)->heredoc_start = minishell->input_line;
+	(*cur_cmd)->heredoc->start = minishell->input_line;
 	return (EXIT_SUCCESS);
 }

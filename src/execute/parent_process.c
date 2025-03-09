@@ -1,5 +1,19 @@
 #include "minishell.h"
 
+static t_bool	handle_signaled_parent_process(t_minishell *ms,
+	pid_t pid, int *status)
+{
+	if (pid == -1 && errno == EINTR)
+	{
+		kill_all_children(ms);
+		ms->exit_code = E_SIGBASE + get_and_reset_signal();
+		while (waitpid(-1, status, WNOHANG) > 0)
+			;
+		return (TRUE);
+	}
+	return (FALSE);
+}
+
 /**
  * Wait for all processes to finish and handle exit codes. 
  *
@@ -8,19 +22,27 @@
  * @return void
  * @note Exit on: a process exits with code > E_ERRMAX
  */
-static void	wait_for_processes(t_minishell *minishell)
+static void	wait_for_processes(t_minishell *ms)
 {
 	t_cmd	*cmd;
 	int		status;
+	pid_t	pid;
 
-	cmd = minishell->cmd_lst;
+	cmd = ms->cmd_lst;
 	while (cmd)
 	{
 		if (cmd->pid > 0)
 		{
-			waitpid(cmd->pid, &status, 0);
-			if (WIFEXITED(status))
-				minishell->exit_code = WEXITSTATUS(status);
+			pid = waitpid(cmd->pid, &status, 0);
+			if (handle_signaled_parent_process(ms, pid, &status))
+				return ;
+			else if (WIFEXITED(status))
+				ms->exit_code = WEXITSTATUS(status);
+			else if (WIFSIGNALED(status))
+			{
+				put_sigquit_message(status, cmd);
+				ms->exit_code = E_SIGBASE + WTERMSIG(status);
+			}
 		}
 		cmd = cmd->next;
 	}

@@ -1,7 +1,11 @@
 #include "minishell.h"
-/* 
+
+/**
  * Creates a new token with the given value and type.
- * Returns: A new token or NULL if allocation fails.
+ * 
+ * @param value Value of the token
+ * @param type Type of the token
+ * @return New token or NULL if allocation fails.
  */
 t_token	*token_new(char *value, int type)
 {
@@ -16,7 +20,7 @@ t_token	*token_new(char *value, int type)
 	return (token);
 }
 
-/* 
+/**
  * Creates a word token from the input string starting at `index`.
  *
  * - Identifies a sequence of non-special 
@@ -60,7 +64,7 @@ t_token	*create_word_token(char *input, int *index, char *unmatched_quote,
 	return (token);
 }
 
-/* 
+/**
  * Adds a new token to the end of the token list.
  */
 void	token_addback(t_token **tokens, t_token *new)
