@@ -137,16 +137,21 @@ void			exit_minishell(int exit_code, t_minishell *minishell,
 					char *fmt, ...);
 
 /* Env */
-char			*get_env_value(char *var_name, t_minishell *minishell);
 t_envvar		*init_envvars(t_minishell *minishell);
-t_bool			is_directory(char *path);
-t_bool			is_path(char *s);
-int				update_envp(t_minishell *minishell);
 t_envvar		*envvar_new(char *var);
 int				envvar_addoneback(t_envvar **lst, t_envvar *new);
 int				envvar_deleteone(t_envvar **lst, t_envvar *node);
 int				envvar_updateone(t_envvar *node, char *new_value);
+char			*get_env_value(char *var_name, t_minishell *minishell);
+int				envvar_lstsize(t_envvar *head);
 t_envvar		*envvar_findbyname(t_envvar *lst, char *name);
+char			*get_envp_var_identifier(char *var);
+char			*get_envp_var_value(char *var);
+int				update_envp(t_minishell *minishell);
+
+t_bool			is_directory(char *path);
+t_bool			is_path(char *s);
+t_bool			is_valid_envp_var(char *var);
 
 /* Signals */
 void			rl_sigint_handler(int signal);

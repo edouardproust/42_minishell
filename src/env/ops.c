@@ -5,15 +5,12 @@
  *
  * @param var Definition of the env. variable: VAR_NAME=var_value
  * @return Pointer to the created node
- * 
- * @todo: check input invalid syntaxes during tokenization phase:
- * - `export NAME = value` and `export =value` are incorrect
- * - `export NAME` and `export NAME=` are correct
+ * @note This function does not check the identifier validity. Use
+ * utils function `is_valid_envp_var` to perform a check.
  */
 t_envvar	*envvar_new(char *var)
 {
 	t_envvar	*node;
-	int			equal_sign_index;
 
 	if (!var)
 		return (NULL);
@@ -22,17 +19,10 @@ t_envvar	*envvar_new(char *var)
 		return (NULL);
 	node->prev = NULL;
 	node->next = NULL;
-	equal_sign_index = ft_strchri(var, '=');
-	if (equal_sign_index < 0)
-		node->name = ft_strdup(var);
-	else
-		node->name = ft_substr(var, 0, equal_sign_index);
+	node->name = get_envp_var_identifier(var);
 	if (!node->name)
 		return (ft_free(1, &node), NULL);
-	if (equal_sign_index < 0)
-		node->value = ft_strdup("");
-	else
-		node->value = ft_substr(var, equal_sign_index + 1, ft_strlen(var));
+	node->value = get_envp_var_value(var);
 	if (!node->value)
 		return (ft_free(2, &node->name, &node), NULL);
 	return (node);
@@ -118,27 +108,4 @@ int	envvar_updateone(t_envvar *node, char *new_value)
 	if (!node->value)
 		return (EXIT_FAILURE);
 	return (EXIT_SUCCESS);
-}
-
-/**
- * Find the t_envvar based on the var name.
- * 
- * @param lst Head of the list of t_envvar nodes
- * @param name Name of the var to be found
- * @return The found t_envvar or NULL if not found
- */
-t_envvar	*envvar_findbyname(t_envvar *lst, char *name)
-{
-	size_t	name_len;
-
-	if (!lst || !name)
-		return (NULL);
-	name_len = ft_strlen(name);
-	while (lst)
-	{
-		if (strncmp(lst->name, name, name_len + 1) == 0)
-			return (lst);
-		lst = lst->next;
-	}
-	return (NULL);
 }

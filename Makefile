@@ -18,9 +18,11 @@ C_FILES = debug.c \
 	utils/string.c \
 	utils/fd.c \
 	env/init.c \
-	env/utils.c \
 	env/ops.c \
 	env/path.c \
+	env/utils/envp.c \
+	env/utils/envvar.c \
+	env/valid.c \
 	signal/signal.c \
 	signal/utils.c \
 	tokenizer/tokenizer.c \
@@ -130,6 +132,9 @@ re: fclean all
 
 libft:
 	$(MAKE) -C $(LIBFT_DIR)
+
+valgrind:
+	valgrind --leak-check=full --track-origins=yes --track-fds=yes $(NAME)
 
 # ************************************
 # Phony                              *
