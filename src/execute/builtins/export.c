@@ -25,7 +25,8 @@ static void	export_envvar(t_envvar *envvar, t_minishell *minishell)
 	found_node = envvar_findbyname(minishell->envvar_lst, envvar->name);
 	if (found_node)
 	{
-		envvar_updateone(found_node, envvar->value);
+		if (envvar_updateone(found_node, envvar->value) != EXIT_SUCCESS)
+			return (put_error("export"));
 		free_envvar_node(&envvar);
 	}
 	else
@@ -46,9 +47,11 @@ int	do_export(char **args, t_minishell *ms)
 {
 	t_envvar	*envvar;
 	int			i;
+	int			exit_code;
 
 	if (ft_matrix_size(args) == 1)
 		return (put_export_vars(ms->envvar_lst));
+	exit_code = EXIT_SUCCESS;
 	i = 1;
 	while (args[i])
 	{
@@ -58,11 +61,12 @@ int	do_export(char **args, t_minishell *ms)
 		if (!is_valid_envp_var(envvar->name))
 		{
 			put_error("export: `%s': not a valid identifier", envvar->name);
+			exit_code = EXIT_FAILURE;
 			free_envvar_node(&envvar);
 		}
 		else
 			export_envvar(envvar, ms);
 		i++;
 	}
-	return (update_envp(ms));
+	return (update_envp(ms) | exit_code);
 }
