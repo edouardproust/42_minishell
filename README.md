@@ -17,12 +17,11 @@
 	- Wildcards * should work for the current working directory.
 
 ### Fix
-- `$ export ""`, should print: ``minishell: export: `': not a valid identifier`` + exit_code 1
 - `$ cd <directory>` should update `PWD` and `OLDPWD` env. vars
 - `add_history` add leaks? (Did i forget a `rl_clear_history` somewhere?)
 - Don't print `exit` in this case: `$ sleep 3000 | exit`
 - Deal with more than 1 outfile or infile in a t_cmd (eg. `$ echo hello > out1 >> out2`)
-- Run ./minishell inside ./minishell
+- Run `./minishell` inside `./minishell` (eg. `$ minishell ./minishell`)
 - (optional) "Zombie-process" architecture
 
 ### Final checks
@@ -32,7 +31,7 @@
 - exit codes (in all case senarios)
 - error messages (in all case senarios)
 - Search for any "TODO" and "DEBUG" and fix / remove them
-- Do a .gitignore file that excludes `test/`, `.gitguardian.yaml`, etc.
+- Review `..gitignore` and rename it into into `.gitignore`
 
 ## How to use?
 
