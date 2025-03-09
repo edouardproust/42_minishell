@@ -30,12 +30,6 @@ int	skip_quotes(char *input, int *index, char *unmatched_quote)
 	return (1);
 }
 
-static void	init_remove_quotes(char **cleaned, int *buf_size, char *str)
-{
-	*buf_size = ft_strlen(str) * 2 + 1;
-	*cleaned = malloc(*buf_size);
-}
-
 /* 
  * Processes a single character while removing surrounding quotes.
  *
@@ -49,13 +43,13 @@ static void	init_remove_quotes(char **cleaned, int *buf_size, char *str)
  * @param cleaned The output string being built.
  * @param j Pointer to the current position in `cleaned`.
  */
-static void	process_quotes(char c, char *in_quote, int *i)
+static void	process_quotes(char c, t_expansion *exp)
 {
-	if (!*in_quote && (is_quote_char(c)))
-		*in_quote = c;
-	else if (*in_quote == c)
-		*in_quote = 0;
-	(*i)++;
+	if (!exp->in_quote && (is_quote_char(c)))
+		exp->in_quote = c;
+	else if (exp->in_quote == c)
+		exp->in_quote = 0;
+	exp->input_pos++;
 }
 
 /**
@@ -71,24 +65,26 @@ static void	process_quotes(char c, char *in_quote, int *i)
  */
 char	*remove_quotes_and_expand(char *str, t_minishell *minishell)
 {
-	t_remove	r;
+	t_expansion	exp;
 
-	init_remove_quotes(&r.cleaned, &r.buf_size, str);
-	if (!r.cleaned)
+	init_expansion(&exp, str);
+	if (!exp.cleaned)
 		return(free(str), NULL);
-	r.i = 0;
-	r.j = 0;
-	r.in_quote = 0;
-	while (str[r.i])
+	while (str[exp.input_pos])
 	{
-		if ((!r.in_quote || in_quote == '"') && str[i] == '$')
-			handle_expansion(str + r.i, minishell, &r);
-		else if (is_quote_char(str[r.i]))
-			process_quotes(str[r.i], &r.in_quote, &r.i);
+		if ((!exp.in_quote || exp.in_quote == '"'))
+		{
+			if (str[exp.input_pos] == '$')
+				expand_var(&exp, str, minishell);
+			else if (is_quote_char(str[exp.input_pos]))
+				process_quotes(str[exp.input_pos], &exp);
+			else
+				exp.cleaned[exp.output_pos++] = str[exp.input_pos++];
+		}
 		else
-			r.cleaned[r.j++] = str[r.i++];
+			exp.cleaned[exp.output_pos++] = str[exp.input_pos++];
 	}
-	cleaned[r.j] = '\0';
+	exp.cleaned[exp.output_pos] = '\0';
 	free(str);
-	return (r.cleaned);
+	return (exp.cleaned);
 }

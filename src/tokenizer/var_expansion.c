@@ -1,25 +1,38 @@
 #include "minishell.h"
 
-static char	*extract_name_with_braces(char *start, int *i)
+static char	*extract_name_with_braces(char *start, t_expansion *exp)
 {
 	char	*name;
+	int		i;
+	int		brace_depth;
 
-	(*i)++;
-	while (start[*i] && start[*i] != '}')
-		(*i)++;
-	name = ft_substr(start, 1, *i - 1);
-	if (start[*i] == '}')
-		(*i)++;
+	i = 0;
+	exp->input_pos++;
+	brace_depth = 1;
+	i++;
+	while (start[exp->input_pos] && brace_depth > 0)
+	{
+		if (start[exp->input_pos] == '{')
+			brace_depth++;
+		else if (start[exp->input_pos] == '}')
+			brace_depth--;
+		exp->input_pos++;
+	}
+	name = ft_substr(start, 1, i - 2);
+	exp->input_pos = exp->input_pos + i;
 	return (name);
 }
 
-static char	*extract_name_without_braces(char *start, int *i)
+static char	*extract_name_without_braces(char *start, t_expansion *exp)
 {
 	char	*name;
+	int		start_pos;
 
-	while (ft_isalnum(start[*i]) || start[*i] == '_')
-		(*i)++;
-	name = ft_substr(start, 0, *i);
+	start_pos = exp->input_pos;
+	while (ft_isalnum(start[exp->input_pos])
+			|| start[exp->input_pos] == '_')
+		exp->input_pos++;
+	name = ft_substr(start, start_pos, exp->input_pos - start_pos);
 	return (name);
 }
 
@@ -29,15 +42,13 @@ static char	*extract_name_without_braces(char *start, int *i)
  * @param start Position after `$` (e.g., `USER` in `$USER`).
  * @return Allocated string containing the variable name.
  */
-static char	*extract_var_name(char *start)
+static char	*extract_var_name(char *start, t_expansion *exp)
 {
-	int		i;
 
-	i = 0;
-	if (start[i] == '}')
-		return (extract_name_with_braces(start, &i));
+	if (start[exp->input_pos] == '{')
+		return (extract_name_with_braces(start, exp));
 	else
-		return (extract_name_without_braces(start, &i));
+		return (extract_name_without_braces(start, exp));
 }
 
 /**
@@ -50,20 +61,24 @@ static char	*extract_var_name(char *start)
  * @return Length of the appended value.
  */
 
-int	expand_var(char *str, int *i, char *cleaned, t_minishell *minishell)
+void	expand_var(t_expansion *exp, char *str, t_minishell *minishell)
 {
 	char	*var_name;
 	char	*var_value;
-	int		len;
+	int		var_len;
 
-	(*i)++;
-	var_name = extract_var_name(str + *i);
+	exp->input_pos++;
+	var_name = extract_var_name(str + exp->input_pos, exp);
+	if (!var_name)
+		return ;
 	var_value = get_env_value(var_name, minishell);
 	if (!var_value)
 		var_value = "";
-	len = ft_strlcpy(cleaned, var_value, ft_strlen(var_value) + 1);
-	*i = *i + ft_strlen(var_name);
+	var_len = ft_strlen(var_value);
+	if (exp->output_pos + var_len >= exp->buf_size)
+		ensure_buffer_space(exp, var_len);
+	ft_strlcpy(exp->cleaned + exp->output_pos, var_value, var_len + 1);
+	exp->output_pos = exp->output_pos + var_len;
 	ft_free(1, &var_name);
-	return (len - 1);
 }
 
