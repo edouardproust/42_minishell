@@ -224,13 +224,17 @@ void			close_pipe_if(t_cmd *cmd);
 t_builtin		*get_builtin(t_cmd *cmd);
 void			run_builtin(t_bool in_child_process, t_builtin *builtin,
 					char **args, t_minishell *minishell);
-int				do_echo(char **args, t_minishell *minishell);
 int				do_cd(char **args, t_minishell *minishell);
+int				do_echo(char **args, t_minishell *minishell);
 int				do_pwd(char **args, t_minishell *minishell);
 int				do_export(char **args, t_minishell *minishell);
 int				do_unset(char **args, t_minishell *minishell);
 int				do_env(char **args, t_minishell *minishell);
 int				do_exit(char **args, t_minishell *minishell);
+char			*get_destdir(char **args, int args_nb, t_minishell *ms);
+char			*get_current_pwd(void);
+int				change_directory(char *dest_dir, char **pwd);
+int				update_envvars(char **pwd, char **new_pwd, t_minishell *ms);
 
 /* File descriptors */
 int				ft_dup(int src_fd, int *dst_fd);

@@ -7,6 +7,7 @@
  * @return Pointer to the created node
  * @note This function does not check the identifier validity. Use
  * utils function `is_valid_envp_var` to perform a check.
+ * @note Caller must free var.
  */
 t_envvar	*envvar_new(char *var)
 {
@@ -97,7 +98,8 @@ int	envvar_deleteone(t_envvar **lst, t_envvar *to_remove)
  * 
  * @param lst Pointer to the head of the list of t_envvar nodes
  * @param name Name of the var to be found
- * @return The found node. NULL if not found
+ * @return EXIT_SUCCESS or EXIT_FAILURE (on malloc error or 
+ * wrong node / value)
  */
 int	envvar_updateone(t_envvar *node, char *new_value)
 {

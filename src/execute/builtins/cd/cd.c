@@ -9,25 +9,30 @@
  * @return EXIT_SUCCESS on success. EXIT_FAILURE on failure.
  * @note The quotes around args are removed during tokenization phase.
  */
-int	do_cd(char **args, t_minishell *minishell)
+int	do_cd(char **args, t_minishell *ms)
 {
 	int			args_nb;
-	char		*dir;
+	char		*dest_dir;
+	char		*pwd;
+	char		*new_pwd;
 
 	args_nb = ft_matrix_size(args);
 	if (args_nb > 2)
 		return (put_error("cd: too many arguments"), EXIT_FAILURE);
-	if (args_nb == 2)
-		dir = args[1];
-	else
-	{
-		dir = get_env_value("HOME", minishell);
-		if (!dir)
-			return (put_error("cd: HOME not set"), EXIT_FAILURE);
-	}
-	if (dir[0] == '\0')
+	dest_dir = get_destdir(args, args_nb, ms);
+	if (!dest_dir)
+		return (EXIT_FAILURE);
+	if (dest_dir[0] == '\0')
 		return (EXIT_SUCCESS);
-	if (chdir(dir) == -1)
-		return (put_error("cd: %s", dir), EXIT_FAILURE);
-	return (EXIT_SUCCESS);
+	pwd = get_current_pwd();
+	if (!pwd)
+		return (EXIT_FAILURE);
+	if (change_directory(dest_dir, &pwd) == EXIT_FAILURE)
+		return (EXIT_FAILURE);
+	new_pwd = get_current_pwd();
+	if (!new_pwd)
+		return (EXIT_FAILURE);
+	if (update_envvars(&pwd, &new_pwd, ms) == EXIT_FAILURE)
+		return (EXIT_FAILURE);
+	return (update_envp(ms));
 }
