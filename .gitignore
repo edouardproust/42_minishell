@@ -1,5 +1,5 @@
 minishell
-src/obj
+src/_obj
 
 *.a
 *.o

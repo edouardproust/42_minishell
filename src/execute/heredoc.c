@@ -72,13 +72,12 @@ static int	handle_parent_process(int pid, int *pipefd, t_cmd *cmd)
 	if (WIFEXITED(status) && WEXITSTATUS(status) != EXIT_SUCCESS)
 	{
 		ft_close(&pipefd[0]);
-		return (EXIT_FAILURE);
-	}
-	else if (WIFSIGNALED(status))
-	{
-		ft_close(&pipefd[0]);
-		cmd->heredoc->fd = -1;
-		return (E_SIGBASE + WTERMSIG(status));
+		if (WEXITSTATUS(status) > E_SIGBASE)
+		{
+			ft_close(&pipefd[0]);
+			cmd->heredoc->fd = -1;
+		}
+		return (WEXITSTATUS(status));
 	}
 	cmd->heredoc->fd = pipefd[0];
 	return (EXIT_SUCCESS);
@@ -136,7 +135,7 @@ int	process_all_heredocs(t_minishell *ms)
 			if (exit_code != EXIT_SUCCESS)
 			{
 				ms->exit_code = exit_code;
-				return (EXIT_FAILURE);
+				return (exit_code);
 			}
 		}
 		cmd = cmd->next;

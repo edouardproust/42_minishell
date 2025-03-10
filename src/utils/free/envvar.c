@@ -17,6 +17,7 @@ t_envvar	*free_envvar_node(t_envvar **var)
 		&(*var)->name,
 		&(*var)->value,
 		var);
+	*var = NULL;
 	return (nxt_var);
 }
 

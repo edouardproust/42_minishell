@@ -1,0 +1,12 @@
+test
+minishell
+src/_obj
+*.a
+*.o
+*.out
+*.swp
+*.swo
+.gitignore
+..gitignore
+.gitguardian.yaml
+.vscode
