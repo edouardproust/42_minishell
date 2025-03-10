@@ -76,7 +76,9 @@ static void	process_quotes(char c, t_expansion *exp)
 char	*remove_quotes_and_expand(char *str, t_minishell *minishell)
 {
 	t_expansion	exp;
+	int			error;
 
+	error = 0;
 	init_expansion(&exp, str);
 	if (!exp.cleaned)
 		return(free(str), NULL);
@@ -96,6 +98,8 @@ char	*remove_quotes_and_expand(char *str, t_minishell *minishell)
 		}
 		else
 			exp.cleaned[exp.output_pos++] = str[exp.input_pos++];
+		if (error)
+			return (free(exp.cleaned), free(str), NULL);
 	}
 	exp.cleaned[exp.output_pos] = '\0';
 	free(str);

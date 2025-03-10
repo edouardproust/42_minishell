@@ -68,9 +68,18 @@ t_token	*handle_special_char(char *input, int *i)
 t_token	*handle_token_creation(char *input, int *i, char *unmatched_quote,
 		t_minishell *minishell)
 {
+	t_token	*token;
+
 	if (is_special_char(input[*i]))
 		return (handle_special_char(input, i));
-	return (create_word_token(input, i, unmatched_quote, minishell));
+	token = create_word_token(input, i, unmatched_quote, minishell);
+	if (!token)
+	{
+		if (*unmatched_quote == 0)
+			minishell->exit_code = 1;
+		return (NULL);
+	}
+	return (token);
 }
 
 /**
@@ -94,6 +103,6 @@ int	handle_token_error(t_token **token_lst, char unmatched_quote,
 			"unexpected EOF while looking for matching `%c'",
 			unmatched_quote);
 	else
-		exit_minishell(EXIT_FAILURE, minishell, NULL);
+		minishell->exit_code = 1;
 	return (EXIT_SUCCESS);
 }
