@@ -45,11 +45,21 @@ int	skip_quotes(char *input, int *index, char *unmatched_quote)
  */
 static void	process_quotes(char c, t_expansion *exp)
 {
-	if (!exp->in_quote && (is_quote_char(c)))
+	if (exp->in_quote == 0)
+	{
 		exp->in_quote = c;
+		exp->input_pos++;
+	}
 	else if (exp->in_quote == c)
+	{
 		exp->in_quote = 0;
-	exp->input_pos++;
+		exp->input_pos++;
+	}
+	else
+	{
+		exp->cleaned[exp->output_pos++] = c;
+		exp->input_pos++;
+	}
 }
 
 /**
@@ -72,12 +82,15 @@ char	*remove_quotes_and_expand(char *str, t_minishell *minishell)
 		return(free(str), NULL);
 	while (str[exp.input_pos])
 	{
-		if ((!exp.in_quote || exp.in_quote == '"'))
+		if (is_quote_char(str[exp.input_pos]))
+		{
+			process_quotes(str[exp.input_pos], &exp);
+			continue ;
+		}
+		else if ((!exp.in_quote || exp.in_quote == '"'))
 		{
 			if (str[exp.input_pos] == '$')
 				expand_var(&exp, str, minishell);
-			else if (is_quote_char(str[exp.input_pos]))
-				process_quotes(str[exp.input_pos], &exp);
 			else
 				exp.cleaned[exp.output_pos++] = str[exp.input_pos++];
 		}

@@ -20,4 +20,3 @@ void	ensure_buffer_space(t_expansion *exp, int space_needed)
 	if (new)
 		exp->cleaned = new;
 }
-

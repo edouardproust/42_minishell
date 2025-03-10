@@ -27,7 +27,7 @@ C_FILES = debug.c \
 	tokenizer/tokenizer_utils.c \
 	tokenizer/token_utils.c \
 	tokenizer/quote_handler.c \
-	tokenizer/token_cleanup.c \
+	tokenizer/vars_exp_init.c \
 	tokenizer/var_expansion.c \
 	parser/cmd/init_list.c \
 	parser/cmd/new_cmd.c \
