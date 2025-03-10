@@ -203,9 +203,15 @@ int				handle_token_error(t_token **token_lst, char unmatched_quote,
 void			token_addback(t_token **tokens, t_token *new);
 int				skip_quotes(char *input, int *index, char *unmatched_quote);
 char			*remove_quotes_and_expand(char *str, t_minishell *minishell);
+
+/* Vars expansion */
 void			init_expansion(t_expansion *exp, char *str);
 void			ensure_buffer_space(t_expansion *exp, int space_needed);
-void			expand_var(t_expansion *exp, char *str, t_minishell *minishell);
+int				expand_var(t_expansion *exp, char *str, t_minishell *minishell);
+char			*extract_name_with_braces(char *start, int *chars_consumed);
+char			*extract_name_without_braces(char *start, int *chars_consumed);
+char			*extract_var_name(char *start, int *chars_consumed);
+void			handle_bad_substitution(t_expansion *exp, char *str, int chars_consumed);
 
 /* Execute */
 void			execute_cmd_lst(t_minishell *minishell);
