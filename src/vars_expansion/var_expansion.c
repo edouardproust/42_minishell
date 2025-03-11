@@ -31,10 +31,16 @@ int	expand_var(t_expansion *exp, char *str, t_minishell *minishell)
 	char	*var_name;
 	int		chars_consumed;
 
-	exp->input_pos++;
 	chars_consumed = 0;
+	exp->input_pos++;
 	if (handle_special_cases(exp, str, minishell) == 1)
 		return (0);
+	if (!is_valid_varchar(str[exp->input_pos], TRUE))
+	{
+		ensure_buffer_space(exp, 1);
+		exp->cleaned[exp->output_pos++] = '$';
+		return 0;
+	}
 	var_name = extract_var_name(str + exp->input_pos, &chars_consumed);
 	if (!var_name)
 	{
@@ -42,6 +48,7 @@ int	expand_var(t_expansion *exp, char *str, t_minishell *minishell)
 		return (1);
 	}
 	process_valid_var(exp, var_name, minishell, chars_consumed);
+	exp->input_pos = exp->input_pos + chars_consumed;
 	ft_free(1, &var_name);
 	return (0);
 }

@@ -1,6 +1,6 @@
 #include "minishell.h"
 
-t_bool	is_valid_varname_char(char c, t_bool first_char)
+t_bool	is_valid_varchar(char c, t_bool first_char)
 {
 	if (first_char)
 	{
@@ -25,7 +25,7 @@ char	*extract_name_with_braces(char *start, int *chars_consumed)
 	*chars_consumed = 0;
 	while (start[i] && start[i] != '}')
 		i++;
-	if (start[i] != '}' || i == 1 || !is_valid_varname_char(start[1], TRUE))
+	if (start[i] != '}' || i == 1 || !is_valid_varchar(start[1], TRUE))
 		return (NULL);
 	name = ft_substr(start, 1, i - 1);
 	if (!name)
@@ -33,7 +33,7 @@ char	*extract_name_with_braces(char *start, int *chars_consumed)
 	j = 0;
 	while (name[j])
 	{
-		if (!is_valid_varname_char(name[j], (j == 0)))
+		if (!is_valid_varchar(name[j], (j == 0)))
 			return (free(name), NULL);
 		j++;
 	}
@@ -46,9 +46,9 @@ char	*extract_name_without_braces(char *start, int *chars_consumed)
 	int		i;
 
 	i = 0;
-	if (!is_valid_varname_char(start[0], TRUE))
+	if (!is_valid_varchar(start[0], TRUE))
 		return (*chars_consumed = 0, NULL);
-	while (is_valid_varname_char(start[i], (i == 0)))
+	while (is_valid_varchar(start[i], (i == 0)))
 		i++;
 	*chars_consumed = i;
 	return (ft_substr(start, 0, i));
@@ -83,6 +83,8 @@ void	handle_bad_substitution(t_expansion *exp, char *str)
  */
 char	*extract_var_name(char *start, int *chars_consumed)
 {
+	if (start[0] == '}')
+		return (*chars_consumed = 0, NULL);
 	if (start[0] == '{')
 	{
 		if (start[1] == '}')
@@ -121,7 +123,7 @@ int	handle_special_cases(t_expansion *exp, char *str, t_minishell *minishell)
 		exp->input_pos++;
 		return (1);
     }
-	else if (!str[exp->input_pos] || ft_isspace(str[exp->input_pos]))
+	else if (!str[exp->input_pos] || !is_valid_varchar(str[exp->input_pos], TRUE))
 	{
 		ensure_buffer_space(exp, 1);
 		exp->cleaned[exp->output_pos++] = '$';
