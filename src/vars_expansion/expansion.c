@@ -25,7 +25,7 @@ static void	process_valid_var(t_expansion *exp, char *var_name,
  * - Handles special cases (`$?`, `$$`).
  * - Extracts and validates the variable name.
  * - Appends the variable’s value (or empty string if unset).
- * Returns `0` on success, `1` on bad substitution.
+ * Returns `0` on failure.
  */
 int	expand_var(t_expansion *exp, char *str, t_minishell *minishell)
 {
