@@ -43,7 +43,7 @@ int	skip_quotes(char *input, int *index, char *unmatched_quote)
  * @param cleaned The output string being built.
  * @param j Pointer to the current position in `cleaned`.
  */
-static void	process_quotes(char c, t_expansion *exp)
+static int	process_quotes(char c, t_expansion *exp)
 {
 	if (exp->in_quote == 0)
 	{
@@ -60,6 +60,7 @@ static void	process_quotes(char c, t_expansion *exp)
 		exp->cleaned[exp->output_pos++] = c;
 		exp->input_pos++;
 	}
+	return (0);
 }
 
 /**
@@ -82,20 +83,14 @@ char	*remove_quotes_and_expand(char *str, t_minishell *minishell)
 	init_expansion(&exp, str);
 	if (!exp.cleaned)
 		return(free(str), NULL);
-	while (str[exp.input_pos])
+	exp.cleaned[0] = '\0';
+	while (str[exp.input_pos] && !error)
 	{
 		if (is_quote_char(str[exp.input_pos]))
-		{
-			process_quotes(str[exp.input_pos], &exp);
-			continue ;
-		}
-		else if ((!exp.in_quote || exp.in_quote == '"'))
-		{
-			if (str[exp.input_pos] == '$')
-				expand_var(&exp, str, minishell);
-			else
-				exp.cleaned[exp.output_pos++] = str[exp.input_pos++];
-		}
+			error = process_quotes(str[exp.input_pos], &exp);
+		else if ((!exp.in_quote || exp.in_quote == '"')
+			&& str[exp.input_pos] == '$')
+			error = expand_var(&exp, str, minishell);
 		else
 			exp.cleaned[exp.output_pos++] = str[exp.input_pos++];
 		if (error)

@@ -57,7 +57,7 @@ t_token	*create_word_token(char *input, int *index, char *unmatched_quote,
 	word = ft_substr(input, start, *index - start);
 	word = remove_quotes_and_expand(word, minishell);
 	if (!word)
-		return (put_error(NULL), NULL);
+		return (minishell->exit_code = 1, NULL);
 	token = token_new(word, TOKEN_WORD);
 	if (!token)
 		return (free(word), NULL);

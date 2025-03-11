@@ -30,18 +30,18 @@ int	expand_var(t_expansion *exp, char *str, t_minishell *minishell)
 {
 	char	*var_name;
 	int		chars_consumed;
-	int		error;
 
-	error = 0;
-	chars_consumed = 0;
 	exp->input_pos++;
+	chars_consumed = 0;
+	if (handle_special_cases(exp, str, minishell) == 1)
+		return (0);
 	var_name = extract_var_name(str + exp->input_pos, &chars_consumed);
 	if (!var_name)
 	{
-		handle_bad_substitution(exp, str, chars_consumed);
-		error = 1;
+		handle_bad_substitution(exp, str);
+		return (1);
 	}
 	process_valid_var(exp, var_name, minishell, chars_consumed);
 	ft_free(1, &var_name);
-	return (error);
+	return (0);
 }
