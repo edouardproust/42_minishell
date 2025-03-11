@@ -30,18 +30,12 @@ int	skip_quotes(char *input, int *index, char *unmatched_quote)
 	return (1);
 }
 
-/* 
- * Processes a single character while removing surrounding quotes.
- *
- * - If inside a quote block, the function either closes the quote
- *   or adds the character to the cleaned string.
- * - If not inside a quote block, it checks if the character is a quote
- *   and marks the start of a new quote block or adds the character.
- *
- * @param c The current character to process.
- * @param in_quote Pointer to track whether currently inside a quote.
- * @param cleaned The output string being built.
- * @param j Pointer to the current position in `cleaned`.
+/*
+ * Toggles quote state and skips quote characters in the output.
+ * - If `c` matches the current `exp->in_quote`, closes the quote block.
+ * - If not in a quote, opens a new quote block (single/double).
+ * - Characters inside quotes are preserved; quote marks are omitted.
+ * Returns `0` on success.
  */
 static int	process_quotes(char c, t_expansion *exp)
 {
@@ -63,16 +57,14 @@ static int	process_quotes(char c, t_expansion *exp)
 	return (0);
 }
 
-/**
- * Removes quotes from a string while preserving its contents.
- *
- * - Allocates memory for a new string without quotes.
- * - Iterates through the input string and removes quote characters while
- *   preserving characters inside quotes.
- * - If memory allocation fails, frees the input string and returns NULL.
- *
- * @param str The string to process.
- * @return A new string with quotes removed, or NULL if memory allocation fails.
+/*
+ * Main entry point for quote removal and variable expansion.
+ * - Allocates a buffer for the cleaned string (via `init_expansion`).
+ * - Processes each character:
+ *   - Skips quotes (handled by `process_quotes`).
+ *   - Expands `$VAR` (via `expand_var`).
+ * - Returns the cleaned string, or `NULL` on allocation error.
+ * Frees the original `str` after processing.
  */
 char	*remove_quotes_and_expand(char *str, t_minishell *minishell)
 {
@@ -82,7 +74,7 @@ char	*remove_quotes_and_expand(char *str, t_minishell *minishell)
 	error = 0;
 	init_expansion(&exp, str);
 	if (!exp.cleaned)
-		return(free(str), NULL);
+		return (free(str), NULL);
 	exp.cleaned[0] = '\0';
 	while (str[exp.input_pos] && !error)
 	{
@@ -93,9 +85,9 @@ char	*remove_quotes_and_expand(char *str, t_minishell *minishell)
 			error = expand_var(&exp, str, minishell);
 		else
 			exp.cleaned[exp.output_pos++] = str[exp.input_pos++];
-		if (error)
-			return (free(exp.cleaned), free(str), NULL);
 	}
+	if (error)
+		return (free(exp.cleaned), free(str), NULL);
 	exp.cleaned[exp.output_pos] = '\0';
 	free(str);
 	return (exp.cleaned);

@@ -1,7 +1,11 @@
 #include "minishell.h"
-
+/*
+ * Retrieves a variable’s value from the env and adds it to the output.
+ * - Unset variables are treated as empty strings.
+ * - Uses `get_env_value` (assumed to search `minishell`’s env).
+ */
 static void	process_valid_var(t_expansion *exp, char *var_name,
-	t_minishell *minishell, int chars_consumed)
+	t_minishell *minishell)
 {
 	char	*var_value;
 	int		var_len;
@@ -14,17 +18,14 @@ static void	process_valid_var(t_expansion *exp, char *var_name,
 		ensure_buffer_space(exp, var_len);
 	ft_strlcpy(exp->cleaned + exp->output_pos, var_value, var_len + 1);
 	exp->output_pos = exp->output_pos + var_len;
-	exp->input_pos = exp->input_pos + chars_consumed;
 }
 
 /*
- * Expands a variable starting at `i` and updates the cleaned buffer.
- * 
- * @param str Input string.
- * @param i Pointer to current index (updated after expansion).
- * @param cleaned Buffer to append the variable's value.
- * @param minishell Shell instance for environment lookup.
- * @return Length of the appended value.
+ * Expands a variable starting at `exp->input_pos`.
+ * - Handles special cases (`$?`, `$$`).
+ * - Extracts and validates the variable name.
+ * - Appends the variable’s value (or empty string if unset).
+ * Returns `0` on success, `1` on bad substitution.
  */
 int	expand_var(t_expansion *exp, char *str, t_minishell *minishell)
 {
@@ -32,22 +33,16 @@ int	expand_var(t_expansion *exp, char *str, t_minishell *minishell)
 	int		chars_consumed;
 
 	chars_consumed = 0;
-	exp->input_pos++;
-	if (handle_special_cases(exp, str, minishell) == 1)
+	if (handle_special_cases(exp, str, minishell))
 		return (0);
-	if (!is_valid_varchar(str[exp->input_pos], TRUE))
-	{
-		ensure_buffer_space(exp, 1);
-		exp->cleaned[exp->output_pos++] = '$';
-		return 0;
-	}
+	exp->input_pos++;
 	var_name = extract_var_name(str + exp->input_pos, &chars_consumed);
 	if (!var_name)
 	{
 		handle_bad_substitution(exp, str);
 		return (1);
 	}
-	process_valid_var(exp, var_name, minishell, chars_consumed);
+	process_valid_var(exp, var_name, minishell);
 	exp->input_pos = exp->input_pos + chars_consumed;
 	ft_free(1, &var_name);
 	return (0);

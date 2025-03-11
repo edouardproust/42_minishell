@@ -1,12 +1,14 @@
 #include "minishell.h"
-
+/*
+ * Initializes the `t_expansion` struct.
+ * - Allocates `cleaned` buffer with size `2 * strlen(str) + 1`.
+ * - Initializes buffer size, positions and `in_quote` state.
+ */
 void	init_expansion(t_expansion *exp, char *str)
 {
 	size_t	initial_size;
 
 	initial_size = ft_strlen(str) * 2 + 1;
-	if (initial_size < 1024)
-		initial_size = 1024;
 	exp->cleaned = malloc(initial_size);
 	exp->buf_size = initial_size;
 	exp->input_pos = 0;
@@ -14,6 +16,11 @@ void	init_expansion(t_expansion *exp, char *str)
 	exp->in_quote = 0;
 }
 
+/*
+ * Ensures the output buffer has space for `space_needed` additional bytes.
+ * - Doubles buffer size repeatedly until sufficient.
+ * - Uses `ft_realloc` to preserve existing content.
+ */
 void	ensure_buffer_space(t_expansion *exp, int space_needed)
 {
 	char	*new;
