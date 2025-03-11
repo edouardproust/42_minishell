@@ -26,12 +26,12 @@ void	ensure_buffer_space(t_expansion *exp, int space_needed)
 	char	*new;
 	int		new_size;
 
-	if (exp->output_pos + space_needed < exp->buf_size)
+	if (exp->output_pos + space_needed + 1 < exp->buf_size)
 		return ;
 	new_size = exp->buf_size * 2;
-	while (exp->output_pos + space_needed >= new_size)
+	while (exp->output_pos + space_needed + 1 >= new_size)
 		new_size = new_size * 2;
-	new = ft_realloc(exp->cleaned, new_size);
+	new = ft_realloc(exp->cleaned, exp->buf_size, new_size);
 	if (new)
 	{
 		exp->cleaned = new;

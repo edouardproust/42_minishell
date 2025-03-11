@@ -208,12 +208,9 @@ char			*remove_quotes_and_expand(char *str, t_minishell *minishell);
 void			init_expansion(t_expansion *exp, char *str);
 void			ensure_buffer_space(t_expansion *exp, int space_needed);
 int				expand_var(t_expansion *exp, char *str, t_minishell *minishell);
-char			*extract_name_with_braces(char *start, int *chars_consumed);
-char			*extract_name_without_braces(char *start, int *chars_consumed);
 char			*extract_var_name(char *start, int *chars_consumed);
-void			handle_bad_substitution(t_expansion *exp, char *str);
-void			handle_pid_expansion(t_expansion *exp);
-int				handle_special_cases(t_expansion *exp, char *str, t_minishell *minishell);
+int				handle_special_cases(t_expansion *exp, char *str,
+					t_minishell *minishell);
 void			handle_exit_status(t_expansion *exp, t_minishell *minishell);
 t_bool			is_valid_varchar(char c, t_bool first_char);
 

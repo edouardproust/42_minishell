@@ -38,10 +38,7 @@ int	expand_var(t_expansion *exp, char *str, t_minishell *minishell)
 	exp->input_pos++;
 	var_name = extract_var_name(str + exp->input_pos, &chars_consumed);
 	if (!var_name)
-	{
-		handle_bad_substitution(exp, str);
-		return (1);
-	}
+		return (0);
 	process_valid_var(exp, var_name, minishell);
 	exp->input_pos = exp->input_pos + chars_consumed;
 	ft_free(1, &var_name);
