@@ -45,12 +45,13 @@ static void	export_envvar(t_envvar *envvar, t_minishell *minishell)
  */
 int	do_export(char **args, t_minishell *ms)
 {
+	int			exit_code;
 	t_envvar	*envvar;
 	int			i;
-	int			exit_code;
 
-	if (error_if_options(args, "export"))
-		return (EXIT_FAILURE);
+	exit_code = error_if_options(args, "export");
+	if (exit_code)
+		return (exit_code);
 	if (ft_matrix_size(args) == 1)
 		return (put_export_vars(ms->envvar_lst));
 	exit_code = EXIT_SUCCESS;

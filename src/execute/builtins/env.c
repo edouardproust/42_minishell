@@ -11,10 +11,12 @@
  */
 int	do_env(char **args, t_minishell *minishell)
 {
+	int			exit_code;
 	t_envvar	*current;
 
-	if (error_if_wrong_args(args, "env", 1))
-		return (EXIT_FAILURE);
+	exit_code = error_if_wrong_args(args, "env", 1);
+	if (exit_code)
+		return (exit_code);
 	current = minishell->envvar_lst;
 	while (current)
 	{

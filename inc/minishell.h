@@ -235,8 +235,8 @@ char			*get_destdir(char **args, int args_nb, t_minishell *ms);
 char			*get_current_pwd(void);
 int				change_directory(char *dest_dir, char **pwd);
 int				update_envvars(char **pwd, char **new_pwd, t_minishell *ms);
-t_bool			error_if_options(char **args, char *builtin_name);
-t_bool			error_if_wrong_args(char **args, char *builtin_name,
+int				error_if_options(char **args, char *builtin_name);
+int				error_if_wrong_args(char **args, char *builtin_name,
 					int max_args_nb);
 
 /* File descriptors */

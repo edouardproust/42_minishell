@@ -11,13 +11,15 @@
  */
 int	do_cd(char **args, t_minishell *ms)
 {
+	int			exit_code;
 	int			args_nb;
 	char		*dest_dir;
 	char		*pwd;
 	char		*new_pwd;
 
-	if (error_if_wrong_args(args, "cd", 2))
-		return (EXIT_FAILURE);
+	exit_code = error_if_wrong_args(args, "cd", 2);
+	if (exit_code)
+		return (exit_code);
 	args_nb = ft_matrix_size(args);
 	dest_dir = get_destdir(args, args_nb, ms);
 	if (!dest_dir)

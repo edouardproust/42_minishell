@@ -11,11 +11,13 @@
  */
 int	do_unset(char **args, t_minishell *minishell)
 {
+	int			exit_code;
 	int			i;
 	t_envvar	*found_node;
 
-	if (error_if_options(args, "unset"))
-		return (EXIT_FAILURE);
+	exit_code = error_if_options(args, "unset");
+	if (exit_code)
+		return (exit_code);
 	if (ft_matrix_size(args) == 1)
 		return (EXIT_SUCCESS);
 	i = 1;

@@ -1,6 +1,6 @@
 #include "minishell.h"
 
-t_bool	error_if_options(char **args, char *builtin_name)
+int	error_if_options(char **args, char *builtin_name)
 {
 	int	i;
 
@@ -9,15 +9,15 @@ t_bool	error_if_options(char **args, char *builtin_name)
 	{
 		if (args[i][0] == '-')
 		{
-			put_error("%s: %s: invalid option", builtin_name, args[i]);
-			return (TRUE);
+			put_error("%s: -%c: invalid option", builtin_name, args[i][1]);
+			return (E_CMDWRONGARG);
 		}
 		i++;
 	}
-	return (FALSE);
+	return (EXIT_SUCCESS);
 }
 
-t_bool	error_if_wrong_args(char **args, char *builtin_name,
+int	error_if_wrong_args(char **args, char *builtin_name,
 	int max_args_nb)
 {
 	int	args_nb;
@@ -26,7 +26,7 @@ t_bool	error_if_wrong_args(char **args, char *builtin_name,
 	if (args_nb > max_args_nb)
 	{
 		put_error("%s: too many arguments", builtin_name);
-		return (TRUE);
+		return (EXIT_FAILURE);
 	}
 	return (error_if_options(args, builtin_name));
 }

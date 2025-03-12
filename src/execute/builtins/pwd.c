@@ -10,11 +10,13 @@
  */
 int	do_pwd(char **args, t_minishell *minishell)
 {
+	int		exit_code;
 	char	*path;
 
 	(void)minishell;
-	if (error_if_options(args, "pwd"))
-		return (EXIT_FAILURE);
+	exit_code = error_if_options(args, "pwd");
+	if (exit_code)
+		return (exit_code);
 	path = getcwd(NULL, 0);
 	if (!path)
 		return (put_error("pwd: getcwd"), EXIT_FAILURE);
