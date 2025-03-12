@@ -2,9 +2,9 @@
 
 /**
  * Implementation of the cd builtin, with only a relative or absolute path.
- * 
+ *
  * @param args Array of arguments passed to cd.
- * @param minishell Struct containing global Minishell data, including the 
+ * @param minishell Struct containing global Minishell data, including the
  * 	environment variables list (`envvar_lst`) and the environment array (`envp`).
  * @return EXIT_SUCCESS on success. EXIT_FAILURE on failure.
  * @note The quotes around args are removed during tokenization phase.
@@ -16,9 +16,9 @@ int	do_cd(char **args, t_minishell *ms)
 	char		*pwd;
 	char		*new_pwd;
 
+	if (error_if_wrong_args(args, "cd", 2))
+		return (EXIT_FAILURE);
 	args_nb = ft_matrix_size(args);
-	if (args_nb > 2)
-		return (put_error("cd: too many arguments"), EXIT_FAILURE);
 	dest_dir = get_destdir(args, args_nb, ms);
 	if (!dest_dir)
 		return (EXIT_FAILURE);

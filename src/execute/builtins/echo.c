@@ -2,7 +2,7 @@
 
 /**
  * Defines if the option -n is active for this command or not.
- * 
+ *
  * @param args Array of args (strings) of the current t_cmd
  * @param i Pointer to the args index
  * @return boolean TRUE if option -n is activated. FALSE if not.
@@ -24,7 +24,7 @@ t_bool	handle_option_n(char **args, int *i)
 
 /**
  * Implementation of the echo builtin, with option -n.
- * 
+ *
  * @param args Array of arguments passed to echo.
  * @param minishell (not used) Struct containing global Minishell data.
  * @return EXIT_SUCCESS on success. EXIT_FAILURE on failure.

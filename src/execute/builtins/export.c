@@ -3,7 +3,7 @@
 /**
  * Print in stdout the list of export environment variables
  * for the command `export`.
- * 
+ *
  * @param lst Head node of t_envvar list
  * @return FAILURE if ft_printf fails. EXIT_SUCCESS otherwise.
  */
@@ -35,9 +35,9 @@ static void	export_envvar(t_envvar *envvar, t_minishell *minishell)
 
 /**
  * Implementation of the export builtin, with no options.
- * 
+ *
  * @param args Array of arguments passed to export.
- * @param ms Struct containing global Minishell data, including the 
+ * @param ms Struct containing global Minishell data, including the
  * 	environment variables list (`envvar_lst`) and the environment array
  * (`envp`).
  * @return EXIT_SUCCESS on success. EXIT_FAILURE on failure.
@@ -49,6 +49,8 @@ int	do_export(char **args, t_minishell *ms)
 	int			i;
 	int			exit_code;
 
+	if (error_if_options(args, "export"))
+		return (EXIT_FAILURE);
 	if (ft_matrix_size(args) == 1)
 		return (put_export_vars(ms->envvar_lst));
 	exit_code = EXIT_SUCCESS;

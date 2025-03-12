@@ -2,9 +2,9 @@
 
 /**
  * Implementation of the env builtin, with no option or argument.
- * 
+ *
  * @param args Array of arguments passed to env.
- * @param minishell Struct containing global Minishell data, including the 
+ * @param minishell Struct containing global Minishell data, including the
  * 	environment variables list (`envvar_lst`).
  * @return EXIT_SUCCESS on success. EXIT_FAILURE on failure.
  * @note The quotes around args are removed during tokenization.
@@ -13,7 +13,8 @@ int	do_env(char **args, t_minishell *minishell)
 {
 	t_envvar	*current;
 
-	(void)args;
+	if (error_if_wrong_args(args, "env", 1))
+		return (EXIT_FAILURE);
 	current = minishell->envvar_lst;
 	while (current)
 	{

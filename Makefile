@@ -48,6 +48,7 @@ C_FILES = debug.c \
 	execute/heredoc.c \
 	execute/executable.c \
 	execute/builtin.c \
+	execute/builtins/utils_args.c \
 	execute/builtins/cd/cd.c \
 	execute/builtins/cd/utils_dir.c \
 	execute/builtins/cd/utils_envvar.c \
