@@ -18,9 +18,11 @@ C_FILES = debug.c \
 	utils/string.c \
 	utils/fd.c \
 	env/init.c \
-	env/utils.c \
 	env/ops.c \
 	env/path.c \
+	env/utils/envp.c \
+	env/utils/envvar.c \
+	env/valid.c \
 	signal/signal.c \
 	signal/utils.c \
 	tokenizer/tokenizer.c \
@@ -46,7 +48,10 @@ C_FILES = debug.c \
 	execute/heredoc.c \
 	execute/executable.c \
 	execute/builtin.c \
-	execute/builtins/cd.c \
+	execute/builtins/utils_args.c \
+	execute/builtins/cd/cd.c \
+	execute/builtins/cd/utils_dir.c \
+	execute/builtins/cd/utils_envvar.c \
 	execute/builtins/echo.c \
 	execute/builtins/env.c \
 	execute/builtins/exit.c \
@@ -130,6 +135,9 @@ re: fclean all
 
 libft:
 	$(MAKE) -C $(LIBFT_DIR)
+
+valgrind:
+	valgrind --leak-check=full --track-origins=yes --track-fds=yes $(NAME)
 
 # ************************************
 # Phony                              *
