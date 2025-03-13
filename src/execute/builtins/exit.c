@@ -3,7 +3,7 @@
 /**
  * Check if the string is a valid number.
  */
-static t_bool	is_number(char *str)
+static t_bool	is_valid_number(char *str)
 {
 	if (*str == '-' || *str == '+')
 		str++;
@@ -23,21 +23,32 @@ static t_bool	is_number(char *str)
  * @param minishell Struct containing global Minishell data.
  * @return EXIT_SUCCESS on success. EXIT_FAILURE on failure.
  * @note The quotes around args are removed during tokenization.
- * @TODO line `minishell->exit_code = minishell->exit_code;`:
  * 	check at school: minishell->exit_code or EXIT_SUCCESS ?
  */
 int	do_exit(char **args, t_minishell *minishell)
 {
+	size_t	arg_count;
+	int		exit_code;
+
 	ft_printf("exit\n");
-	if (ft_matrix_size(args) == 1)
-		minishell->exit_code = minishell->exit_code;
-	else if (is_number(args[1]))
-		minishell->exit_code = ft_atoi(args[1]);
+	arg_count = ft_matrix_size(args);
+	if (arg_count == 1)
+		exit_code = minishell->exit_code;
 	else
 	{
-		minishell->exit_code = E_CMDWRONGARG;
-		put_error("exit: %s: numeric argument required", args[1]);
+		if (!is_valid_number(args[1]))
+		{
+			exit_code = E_CMDWRONGARG;
+			put_error("exit: %s: numeric argument required", args[1]);
+		}
+		else if (arg_count > 2)
+		{
+			put_error("exit: too many arguments");
+			return (EXIT_FAILURE);
+		}
+		else
+			exit_code = ft_atoi(args[1]);
 	}
-	exit_minishell(minishell->exit_code, minishell, NULL);
+	exit_minishell(exit_code, minishell, NULL);
 	return (EXIT_SUCCESS);
 }
