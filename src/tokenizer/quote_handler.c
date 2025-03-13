@@ -30,70 +30,29 @@ int	skip_quotes(char *input, int *index, char *unmatched_quote)
 	return (1);
 }
 
-/**
- * Processes a single character while removing surrounding quotes.
- *
- * - If inside a quote block, the function either closes the quote
- *   or adds the character to the cleaned string.
- * - If not inside a quote block, it checks if the character is a quote
- *   and marks the start of a new quote block or adds the character.
- *
- * @param c The current character to process.
- * @param in_quote Pointer to track whether currently inside a quote.
- * @param cleaned The output string being built.
- * @param j Pointer to the current position in `cleaned`.
+/*
+ * Toggles quote state and skips quote characters in the output.
+ * - If `c` matches the current `exp->in_quote`, closes the quote block.
+ * - If not in a quote, opens a new quote block (single/double).
+ * - Characters inside quotes are preserved; quote marks are omitted.
+ * Returns `0` on success.
  */
-static void	process_char(char c, char *in_quote, char *cleaned, int *j)
+int	process_quotes(char c, t_expansion *exp)
 {
-	if (*in_quote)
+	if (exp->in_quote == 0)
 	{
-		if (c == *in_quote)
-			*in_quote = 0;
-		else
-			cleaned[(*j)++] = c;
+		exp->in_quote = c;
+		exp->input_pos++;
+	}
+	else if (exp->in_quote == c)
+	{
+		exp->in_quote = 0;
+		exp->input_pos++;
 	}
 	else
 	{
-		if (is_quote_char(c))
-			*in_quote = c;
-		else
-			cleaned[(*j)++] = c;
+		exp->cleaned[exp->output_pos++] = c;
+		exp->input_pos++;
 	}
-}
-
-/**
- * Removes quotes from a string while preserving its contents.
- *
- * - Allocates memory for a new string without quotes.
- * - Iterates through the input string and removes quote characters while
- *   preserving characters inside quotes.
- * - If memory allocation fails, frees the input string and returns NULL.
- *
- * @param str The string to process.
- * @return A new string with quotes removed, or NULL if memory allocation fails.
- */
-char	*remove_quotes(char *str)
-{
-	char	*cleaned;
-	char	in_quote;
-	int		i;
-	int		j;
-
-	cleaned = malloc(ft_strlen(str) + 1);
-	if (!cleaned)
-	{
-		free(str);
-		return (NULL);
-	}
-	i = 0;
-	j = 0;
-	in_quote = 0;
-	while (str[i])
-	{
-		process_char(str[i], &in_quote, cleaned, &j);
-		i++;
-	}
-	cleaned[j] = '\0';
-	free(str);
-	return (cleaned);
+	return (0);
 }

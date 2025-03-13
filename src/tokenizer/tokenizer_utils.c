@@ -65,11 +65,21 @@ t_token	*handle_special_char(char *input, int *i)
  * @param unmatched_quote Pointer to the unmatched quote character, if any.
  * @returns Newly allocated token (`t_token *`).
  */
-t_token	*handle_token_creation(char *input, int *i, char *unmatched_quote)
+t_token	*handle_token_creation(char *input, int *i, char *unmatched_quote,
+		t_minishell *minishell)
 {
+	t_token	*token;
+
 	if (is_special_char(input[*i]))
 		return (handle_special_char(input, i));
-	return (create_word_token(input, i, unmatched_quote));
+	token = create_word_token(input, i, unmatched_quote, minishell);
+	if (!token)
+	{
+		if (*unmatched_quote == 0)
+			minishell->exit_code = 1;
+		return (NULL);
+	}
+	return (token);
 }
 
 /**
@@ -89,10 +99,13 @@ int	handle_token_error(t_token **token_lst, char unmatched_quote,
 {
 	free_token_lst(token_lst);
 	if (unmatched_quote)
-		exit_minishell(EXIT_FAILURE, minishell,
-			"unexpected EOF while looking for matching `%c'",
+	{
+		put_error("unexpected EOF while looking for matching `%c'",
 			unmatched_quote);
+		minishell->exit_code = E_CRITICAL;
+		return (EXIT_FAILURE);
+	}
 	else
-		exit_minishell(EXIT_FAILURE, minishell, NULL);
+		minishell->exit_code = 1;
 	return (EXIT_SUCCESS);
 }
