@@ -22,6 +22,7 @@ t_bool	is_valid_varchar(char c, t_bool first_char)
 char	*extract_var_name(char *start, int *chars_consumed)
 {
 	int	i;
+
 	i = 0;
 	if (!is_valid_varchar(start[i], TRUE))
 		return (*chars_consumed = 0, NULL);

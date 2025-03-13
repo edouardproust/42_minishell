@@ -1,7 +1,14 @@
 #include "minishell.h"
-/*
- * Handles `$?` and invalid `$` cases (e.g., `$` at end or followed by invalid char).
- * Returns `1` if a special/invalid case was handled, `0` otherwise.
+/**
+ * Handles special cases during variable expansion:
+ * - `$?`: Expands to the last exit code.
+ * - Lone `$` or `$` followed by invalid characters (not alphanum/"_").
+ * 
+ * @param exp Expansion context (buffer state)
+ * @param str Input string being processed
+ * @param minishell Shell context for exit code
+ * @return 1 if special case handled, 0 if normal expansion needed
+ * @note Advances input position when handling special cases
  */
 int	handle_special_cases(t_expansion *exp, char *str, t_minishell *minishell)
 {
@@ -11,8 +18,8 @@ int	handle_special_cases(t_expansion *exp, char *str, t_minishell *minishell)
 		exp->input_pos = exp->input_pos + 2;
 		return (1);
 	}
-	else if (!str[exp->input_pos + 1] && (!str[exp->input_pos + 1]
-		|| !is_valid_varchar(str[exp->input_pos + 1], TRUE)))
+	else if (str[exp->input_pos] == '$' && (str[exp->input_pos + 1] == '\0'
+			|| !is_valid_varchar(str[exp->input_pos + 1], TRUE)))
 	{
 		ensure_buffer_space(exp, 1);
 		exp->cleaned[exp->output_pos++] = '$';

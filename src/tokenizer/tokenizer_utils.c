@@ -99,9 +99,12 @@ int	handle_token_error(t_token **token_lst, char unmatched_quote,
 {
 	free_token_lst(token_lst);
 	if (unmatched_quote)
-		exit_minishell(EXIT_FAILURE, minishell,
-			"unexpected EOF while looking for matching `%c'",
+	{
+		put_error("unexpected EOF while looking for matching `%c'",
 			unmatched_quote);
+		minishell->exit_code = E_CRITICAL;
+		return (EXIT_FAILURE);
+	}
 	else
 		minishell->exit_code = 1;
 	return (EXIT_SUCCESS);
