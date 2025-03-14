@@ -30,7 +30,8 @@ t_token	*tokenizer(t_minishell *minishell)
 		skip_whitespaces(input, &i);
 		if (!input[i])
 			break ;
-		new_token = handle_token_creation(input, &i, &unmatched_quote);
+		new_token = handle_token_creation
+			(input, &i, &unmatched_quote, minishell);
 		if (!new_token)
 			return (handle_token_error(&minishell->token_lst,
 					unmatched_quote, minishell), NULL);
