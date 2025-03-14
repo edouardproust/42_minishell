@@ -54,8 +54,10 @@ typedef struct s_envvar
 
 typedef struct s_token
 {
+	char			*original_value;
 	char			*value;
 	int				type;
+	int				was_quoted;
 	struct s_token	*next;
 }	t_token;
 
@@ -177,6 +179,8 @@ t_cmd			*cmd_new(t_cmd *prev_cmd);
 void			add_arg_to_cmd(t_cmd *cmd, char *arg);
 int				parse_tokens(t_minishell *minishell);
 char			*redir_error(t_token *token);
+int				check_ambiguous_redirect(t_token *file_token,
+					t_minishell *minishell);
 t_parse_op		*get_parse_ops(void);
 int				process_all_heredocs(t_minishell *ms);
 int				handle_token_type(t_token **cur_token, t_cmd **cur_cmd,
@@ -202,11 +206,12 @@ t_token			*handle_special_char(char *input, int *i);
 t_token			*create_word_token(char *input, int *index,
 					char *unmatched_quote, t_minishell *minishell);
 t_token			*handle_token_creation(char *input, int *i,
-					char *unmatched_quote,t_minishell *minishell);
+					char *unmatched_quote, t_minishell *minishell);
 int				handle_token_error(t_token **token_lst, char unmatched_quote,
 					t_minishell *minishell);
 void			token_addback(t_token **tokens, t_token *new);
 int				skip_quotes(char *input, int *index, char *unmatched_quote);
+int				process_quotes(char c, t_expansion *exp);
 char			*remove_quotes_and_expand(char *str, t_minishell *minishell);
 
 /* Vars expansion */
@@ -218,7 +223,8 @@ char			*extract_name_without_braces(char *start, int *chars_consumed);
 char			*extract_var_name(char *start, int *chars_consumed);
 void			handle_bad_substitution(t_expansion *exp, char *str);
 void			handle_pid_expansion(t_expansion *exp);
-int				handle_special_cases(t_expansion *exp, char *str, t_minishell *minishell);
+int				handle_special_cases(t_expansion *exp, char *str,
+					t_minishell *minishell);
 void			handle_exit_status(t_expansion *exp, t_minishell *minishell);
 t_bool			is_valid_varchar(char c, t_bool first_char);
 

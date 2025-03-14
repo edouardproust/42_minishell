@@ -68,23 +68,26 @@ char	*extract_name_without_braces(char *start, int *chars_consumed)
 }
 
 /*
- * Handles invalid variable syntax (e.g. `${}`).
- * - Prints "bad substitution" error for the invalid substring.
- * - Advances `exp->input_pos` to skip the invalid portion.
+ * Extracts a variable name after `$`.
+ * - Delegates to `extract_name_with_braces` or `extract_name_without_braces`.
+ * Returns the variable name or `NULL` if invalid.
+ * Updates `chars_consumed` to reflect parsed characters (e.g., `${VAR}` -> 5).
  */
-void	handle_bad_substitution(t_expansion *exp, char *str)
+char	*extract_var_name(char *start, int *chars_consumed)
 {
-	int		end;
-	char	*sub;
-
-	end = exp->input_pos - 1;
-	while (str[end] && !ft_isspace(str[end]) && !is_quote_char(str[end]))
-		end++;
-	sub = ft_substr(str, exp->input_pos - 1, end - (exp->input_pos - 1));
-	if (sub)
+	if (start[0] == '{')
 	{
-		put_error("%s: bad substitution", sub);
-		free(sub);
+		if (start[1] == '}' || !is_valid_varchar(start[1], TRUE))
+		{
+			if (start[1] == '}')
+				*chars_consumed = 2;
+			else
+				*chars_consumed = 1;
+			return (NULL);
+		}
+		if (!extract_name_with_braces(start, chars_consumed))
+			*chars_consumed = 0;
+		return (extract_name_with_braces(start, chars_consumed));
 	}
-	exp->input_pos = end;
+	return (extract_name_without_braces(start, chars_consumed));
 }

@@ -29,6 +29,7 @@ C_FILES = debug.c \
 	tokenizer/tokenizer_utils.c \
 	tokenizer/token_utils.c \
 	tokenizer/quote_handler.c \
+	tokenizer/remove_quotes_expand.c \
 	vars_expansion/exp_init.c \
 	vars_expansion/var_name_extraction.c \
 	vars_expansion/special_cases.c \

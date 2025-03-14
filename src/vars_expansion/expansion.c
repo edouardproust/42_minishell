@@ -20,12 +20,17 @@ static void	process_valid_var(t_expansion *exp, char *var_name,
 	exp->output_pos = exp->output_pos + var_len;
 }
 
-/*
- * Expands a variable starting at `exp->input_pos`.
- * - Handles special cases (`$?`, `$$`).
- * - Extracts and validates the variable name.
- * - Appends the variable’s value (or empty string if unset).
- * Returns `0` on success, `1` on bad substitution.
+/**
+ * Expands variables and special substitutions:
+ * 1. Processes special cases via handle_special_cases()
+ * 2. Extracts/validates variable names (supports ${VAR} syntax)
+ * 3. Appends expanded value to buffer (empty if unset)
+ * 
+ * @param exp Expansion context (buffer state)
+ * @param str Input string being processed
+ * @param minishell Shell context for environment lookups
+ * @return 0 on successful expansion, 1 on bad substitution
+ * @note Generates "bad substitution" error for invalid syntax
  */
 int	expand_var(t_expansion *exp, char *str, t_minishell *minishell)
 {

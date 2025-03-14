@@ -17,7 +17,8 @@ void	free_token_lst(t_token **token_lst)
 	while (cur_token)
 	{
 		nxt_token = cur_token->next;
-		ft_free(2, &cur_token->value, &cur_token);
+		ft_free(2, &cur_token->value, &cur_token->original_value);
+		free(cur_token);
 		cur_token = nxt_token;
 	}
 	*token_lst = NULL;
