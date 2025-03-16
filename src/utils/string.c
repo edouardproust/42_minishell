@@ -10,7 +10,7 @@
 int	is_special_char(char c)
 {
 	return (c == '|' || c == '<' || c == '>');
-}
+}	
 
 /**
  * Checks if the character is a whitespace (space, tab, newline, etc.).
