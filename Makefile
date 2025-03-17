@@ -26,14 +26,17 @@ C_FILES = debug.c \
 	signal/signal.c \
 	signal/utils.c \
 	tokenizer/tokenizer.c \
-	tokenizer/tokenizer_utils.c \
-	tokenizer/token_utils.c \
-	tokenizer/quote_handler.c \
+	tokenizer/token_ops.c \
+	tokenizer/token_creation.c \
+	tokenizer/token_list.c \
+	tokenizer/quote_handling.c \
+	tokenizer/split_tokens.c \
 	tokenizer/remove_quotes_expand.c \
 	vars_expansion/exp_init.c \
 	vars_expansion/var_name_extraction.c \
 	vars_expansion/special_cases.c \
 	vars_expansion/expansion.c \
+	vars_expansion/tilde_expansion.c \
 	parser/cmd/init_list.c \
 	parser/cmd/new_cmd.c \
 	parser/cmd/utils.c \

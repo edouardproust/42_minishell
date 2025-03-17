@@ -213,6 +213,10 @@ void			token_addback(t_token **tokens, t_token *new);
 int				skip_quotes(char *input, int *index, char *unmatched_quote);
 int				process_quotes(char c, t_expansion *exp);
 char			*remove_quotes_and_expand(char *str, t_minishell *minishell);
+char			*handle_tilde_exp(char *original_word, int has_quotes,
+					t_minishell *minishell);
+char			*expand_tilde(char *word, t_minishell *minishell);
+t_token 		*split_unquoted(t_token *orig_token, char *expanded_val);
 
 /* Vars expansion */
 void			init_expansion(t_expansion *exp, char *str);
@@ -221,7 +225,6 @@ int				expand_var(t_expansion *exp, char *str, t_minishell *minishell);
 char			*extract_var_name(char *start, int *chars_consumed);
 int				handle_special_cases(t_expansion *exp, char *str,
 					t_minishell *minishell);
-void			handle_exit_status(t_expansion *exp, t_minishell *minishell);
 t_bool			is_valid_varchar(char c, t_bool first_char);
 
 /* Execute */

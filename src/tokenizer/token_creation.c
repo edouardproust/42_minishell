@@ -1,30 +1,5 @@
 #include "minishell.h"
 /**
- * Allocates and initializes a new token structure.
- * 
- * @param value Processed/expanded token value
- * @param type Token type (TOKEN_WORD, TOKEN_PIPE, etc.)
- * @return Initialized token with:
- *         - NULL-terminated linked list
- *         - was_quoted=0 default
- *         - original_value=NULL
- */
-t_token	*token_new(char *value, int type)
-{
-	t_token	*token;
-
-	token = malloc(sizeof(t_token));
-	if (!token)
-		return (NULL);
-	token->value = value;
-	token->original_value = NULL;
-	token->type = type;
-	token->was_quoted = 0;
-	token->next = NULL;
-	return (token);
-}
-
-/**
  * Creates a token with both original and expanded values, tracking quote status.
  * 
  * @param original The original string from input (with quotes).
@@ -42,6 +17,8 @@ static t_token	*create_token_with_values(char *original, char *expanded,
 		return (free(original), free(expanded), NULL);
 	token->original_value = original;
 	token->was_quoted = was_quoted;
+	if (!was_quoted && ft_strchr(expanded, ' '))
+		return (split_unquoted(token, expanded));
 	return (token);
 }
 
@@ -100,26 +77,9 @@ t_token	*create_word_token(char *input, int *index, char *unmatched_quote,
 	original_word = ft_substr(input, start, *index - start);
 	if (!original_word)
 		return (NULL);
+	original_word = handle_tilde_exp(original_word, has_quotes, minishell);
 	expanded_word = remove_quotes_and_expand(original_word, minishell);
 	if (!expanded_word)
 		return (free(original_word), minishell->exit_code = 1, NULL);
 	return (create_token_with_values(original_word, expanded_word, has_quotes));
-}
-
-/*
- * Adds a new token to the end of the token list.
- */
-void	token_addback(t_token **tokens, t_token *new)
-{
-	t_token	*tmp;
-
-	if (!*tokens)
-		*tokens = new;
-	else
-	{
-		tmp = *tokens;
-		while (tmp->next)
-			tmp = tmp->next;
-		tmp->next = new;
-	}
 }
