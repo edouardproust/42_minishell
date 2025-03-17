@@ -30,6 +30,7 @@ C_FILES = debug.c \
 	tokenizer/token_creation.c \
 	tokenizer/token_list.c \
 	tokenizer/quote_handling.c \
+	tokenizer/split_tokens.c \
 	tokenizer/remove_quotes_expand.c \
 	vars_expansion/exp_init.c \
 	vars_expansion/var_name_extraction.c \

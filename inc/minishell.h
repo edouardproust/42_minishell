@@ -216,7 +216,7 @@ char			*remove_quotes_and_expand(char *str, t_minishell *minishell);
 char			*handle_tilde_exp(char *original_word, int has_quotes,
 					t_minishell *minishell);
 char			*expand_tilde(char *word, t_minishell *minishell);
-t_token 		*split_unquoted(t_token *original_token, char *expanded_val);
+t_token 		*split_unquoted(t_token *orig_token, char *expanded_val);
 
 /* Vars expansion */
 void			init_expansion(t_expansion *exp, char *str);
