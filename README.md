@@ -1,6 +1,6 @@
 # minishell
 
-**The "Minishell" project from 42 School recreates a simple Unix shell, featuring command parsing, execution, environment management, and basic built-ins in C, showcasing expertise in system calls and Unix process control.**
+**The "Minishell" project from 42 School recreates a simple Unix shell in C, featuring: command parsing, command execution, environment management, heredoc handling and several built-ins (echo, cd, pwd, env, export, unset, exit).**
 
 - **Subject:** [English](subject/en.subject.pdf) / [Spanish](subject/es.subject.pdf)
 - **Location:** 42 School Barcelona
@@ -20,6 +20,7 @@
 - (optional) "Zombie-process" architecture
 
 ### Final checks
+- Add 42 headers to all files
 - Remove any `.bak` file, `debug.c` and `debug.h` + clean all reference to them in the code
 - Memory leaks (in all case senarios)
 - Fds leaks (in all case senarios)
@@ -28,6 +29,7 @@
 - Search for any "TODO" and "DEBUG" and fix / remove them
 - Review `..gitignore` and rename it into into `.gitignore`
 - Verify if `valgrind` rule in `Makefile` is norn compliant
+- Norminette final check
 
 ## How to use?
 

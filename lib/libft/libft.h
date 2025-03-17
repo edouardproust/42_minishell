@@ -14,7 +14,7 @@
 # define LIBFT_H
 
 # include <stddef.h>
-# include <stdint.h>
+# include <stdint.h> // SIZE_MAX
 # include <stdlib.h>
 # include <unistd.h>
 

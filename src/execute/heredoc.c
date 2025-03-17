@@ -29,7 +29,8 @@ static int	read_heredoc(t_cmd *cmd, int write_fd)
 		}
 		if (ft_strcmp(line, cmd->heredoc->delimiter) == 0)
 			return (ft_free(&line), EXIT_SUCCESS);
-		if (ft_putstr_fd(line, write_fd) == -1 || ft_putstr_fd("\n", write_fd) == -1)
+		if (ft_putstr_fd(line, write_fd) == -1
+			|| ft_putstr_fd("\n", write_fd) == -1)
 			return (ft_free(&line), EXIT_FAILURE);
 		ft_free(&line);
 	}

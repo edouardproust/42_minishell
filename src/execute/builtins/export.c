@@ -55,8 +55,8 @@ int	do_export(char **args, t_minishell *ms)
 	if (ft_matrix_size(args) == 1)
 		return (put_export_vars(ms->envvar_lst));
 	exit_code = EXIT_SUCCESS;
-	i = 1;
-	while (args[i])
+	i = -1;
+	while (args[++i])
 	{
 		envvar = envvar_new(args[i]);
 		if (!envvar)
@@ -64,12 +64,10 @@ int	do_export(char **args, t_minishell *ms)
 		if (!is_valid_envp_var(envvar->name))
 		{
 			put_error1("export: `%s': not a valid identifier", envvar->name);
-			exit_code = EXIT_FAILURE;
-			free_envvar_node(&envvar);
+			exit_code = (free_envvar_node(&envvar), EXIT_FAILURE);
 		}
 		else
 			export_envvar(envvar, ms);
-		i++;
 	}
 	return (update_envp(ms) | exit_code);
 }

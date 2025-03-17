@@ -42,8 +42,8 @@ void	save_stdin_stdout(t_cmd *cmd, t_minishell *ms)
  */
 void	restore_stdin_stdout(t_cmd *cmd, t_minishell *ms)
 {
-
-	if ((cmd->infile || (cmd->heredoc->delimiter != NULL)) && cmd->saved_stdin != -1)
+	if ((cmd->infile || (cmd->heredoc->delimiter != NULL))
+		&& cmd->saved_stdin != -1)
 	{
 		if (ft_dup2(cmd->saved_stdin, STDIN_FILENO) == EXIT_FAILURE)
 			exit_minishell(EXIT_FAILURE, ms, "dup2");

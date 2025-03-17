@@ -12,7 +12,6 @@
 int	do_cd(char **args, t_minishell *ms)
 {
 	int			exit_code;
-	int			args_nb;
 	char		*dest_dir;
 	char		*pwd;
 	char		*new_pwd;
@@ -20,21 +19,16 @@ int	do_cd(char **args, t_minishell *ms)
 	exit_code = error_if_wrong_args(args, "cd", 2);
 	if (exit_code)
 		return (exit_code);
-	args_nb = ft_matrix_size(args);
-	dest_dir = get_destdir(args, args_nb, ms);
+	dest_dir = get_destdir(args, ft_matrix_size(args), ms);
 	if (!dest_dir)
 		return (EXIT_FAILURE);
 	if (dest_dir[0] == '\0')
 		return (EXIT_SUCCESS);
 	pwd = get_current_pwd();
-	if (!pwd)
-		return (EXIT_FAILURE);
-	if (change_directory(dest_dir, &pwd) == EXIT_FAILURE)
+	if (!pwd || change_directory(dest_dir, &pwd) == EXIT_FAILURE)
 		return (EXIT_FAILURE);
 	new_pwd = get_current_pwd();
-	if (!new_pwd)
-		return (EXIT_FAILURE);
-	if (update_envvars(&pwd, &new_pwd, ms) == EXIT_FAILURE)
+	if (!new_pwd || update_envvars(&pwd, &new_pwd, ms) == EXIT_FAILURE)
 		return (EXIT_FAILURE);
 	return (update_envp(ms));
 }

@@ -1,6 +1,3 @@
-// TODO (E) Delete this file before submitting project
-// TODO (E) Remove file from makefile SRCS
-
 #include "minishell.h"
 #include <sys/stat.h>
 

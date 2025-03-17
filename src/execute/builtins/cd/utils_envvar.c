@@ -20,7 +20,8 @@ static int	create_missing_node(char *identifier, char **path, t_minishell *ms)
 	return (EXIT_SUCCESS);
 }
 
-static int	update_or_create_node(char *identifier, char **path, t_minishell *ms)
+static int	update_or_create_node(char *identifier, char **path,
+	t_minishell *ms)
 {
 	t_envvar	*found_node;
 

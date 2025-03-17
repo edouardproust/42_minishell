@@ -11,7 +11,6 @@
  *
  * @return A pointer to the head of the command list (`cmd_lst`), or NULL if
  * tokenization failed.
- * @TODO Check error messages
  */
 void	init_cmd_lst(t_minishell *minishell)
 {

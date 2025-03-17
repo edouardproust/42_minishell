@@ -126,14 +126,6 @@ typedef struct s_builtin
 	int		(*fn)(char **args, t_minishell *minishell);
 }	t_builtin;
 
-/* Struct for error message with 2 args */
-typedef struct s_args
-{
-    char *fmt;
-    char *arg1;
-    char *arg2;
-} t_args;
-
 /****************************************/
 /* Functions                            */
 /****************************************/
@@ -158,8 +150,6 @@ void			exit_minishell(int exit_code, t_minishell *minishell,
 					char *err_msg);
 void			exit_minishell1(int exit_code, t_minishell *minishell,
 					char *fmt, char *arg);
-void			exit_minishell2(int exit_code, t_minishell *minishell,
-					t_args args);
 
 /* Env */
 t_envvar		*init_envvars(t_minishell *minishell);

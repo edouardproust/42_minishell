@@ -21,7 +21,7 @@ char	*ft_strglue(char *s1, char *glue, char *s2)
 	if (!tmp)
 		return (NULL);
 	glued = ft_strjoin(tmp, s2);
-	 ft_free(&tmp);
+	ft_free(&tmp);
 	if (!glued)
 		return (NULL);
 	return (glued);

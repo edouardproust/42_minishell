@@ -8,7 +8,6 @@ NAME = ./minishell
 C_DIR = src
 
 C_FILES = main.c \
-	utils/free/free.c \
 	utils/free/minishell.c \
 	utils/free/envvar.c \
 	utils/free/token.c \
@@ -16,6 +15,7 @@ C_FILES = main.c \
 	utils/exit.c \
 	utils/error.c \
 	utils/string.c \
+	utils/char.c \
 	utils/fd.c \
 	env/init.c \
 	env/ops.c \

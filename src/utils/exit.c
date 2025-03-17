@@ -31,18 +31,3 @@ void	exit_minishell1(int exit_code, t_minishell *minishell, char *fmt,
 	free_minishell(&minishell);
 	exit(exit_code % 256);
 }
-
-/**
- * Exits the program after printing a formatted error message (using t_args),
- * freeing resources, and exiting with the specified exit code.
- *
- * @param exit_code The exit code for the program.
- * @param minishell Pointer to the minishell structure to free.
- * @param args A t_args structure containing the format string and arguments.
- */
-void	exit_minishell2(int exit_code, t_minishell *minishell, t_args args)
-{
-	put_error2(args.fmt, args.arg1, args.arg2);
-	free_minishell(&minishell);
-	exit(exit_code % 256);
-}

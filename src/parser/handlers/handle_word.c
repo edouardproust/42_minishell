@@ -14,7 +14,7 @@ int	handle_word(t_token **cur_token, t_cmd **cur_cmd,
 	token = *cur_token;
 	arg_copy = ft_strdup(token->value);
 	if (!arg_copy)
-		exit_minishell(EXIT_FAILURE, minishell, NULL);
+		exit_minishell(EXIT_FAILURE, minishell, "parse word: strdup");
 	add_arg_to_cmd(*cur_cmd, arg_copy);
 	*cur_token = token->next;
 	return (EXIT_SUCCESS);
