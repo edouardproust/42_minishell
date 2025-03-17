@@ -48,7 +48,7 @@ static int	setup_redir_outfile(t_cmd *cmd)
 
 /**
  * Sets up input and output redirections for the current command.
- * 
+ *
  * Opens files and duplicates file descriptors as needed.
  *
  * @param cmd Command to execute.

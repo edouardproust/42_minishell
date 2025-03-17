@@ -2,7 +2,7 @@
 
 /**
  * Saves the current stdin and stdout file descriptors.
- * 
+ *
  * This function is used before proceeding to fd redirections in the parent
  * process. This way, we'll be able to restore stdin and stdout once the
  * redirections have been made.
@@ -14,7 +14,7 @@
  */
 void	save_stdin_stdout(t_cmd *cmd, t_minishell *ms)
 {
-	if (cmd->infile)
+	if (cmd->infile || (cmd->heredoc->delimiter != NULL))
 	{
 		if (ft_dup(STDIN_FILENO, &cmd->saved_stdin) == EXIT_FAILURE)
 			exit_minishell(EXIT_FAILURE, ms, "dup");
@@ -31,7 +31,7 @@ void	save_stdin_stdout(t_cmd *cmd, t_minishell *ms)
 
 /**
  * Restores the original stdin and stdout file descriptors.
- * 
+ *
  * This function is used once the fd redirections have been made inside the
  * parent process, so we can move on normally for the next command.
  * It closed saved fds after restoration, and set them to -1.
@@ -42,7 +42,8 @@ void	save_stdin_stdout(t_cmd *cmd, t_minishell *ms)
  */
 void	restore_stdin_stdout(t_cmd *cmd, t_minishell *ms)
 {
-	if (cmd->infile && cmd->saved_stdin != -1)
+
+	if ((cmd->infile || (cmd->heredoc->delimiter != NULL)) && cmd->saved_stdin != -1)
 	{
 		if (ft_dup2(cmd->saved_stdin, STDIN_FILENO) == EXIT_FAILURE)
 			exit_minishell(EXIT_FAILURE, ms, "dup2");

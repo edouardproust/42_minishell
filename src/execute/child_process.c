@@ -5,7 +5,7 @@
  *
  * @param builtin Struct containing data on the builtin to be executed.
  *  NULL if an executable must be executed instead.
- * @param cmd Struct of the command to be executed. NULL if a builtin 
+ * @param cmd Struct of the command to be executed. NULL if a builtin
  *  must be executed instead.
  * @return Child process PID
  * @note Exit on: fork failure, child process exit code > E_ERRMAX

@@ -9,18 +9,14 @@
 ## TODO
 
 ### Features
-- Variables expansion
 - (optional) Bonus:
 	- && and || with parenthesis for priorities
 	- Wildcards * should work for the current working directory.
 
 ### Fix
-- Remove any use of `ft_print` and `va_*` functions. + Remove printf from libft: use `printf` instead.
-- `$ cd <directory>` should update `PWD` and `OLDPWD` env. vars
-- `add_history` add leaks? (Did i forget a `rl_clear_history` somewhere?)
+- `minishell$ ./minishell | echo` or `minishell$ ./minishell | ls`: waiting for input + broken display
 - Don't print `exit` in this case: `$ sleep 3000 | exit`
 - Deal with more than 1 outfile or infile in a t_cmd (eg. `$ echo hello > out1 >> out2`)
-- Run `./minishell` inside `./minishell` (eg. `$ minishell ./minishell`)
 - (optional) "Zombie-process" architecture
 
 ### Final checks
@@ -40,7 +36,7 @@
 ## Overview
 
 **Features:**
-	
+
 - Display a prompt when waiting for a new command.
 - Have a working history.
 - Execute commands with arguments.

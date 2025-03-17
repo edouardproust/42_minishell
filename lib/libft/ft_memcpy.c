@@ -35,7 +35,7 @@ int main()
 	char src[] = "Hello World!";
 	char dest1[20];
 	char dest2[20];
-    
+
 	printf("src: %s\n", src);
 	ft_memcpy(src + 2, src, 8);
 	printf("ft_memcpy: '%s'\n", dest1);

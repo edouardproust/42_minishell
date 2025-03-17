@@ -15,9 +15,9 @@ static t_bool	handle_signaled_parent_process(t_minishell *ms,
 }
 
 /**
- * Wait for all processes to finish and handle exit codes. 
+ * Wait for all processes to finish and handle exit codes.
  *
- * @param minishell Struct containing global Minishell data (to be 
+ * @param minishell Struct containing global Minishell data (to be
  *  freed in case of failure)
  * @return void
  * @note Exit on: a process exits with code > E_ERRMAX
@@ -50,8 +50,8 @@ static void	wait_for_processes(t_minishell *ms)
 
 /**
  * Execute one command (t_cmd).
- * 
- * Create a pipe if the cmd is followed by another. 
+ *
+ * Create a pipe if the cmd is followed by another.
  * If a pipe has been created or the cmd's first does not correspond to a
  * builtin, the execution happens in a child process via the
  * `run_in_child_process` function.
@@ -86,8 +86,8 @@ static void	execute_cmd(t_cmd *cmd, t_minishell *ms)
  *
  * Loop over the commands list, calling `execute_cmd`. Then wait for each process
  * to finish.
- * 
- * @param ms Struct containing global Minishell data (to be 
+ *
+ * @param ms Struct containing global Minishell data (to be
  *  freed in case of failure)
  * @return void
  * @note Exit on: incorrect input, function call exit
