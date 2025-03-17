@@ -23,7 +23,7 @@ t_token	*token_new(char *value, int type)
 	token->next = NULL;
 	return (token);
 }
- 
+
 /*
  * Adds a new token to the end of the token list.
  */

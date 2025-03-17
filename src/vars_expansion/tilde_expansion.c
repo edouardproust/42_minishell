@@ -17,9 +17,9 @@ char	*handle_tilde_exp(char *original_word, int has_quotes,
 
 	if (has_quotes != 0)
 		return (original_word);
-	if (original_word[0] != '~' ||
-		(original_word[1] && original_word[1] != '/'))
-			return (original_word);
+	if (original_word[0] != '~'
+		|| (original_word[1] && original_word[1] != '/'))
+		return (original_word);
 	expanded = expand_tilde(original_word, minishell);
 	if (expanded)
 		return (free(original_word), expanded);

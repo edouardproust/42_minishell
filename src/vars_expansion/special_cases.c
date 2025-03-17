@@ -73,7 +73,3 @@ int	handle_special_cases(t_expansion *exp, char *str, t_minishell *minishell)
 	}
 	return (0);
 }
-
-
-
-

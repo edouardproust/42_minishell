@@ -84,37 +84,49 @@ t_token	*create_word_token(char *input, int *index, char *unmatched_quote,
 	return (create_token_with_values(original_word, expanded_word, has_quotes));
 }
 
+static t_token	*create_split_tokens(char **split, t_token *original)
+{
+	t_token	*head;
+	t_token	*new;
+	int		i;
+	char	*value_copy;
+
+	head = NULL;
+	i = 0;
+	while (split && split[i])
+	{
+		value_copy = ft_strdup(split[i]);
+		if (!value_copy)
+			return (ft_free_split(&split), free_token_lst(&head), NULL );
+		new = token_new(value_copy, TOKEN_WORD);
+		if (!new)
+		{
+			free(value_copy);
+			ft_free_split(&split);
+			free_token_lst(&head);
+			break ;
+		}
+		new->original_value = ft_strdup(original->original_value);
+		new->was_quoted = 0;
+		token_addback(&head, new);
+		i++;
+	}
+	return (head);
+}
+
 /*
  * Splits an unquoted token into multiple word tokens based on spaces.
  * - Uses existing token_addback to maintain list integrity
  * - Preserves original token data for error reporting
  */
-t_token *split_unquoted(t_token *original_token, char *expanded_val)
+t_token	*split_unquoted(t_token *original_token, char *expanded_val)
 {
 	char	**split;
-    t_token	*head;
-	t_token	*new;
-	int		i;
+	t_token	*head;
 
-	head = NULL;
-	i = 0;
 	split = ft_split(expanded_val, ' ');
-	while (split && split[i])
-	{
-		new = token_new(split[i], TOKEN_WORD);
-		if (!new)
-		{
-			ft_free_split(&split);
-			free_token_lst(&head);
-			break ;
-		}
-		new->original_value = ft_strdup(original_token->original_value);
-		new->was_quoted = 0;
-		token_addback(&head, new);
-		i++;
-	}
-	if (split)
-		free(split);
-    free_token_lst(&original_token);
-    return (head);
+	head = create_split_tokens(split, original_token);
+	ft_free_split(&split);
+	free_token_lst(&original_token);
+	return (head);
 }
