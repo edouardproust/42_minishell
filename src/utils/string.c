@@ -74,14 +74,14 @@ char	*char_to_str(char c)
  * @param minishell Pointer to the minishell struct for cleanup on failure.
  * @return A pointer to a static string representing the integer.
  */
-char *int_to_str(int n, t_minishell *minishell)
+char *int_to_str(int n)
 {
 	static char	buf[12];
 	char		*tmp;
 
 	tmp = ft_itoa(n);
 	if (!tmp)
-		exit_minishell(1, minishell, "malloc");
+		return (NULL);
 	ft_strlcpy(buf, tmp, sizeof(buf));
 	free(tmp);
 	return (buf);

@@ -288,6 +288,6 @@ int				is_space_char(char c);
 int				is_quote_char(char c);
 void			skip_whitespaces(char *input, int *i);
 char			*char_to_str(char c);
-char			*int_to_str(int n, t_minishell *minishell);
+char			*int_to_str(int n);
 
 #endif

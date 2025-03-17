@@ -2,10 +2,10 @@
 
 /**
  * Reads heredoc input until delimiter, writing to pipe.
- * 
+ *
  * Reads the heredoc and writes each line to the write_fd descriptor.
  * The reading stops as soon as the delimiter (cmd->heredoc_del) is encountered.
- * 
+ *
  * @param cmd Command structure containing delimiter
  * @param write_fd Pipe write end file descriptor
  * @return EXIT_SUCCESS on delimiter match, EXIT_FAILURE on error/EOF
@@ -13,7 +13,6 @@
 static int	read_heredoc(t_cmd *cmd, int write_fd)
 {
 	char	*line;
-	char	*heredoc_start;
 
 	while (1)
 	{
@@ -22,12 +21,10 @@ static int	read_heredoc(t_cmd *cmd, int write_fd)
 		{
 			if (get_and_reset_signal() == SIGINT)
 				return (ft_free(1, &line), E_SIGBASE + SIGINT);
-			heredoc_start = ft_itoa(cmd->heredoc->start);
 			put_error2("warning: here-document at line %s delimited by "
 				"end of file (wanted `%s')",
-				heredoc_start,
+				int_to_str(cmd->heredoc->start),
 				cmd->heredoc->delimiter);
-			ft_free(1, &heredoc_start);
 			return (EXIT_SUCCESS);
 		}
 		if (ft_strcmp(line, cmd->heredoc->delimiter) == 0)
@@ -59,7 +56,7 @@ static void	handle_child_process(int *pipefd, t_cmd *cmd, t_minishell *ms)
 
 /**
  * Handles parent process after fork, manages pipe and waiting.
- * 
+ *
  * @param pid Child process ID
  * @param pipefd Pipe file descriptors array
  * @param cmd Command structure to store heredoc fd
@@ -88,7 +85,7 @@ static int	handle_parent_process(int pid, int *pipefd, t_cmd *cmd)
 
 /**
  * Manages heredoc processing using pipe communication.
- * 
+ *
  * @param cmd Command structure with heredoc details
  * @return EXIT_SUCCESS on success, EXIT_FAILURE on pipe/fork error
  */
@@ -116,7 +113,7 @@ static int	process_heredoc(t_cmd *cmd, t_minishell *ms)
 /**
  * Processes heredoc (`<<`) redirections for all commands in the command list.
  *
- * Iterates through each command in `ms->cmd_lst`, checking if it has a 
+ * Iterates through each command in `ms->cmd_lst`, checking if it has a
  * heredoc delimiter (`heredoc_del`). If so, it calls process_heredoc.
  *
  * If any heredoc processing fails, `ms->exit_code` is set to EXIT_FAILURE.
