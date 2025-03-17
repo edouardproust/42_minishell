@@ -1,7 +1,7 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_free.c                                     :+:      :+:    :+:   */
+/*   ft_free.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: eproust <contact@edouardproust.dev>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
@@ -12,25 +12,18 @@
 
 #include "libft.h"
 
-void	*ft_free(int count, ...)
+/**
+ * Frees a string in a safe manner:
+ * - Check that the input string is not NULL.
+ * - Set the freed string to NULL.
+ */
+void	*ft_free(char **str)
 {
-	va_list	args;
-	void	**ptr;
-	int		i;
-
-	va_start(args, count);
-	i = 0;
-	while (i < count)
+	if (str && *str)
 	{
-		ptr = va_arg(args, void **);
-		if (ptr && *ptr)
-		{
-			free(*ptr);
-			*ptr = NULL;
-		}
-		i++;
+		free(*str);
+		*str = NULL;
 	}
-	va_end(args);
 	return (NULL);
 }
 
@@ -43,7 +36,7 @@ int main()
 	if (!test)
         return (1);
     printf("Before free: %s\n", test);
-    ft_free(1, &test);
+     ft_free(&test);
     printf("After free: %s\n", test);
     return (0);
 }

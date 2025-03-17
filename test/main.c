@@ -15,11 +15,11 @@ int	main(void)
 		if (ft_strncmp("exit", input, 5) == 0)
 		{
 			printf("exit\n");
-			ft_free(1, &input);
+			ft_free(&input);
 			break ;
 		}
 		printf("input: \"%s\"\n", input);
-		ft_free(1, &input);
+		ft_free(&input);
 	}
 	rl_clear_history();
 	return (EXIT_SUCCESS);

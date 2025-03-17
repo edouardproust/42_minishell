@@ -145,6 +145,7 @@ void			put_error1(char *fmt, char *arg);
 void			put_error2(char *fmt, char *arg1, char *arg2);
 
 /* Memory */
+void			ft_free_ptr(void **ptr);
 void			free_minishell(t_minishell **minishell);
 void			free_envvar_lst(t_envvar **var_lst);
 t_envvar		*free_envvar_node(t_envvar **node);

@@ -21,7 +21,7 @@ char	*ft_strglue(char *s1, char *glue, char *s2)
 	if (!tmp)
 		return (NULL);
 	glued = ft_strjoin(tmp, s2);
-	ft_free(1, &tmp);
+	 ft_free(&tmp);
 	if (!glued)
 		return (NULL);
 	return (glued);
@@ -29,7 +29,7 @@ char	*ft_strglue(char *s1, char *glue, char *s2)
 
 /**
  * To compile:
- * `cc -Werror -Wall -Wextra ft_strglue.c ft_strjoin.c ft_free_ptrs.c 
+ * `cc -Werror -Wall -Wextra ft_strglue.c ft_strjoin.c ft_free_ptrs.c
  * ft_strlen.c ft_strdup.c ft_memcpy.c && valgrind ./a.out`
  */
 /*
@@ -41,7 +41,7 @@ int	main(void)
 	if (!glued)
 		return (1);
 	printf("%s\n", glued);
-	ft_free(1, &glued);
+	 ft_free(&glued);
 	return (0);
 }
 */

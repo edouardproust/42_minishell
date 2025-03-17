@@ -29,7 +29,7 @@ int	change_directory(char *dest_dir, char **pwd)
 {
 	if (chdir(dest_dir) == -1)
 	{
-		ft_free(1, pwd);
+		ft_free(pwd);
 		return (put_error1("cd: %s", dest_dir), EXIT_FAILURE);
 	}
 	return (EXIT_SUCCESS);

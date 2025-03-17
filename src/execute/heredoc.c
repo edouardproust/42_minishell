@@ -20,7 +20,7 @@ static int	read_heredoc(t_cmd *cmd, int write_fd)
 		if (!line)
 		{
 			if (get_and_reset_signal() == SIGINT)
-				return (ft_free(1, &line), E_SIGBASE + SIGINT);
+				return (ft_free(&line), E_SIGBASE + SIGINT);
 			put_error2("warning: here-document at line %s delimited by "
 				"end of file (wanted `%s')",
 				int_to_str(cmd->heredoc->start),
@@ -28,10 +28,10 @@ static int	read_heredoc(t_cmd *cmd, int write_fd)
 			return (EXIT_SUCCESS);
 		}
 		if (ft_strcmp(line, cmd->heredoc->delimiter) == 0)
-			return (ft_free(1, &line), EXIT_SUCCESS);
+			return (ft_free(&line), EXIT_SUCCESS);
 		if (ft_putstr_fd(line, write_fd) == -1 || ft_putstr_fd("\n", write_fd) == -1) //TODO check that heredoc still work!
-			return (ft_free(1, &line), EXIT_FAILURE);
-		ft_free(1, &line);
+			return (ft_free(&line), EXIT_FAILURE);
+		ft_free(&line);
 	}
 	return (EXIT_SUCCESS);
 }

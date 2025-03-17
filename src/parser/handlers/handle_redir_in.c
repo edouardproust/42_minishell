@@ -20,7 +20,7 @@ int	handle_redir_in(t_token **cur_token, t_cmd **cur_cmd,
 	}
 	if (check_ambiguous_redirect(token->next, minishell) == EXIT_FAILURE)
 		return (EXIT_FAILURE);
-	ft_free(1, &(*cur_cmd)->infile);
+	ft_free(&(*cur_cmd)->infile);
 	(*cur_cmd)->infile = ft_strdup(token->next->value);
 	if (!(*cur_cmd)->infile)
 		exit_minishell(EXIT_FAILURE, minishell, "parse redirection: malloc");

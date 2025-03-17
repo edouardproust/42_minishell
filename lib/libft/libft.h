@@ -28,7 +28,7 @@ void	ft_exit(char *error_msg);
 void	ft_pexit(char *error_msg);
 
 /* Free */
-void	*ft_free(int count, ...);
+void	*ft_free(char **str);
 void	ft_free_split(char ***array);
 void	ft_free_splitn(char ***matrix, int n);
 

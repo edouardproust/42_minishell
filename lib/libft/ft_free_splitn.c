@@ -14,11 +14,11 @@
 
 /**
  * Frees a matrix (array of strings) up to n strings.
- * 
+ *
  * This function is often used to free partially alocated matrix, like after
  * the allocation of a string failed while setting up the matrix.
- * 
- * @param array	Dynamic allocated array of strings. It does not have to be 
+ *
+ * @param array	Dynamic allocated array of strings. It does not have to be
  * 				NULL-terminated if n < number of strings in the array
  * @param n		Number of strings to free inside the array
  */

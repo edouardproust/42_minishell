@@ -21,7 +21,7 @@ int	handle_redir_append(t_token **cur_token, t_cmd **cur_cmd,
 	}
 	if (check_ambiguous_redirect(token->next, minishell) == EXIT_FAILURE)
 		return (EXIT_FAILURE);
-	ft_free(1, &(*cur_cmd)->outfile);
+	ft_free(&(*cur_cmd)->outfile);
 	(*cur_cmd)->outfile = ft_strdup(token->next->value);
 	(*cur_cmd)->append = 1;
 	if (!(*cur_cmd)->outfile)

@@ -22,9 +22,9 @@ int	do_pwd(char **args, t_minishell *minishell)
 		return (put_error("pwd: getcwd"), EXIT_FAILURE);
 	if (printf("%s\n", path) < 0)
 	{
-		ft_free(1, &path);
+		ft_free(&path);
 		return (put_error("pwd: printf"), EXIT_FAILURE);
 	}
-	ft_free(1, &path);
+	ft_free(&path);
 	return (EXIT_SUCCESS);
 }
