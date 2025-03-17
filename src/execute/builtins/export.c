@@ -5,14 +5,14 @@
  * for the command `export`.
  *
  * @param lst Head node of t_envvar list
- * @return FAILURE if ft_printf fails. EXIT_SUCCESS otherwise.
+ * @return FAILURE if printf fails. EXIT_SUCCESS otherwise.
  */
 static int	put_export_vars(t_envvar *lst)
 {
 	while (lst)
 	{
-		if (ft_printf("export %s=\"%s\"\n", lst->name, lst->value) < 0)
-			return (put_error("export: ft_printf"), EXIT_FAILURE);
+		if (printf("export %s=\"%s\"\n", lst->name, lst->value) < 0)
+			return (put_error("export: printf"), EXIT_FAILURE);
 		lst = lst->next;
 	}
 	return (EXIT_SUCCESS);
@@ -63,7 +63,7 @@ int	do_export(char **args, t_minishell *ms)
 			return (put_error("export"), EXIT_FAILURE);
 		if (!is_valid_envp_var(envvar->name))
 		{
-			put_error("export: `%s': not a valid identifier", envvar->name);
+			put_error1("export: `%s': not a valid identifier", envvar->name);
 			exit_code = EXIT_FAILURE;
 			free_envvar_node(&envvar);
 		}

@@ -14,7 +14,7 @@ int	handle_redir_heredoc(t_token **cur_token, t_cmd **cur_cmd,
 	token = *cur_token;
 	if (!token->next || token->next->type != TOKEN_WORD)
 	{
-		put_error("syntax error near unexpected token `%s'",
+		put_error1("syntax error near unexpected token `%s'",
 			redir_error(token));
 		minishell->exit_code = E_CRITICAL;
 		return (EXIT_FAILURE);

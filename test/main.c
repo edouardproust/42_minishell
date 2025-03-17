@@ -14,11 +14,11 @@ int	main(void)
 		add_history(input);
 		if (ft_strncmp("exit", input, 5) == 0)
 		{
-			ft_printf("exit\n");
+			printf("exit\n");
 			ft_free(1, &input);
 			break ;
 		}
-		ft_printf("input: \"%s\"\n", input);
+		printf("input: \"%s\"\n", input);
 		ft_free(1, &input);
 	}
 	rl_clear_history();

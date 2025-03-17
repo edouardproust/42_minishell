@@ -143,7 +143,7 @@ void	debug_cmd_lst(t_cmd *cmd_lst)
 		debug_cmd(cmd, title);
 		ft_free(1, &title);
 		if (cmd->next)
-			ft_printf("\t\t▼\n");
+			printf("\t\t▼\n");
 		cmd = cmd->next;
 	}
 }

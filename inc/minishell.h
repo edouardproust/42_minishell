@@ -126,14 +126,23 @@ typedef struct s_builtin
 	int		(*fn)(char **args, t_minishell *minishell);
 }	t_builtin;
 
+/* Struct for error message with 2 args */
+typedef struct s_args
+{
+    char *fmt;
+    char *arg1;
+    char *arg2;
+} t_args;
+
 /****************************************/
 /* Functions                            */
 /****************************************/
 
 /* Error handling */
 void			set_errno(int err_no);
-void			put_error_va(char *fmt, va_list args);
-void			put_error(char *fmt, ...);
+void			put_error(char *err_msg);
+void			put_error1(char *fmt, char *arg);
+void			put_error2(char *fmt, char *arg1, char *arg2);
 
 /* Memory */
 void			free_minishell(t_minishell **minishell);
@@ -145,7 +154,11 @@ t_cmd			*free_cmd_node(t_cmd **cmd);
 
 /* Exit */
 void			exit_minishell(int exit_code, t_minishell *minishell,
-					char *fmt, ...);
+					char *err_msg);
+void			exit_minishell1(int exit_code, t_minishell *minishell,
+					char *fmt, char *arg);
+void			exit_minishell2(int exit_code, t_minishell *minishell,
+					t_args args);
 
 /* Env */
 t_envvar		*init_envvars(t_minishell *minishell);
@@ -274,5 +287,7 @@ int				is_special_char(char c);
 int				is_space_char(char c);
 int				is_quote_char(char c);
 void			skip_whitespaces(char *input, int *i);
+char			*char_to_str(char c);
+char			*int_to_str(int n, t_minishell *minishell);
 
 #endif

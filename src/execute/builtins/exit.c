@@ -30,7 +30,7 @@ int	do_exit(char **args, t_minishell *minishell)
 	size_t	arg_count;
 	int		exit_code;
 
-	ft_printf("exit\n");
+	printf("exit\n");
 	arg_count = ft_matrix_size(args);
 	if (arg_count == 1)
 		exit_code = minishell->exit_code;
@@ -39,13 +39,10 @@ int	do_exit(char **args, t_minishell *minishell)
 		if (!is_valid_number(args[1]))
 		{
 			exit_code = E_CMDWRONGARG;
-			put_error("exit: %s: numeric argument required", args[1]);
+			put_error1("exit: %s: numeric argument required", args[1]);
 		}
 		else if (arg_count > 2)
-		{
-			put_error("exit: too many arguments");
-			return (EXIT_FAILURE);
-		}
+			return (put_error("exit: too many arguments"), EXIT_FAILURE);
 		else
 			exit_code = ft_atoi(args[1]);
 	}

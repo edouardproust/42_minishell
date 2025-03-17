@@ -5,7 +5,6 @@
  * - Ensures that the next token is a valid wrod token (file name).
  * - Stores the file name in `outfile` and marks the append flag as `1`.
  * If the token sequence is invalid, it exits with a syntax error.
- * @TODO Check malloc error message (for now on NULL)
  */
 int	handle_redir_append(t_token **cur_token, t_cmd **cur_cmd,
 	t_minishell *minishell)
@@ -15,7 +14,7 @@ int	handle_redir_append(t_token **cur_token, t_cmd **cur_cmd,
 	token = *cur_token;
 	if (!token->next || token->next->type != TOKEN_WORD)
 	{
-		put_error("syntax error near unexpected token `%s'",
+		put_error1("syntax error near unexpected token `%s'",
 			redir_error(token));
 		minishell->exit_code = E_CRITICAL;
 		return (EXIT_FAILURE);
@@ -26,7 +25,7 @@ int	handle_redir_append(t_token **cur_token, t_cmd **cur_cmd,
 	(*cur_cmd)->outfile = ft_strdup(token->next->value);
 	(*cur_cmd)->append = 1;
 	if (!(*cur_cmd)->outfile)
-		exit_minishell(EXIT_FAILURE, minishell, NULL);
+		exit_minishell(EXIT_FAILURE, minishell, "parse heredoc: malloc");
 	*cur_token = token->next->next;
 	return (EXIT_SUCCESS);
 }

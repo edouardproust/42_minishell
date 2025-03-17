@@ -14,10 +14,10 @@ void	put_sigquit_message(int status, t_cmd *cmd)
 	{
 		if (WTERMSIG(status) == SIGQUIT && !cmd->next)
 		{
-			ft_printf("Quit");
+			printf("Quit");
 			if (WCOREDUMP(status))
-				ft_printf(" (core dumped)");
-			ft_printf("\n");
+				printf(" (core dumped)");
+			printf("\n");
 		}
 	}
 }

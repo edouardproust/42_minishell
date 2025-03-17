@@ -130,7 +130,7 @@ char	*get_exec_path(char *progname, t_minishell *minishell)
 		if (errno == ENOENT)
 			exit_minishell(E_CMDNOTFOUND, minishell, progname);
 		else if (errno == 0)
-			exit_minishell(E_CMDNOTFOUND, minishell, "%s: command not found",
+			exit_minishell1(E_CMDNOTFOUND, minishell, "%s: command not found",
 				progname);
 		else
 			exit_minishell(E_CMDNOTEXEC, minishell, progname);

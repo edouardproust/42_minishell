@@ -20,10 +20,10 @@ int	do_pwd(char **args, t_minishell *minishell)
 	path = getcwd(NULL, 0);
 	if (!path)
 		return (put_error("pwd: getcwd"), EXIT_FAILURE);
-	if (ft_printf("%s\n", path) < 0)
+	if (printf("%s\n", path) < 0)
 	{
 		ft_free(1, &path);
-		return (put_error("pwd: ft_printf"), EXIT_FAILURE);
+		return (put_error("pwd: printf"), EXIT_FAILURE);
 	}
 	ft_free(1, &path);
 	return (EXIT_SUCCESS);

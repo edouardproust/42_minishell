@@ -13,6 +13,7 @@
 static int	read_heredoc(t_cmd *cmd, int write_fd)
 {
 	char	*line;
+	char	*heredoc_start;
 
 	while (1)
 	{
@@ -21,15 +22,17 @@ static int	read_heredoc(t_cmd *cmd, int write_fd)
 		{
 			if (get_and_reset_signal() == SIGINT)
 				return (ft_free(1, &line), E_SIGBASE + SIGINT);
-			put_error("warning: here-document at line %d delimited by "
+			heredoc_start = ft_itoa(cmd->heredoc->start);
+			put_error2("warning: here-document at line %s delimited by "
 				"end of file (wanted `%s')",
-				cmd->heredoc->start,
+				heredoc_start,
 				cmd->heredoc->delimiter);
+			ft_free(1, &heredoc_start);
 			return (EXIT_SUCCESS);
 		}
 		if (ft_strcmp(line, cmd->heredoc->delimiter) == 0)
 			return (ft_free(1, &line), EXIT_SUCCESS);
-		if (ft_fprintf(write_fd, "%s\n", line) == -1)
+		if (ft_putstr_fd(line, write_fd) == -1 || ft_putstr_fd("\n", write_fd) == -1) //TODO check that heredoc still work!
 			return (ft_free(1, &line), EXIT_FAILURE);
 		ft_free(1, &line);
 	}
@@ -38,7 +41,7 @@ static int	read_heredoc(t_cmd *cmd, int write_fd)
 
 /**
  * Handles child process for heredoc input collection.
- * 
+ *
  * @param pipefd Pipe file descriptors array
  * @param cmd Command structure containing heredoc details
  */

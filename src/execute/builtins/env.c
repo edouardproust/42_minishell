@@ -20,8 +20,8 @@ int	do_env(char **args, t_minishell *minishell)
 	current = minishell->envvar_lst;
 	while (current)
 	{
-		if (ft_printf("%s=%s\n", current->name, current->value) < 0)
-			return (put_error("env: ft_printf"), EXIT_FAILURE);
+		if (printf("%s=%s\n", current->name, current->value) < 0)
+			return (put_error("env: printf"), EXIT_FAILURE);
 		current = current->next;
 	}
 	return (EXIT_SUCCESS);

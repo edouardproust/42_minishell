@@ -85,13 +85,13 @@ int	check_ambiguous_redirect(t_token *file_token, t_minishell *minishell)
 	expanded_val = file_token->value;
 	if (!expanded_val || expanded_val[0] == '\0')
 	{
-		put_error("%s: ambiguous redirect", file_token->original_value);
+		put_error1("%s: ambiguous redirect", file_token->original_value);
 		minishell->exit_code = E_CRITICAL;
 		return (EXIT_FAILURE);
 	}
 	if (ft_strchr(expanded_val, ' ') && !file_token->was_quoted)
 	{
-		put_error("%s: ambiguous redirect", file_token->original_value);
+		put_error1("%s: ambiguous redirect", file_token->original_value);
 		minishell->exit_code = E_CRITICAL;
 		return (EXIT_FAILURE);
 	}

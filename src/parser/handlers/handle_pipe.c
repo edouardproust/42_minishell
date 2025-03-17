@@ -1,7 +1,7 @@
 #include "minishell.h"
 /**
  * Determines the error message for invalid pipe syntax.
- * 
+ *
  * @param token Current token being processed.
  * @return "|" if the next token is missing or another pipe, otherwise returns
  *         the unexpected token's value.
@@ -29,7 +29,7 @@ int	handle_pipe(t_token **cur_token, t_cmd **cur_cmd,
 	token = *cur_token;
 	if (!(token)->next || token->next->type == TOKEN_PIPE)
 	{
-		put_error("syntax error near unexpected token `%s'",
+		put_error1("syntax error near unexpected token `%s'",
 			pipe_error(token));
 		minishell->exit_code = E_CRITICAL;
 		return (EXIT_FAILURE);

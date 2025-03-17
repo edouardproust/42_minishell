@@ -2,7 +2,7 @@
 
 /**
  * Inititalize the t_minishell struct containing global data on the program.
- * 
+ *
  * @param envp Array containing the env. variables on program startup
  * @return the t_minishell struct
  * @note Exit program on memory allocation failure.
@@ -57,7 +57,7 @@ static void	set_input(t_minishell *ms)
 			put_error("readline");
 		else
 		{
-			ft_printf("exit\n");
+			printf("exit\n");
 			exit_minishell(EXIT_SUCCESS, ms, NULL);
 		}
 	}
@@ -65,11 +65,11 @@ static void	set_input(t_minishell *ms)
 
 /**
  * Minishell entry point.
- * 
+ *
  * @param ac Number of arguments passed to the program
  * @param av Array of the arguments passed to the program
  * @param envp Array containing the environment variables on program startup
- * @return EXIT_SUCCESS or EXIT_FAILURE 
+ * @return EXIT_SUCCESS or EXIT_FAILURE
  */
 int	main(int ac, char **av, char **envp)
 {

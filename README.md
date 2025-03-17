@@ -15,7 +15,7 @@
 	- Wildcards * should work for the current working directory.
 
 ### Fix
-- Remove any use of `ft_print` and `va_*` functions. + Remove ft_printf from libft: use `printf` instead.
+- Remove any use of `ft_print` and `va_*` functions. + Remove printf from libft: use `printf` instead.
 - `$ cd <directory>` should update `PWD` and `OLDPWD` env. vars
 - `add_history` add leaks? (Did i forget a `rl_clear_history` somewhere?)
 - Don't print `exit` in this case: `$ sleep 3000 | exit`
