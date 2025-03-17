@@ -3,7 +3,7 @@
 /*                                                        :::      ::::::::   */
 /*   ft_putendl_fd.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: eproust <marvin@42.fr>                     +#+  +:+       +#+        */
+/*   By: eproust <contact@edouardproust.dev>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/19 16:39:48 by eproust           #+#    #+#             */
 /*   Updated: 2024/09/19 16:39:50 by eproust          ###   ########.fr       */

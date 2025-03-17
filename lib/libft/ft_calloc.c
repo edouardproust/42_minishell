@@ -3,7 +3,7 @@
 /*                                                        :::      ::::::::   */
 /*   ft_calloc.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: eproust <marvin@42.fr>                     +#+  +:+       +#+        */
+/*   By: eproust <contact@edouardproust.dev>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/17 18:08:50 by eproust           #+#    #+#             */
 /*   Updated: 2024/09/25 17:49:17 by eproust          ###   ########.fr       */

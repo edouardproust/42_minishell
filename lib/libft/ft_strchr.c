@@ -3,7 +3,7 @@
 /*                                                        :::      ::::::::   */
 /*   ft_strchr.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: eproust <marvin@42.fr>                     +#+  +:+       +#+        */
+/*   By: eproust <contact@edouardproust.dev>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/17 12:55:29 by eproust           #+#    #+#             */
 /*   Updated: 2024/12/20 17:18:57 by eproust          ###   ########.fr       */
@@ -42,7 +42,7 @@ int	main(void)
 	printf("string: \"%s\"\n", str);
 	printf("char: \'%c\'\n", c);
 	printf("ft_strchr: \"%s\"\n", ft_strchr(str, c));
-	printf("strchr: \"%s\"\n", strchr(str, c));	
+	printf("strchr: \"%s\"\n", strchr(str, c));
 
 	return (0);
 }

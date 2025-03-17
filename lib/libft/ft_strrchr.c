@@ -3,7 +3,7 @@
 /*                                                        :::      ::::::::   */
 /*   ft_strrchr.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: eproust <marvin@42.fr>                     +#+  +:+       +#+        */
+/*   By: eproust <contact@edouardproust.dev>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/17 12:54:49 by eproust           #+#    #+#             */
 /*   Updated: 2024/09/17 13:41:42 by eproust          ###   ########.fr       */

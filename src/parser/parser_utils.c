@@ -1,9 +1,9 @@
 #include "minishell.h"
-/* 
+/**
  * Returns a static list of parsing operators and their corresponding handlers.
  *
  * Used in `handle_token_type()` to determine how to process tokens.
- * 
+ *
  * Returns: A pointer to a static array of `t_parse_op` structures.
  */
 t_parse_op	*get_parse_ops(void)
@@ -21,7 +21,7 @@ t_parse_op	*get_parse_ops(void)
 	return (parse_ops);
 }
 
-/* 
+/**
  * Processes tokens based on their type using appropriate handler functions
  * - Calls handlers for redirections (`<`, `>`, `<<`, `<<`),
  *   pipes (`|`), and words.
@@ -41,8 +41,8 @@ int	handle_token_type(t_token **cur_token, t_cmd **cur_cmd,
 	{
 		if (parse_ops[i].type == type)
 		{
-			if (parse_ops[i].handler
-				(cur_token, cur_cmd, minishell) == EXIT_FAILURE)
+			if (parse_ops[i].handler(cur_token, cur_cmd, minishell)
+				== EXIT_FAILURE)
 				return (EXIT_FAILURE);
 			return (EXIT_SUCCESS);
 		}
@@ -54,10 +54,10 @@ int	handle_token_type(t_token **cur_token, t_cmd **cur_cmd,
 
 /**
  * Determines the error message for invalid redirection syntax.
- * 
+ *
  * @param token Current token (e.g., `<`, `>`, `<<`, `>>`).
  * @return "newline" if no token follows, "|" for unexpected pipes.
- * 
+ *
  */
 char	*redir_error(t_token *token)
 {
@@ -70,7 +70,7 @@ char	*redir_error(t_token *token)
 
 /**
  * Validates redirection targets to prevent ambiguous filenames.
- * 
+ *
  * @param file_token Token containing filename (after expansion)
  * @param minishell Shell context for error reporting
  * @return EXIT_SUCCESS if valid, EXIT_FAILURE if:

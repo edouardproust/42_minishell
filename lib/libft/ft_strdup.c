@@ -3,7 +3,7 @@
 /*                                                        :::      ::::::::   */
 /*   ft_strdup.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: eproust <marvin@42.fr>                     +#+  +:+       +#+        */
+/*   By: eproust <contact@edouardproust.dev>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/17 17:52:06 by eproust           #+#    #+#             */
 /*   Updated: 2024/09/17 19:07:44 by eproust          ###   ########.fr       */

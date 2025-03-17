@@ -9,8 +9,7 @@
 # include <readline/history.h>
 # include <sys/wait.h>
 # include <signal.h>
-# include <sys/stat.h> 
-# include <termios.h>
+# include <sys/stat.h>
 
 /****************************************/
 /* Macros and Enums                     */
@@ -82,7 +81,7 @@ typedef struct s_cmd
 	char			*infile;
 	char			*outfile;
 	t_heredoc		*heredoc;
-	int				append;
+	t_bool			append;
 
 	struct s_cmd	*prev;
 	struct s_cmd	*next;
@@ -234,6 +233,7 @@ char			*get_exec_path(char *arg, t_minishell *minishell);
 pid_t			run_in_child_process(t_builtin *builtin, t_cmd *cmd,
 					t_minishell *minishell);
 int				setup_redirections(t_cmd *cmd);
+t_bool			is_forbidden_cmd(t_cmd *cmd);
 
 /* Pipes and redirections */
 void			init_pipe_if(t_cmd *cmd, t_minishell *minishell);

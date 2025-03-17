@@ -9,24 +9,24 @@
  */
 t_minishell	*init_minishell(char **envp)
 {
-	t_minishell	*minishell;
+	t_minishell	*ms;
 
-	minishell = malloc(sizeof(t_minishell));
-	if (!minishell)
+	ms = malloc(sizeof(t_minishell));
+	if (!ms)
 		exit_minishell(E_CRITICAL, NULL, "failed to initialize");
-	minishell->input = NULL;
-	minishell->token_lst = NULL;
-	minishell->cmd_lst = NULL;
-	minishell->exit_code = 0;
-	minishell->input_line = 0;
-	minishell->envp = ft_matrix_dup(envp);
-	if (!minishell->envp)
-		exit_minishell(E_CRITICAL, minishell, "failed to copy environment");
-	minishell->envvar_lst = init_envvars(minishell);
-	if (!minishell->envvar_lst)
-		exit_minishell(E_CRITICAL, minishell,
+	ms->input = NULL;
+	ms->token_lst = NULL;
+	ms->cmd_lst = NULL;
+	ms->exit_code = 0;
+	ms->input_line = 0;
+	ms->envp = ft_matrix_dup(envp);
+	if (!ms->envp)
+		exit_minishell(E_CRITICAL, ms, "failed to copy environment");
+	ms->envvar_lst = init_envvars(ms);
+	if (!ms->envvar_lst)
+		exit_minishell(E_CRITICAL, ms,
 			"failed to initialize environment variables");
-	return (minishell);
+	return (ms);
 }
 
 /**
@@ -40,7 +40,7 @@ t_minishell	*init_minishell(char **envp)
  * @param ms Pointer to the minishell data structure.
  * @return void
  */
-static void	set_input(t_minishell *ms)
+static int	set_input(t_minishell *ms)
 {
 	int	sig;
 
@@ -61,6 +61,7 @@ static void	set_input(t_minishell *ms)
 			exit_minishell(EXIT_SUCCESS, ms, NULL);
 		}
 	}
+	return (EXIT_SUCCESS);
 }
 
 /**
@@ -73,25 +74,27 @@ static void	set_input(t_minishell *ms)
  */
 int	main(int ac, char **av, char **envp)
 {
-	t_minishell	*minishell;
+	t_minishell	*ms;
 
 	(void)av;
 	if (ac > 1)
 		return (put_error("no arguments allowed."), EXIT_FAILURE);
 	ft_signal(SIGQUIT, SIG_IGN);
+	ft_signal(SIGPIPE, SIG_IGN);
 	ft_signal(SIGINT, rl_sigint_handler);
-	minishell = init_minishell(envp);
+	ms = init_minishell(envp);
 	while (1)
 	{
-		set_input(minishell);
-		init_cmd_lst(minishell);
-		if (minishell->cmd_lst == NULL)
+		if (set_input(ms) == EXIT_FAILURE)
+			continue ;
+		init_cmd_lst(ms);
+		if (ms->cmd_lst == NULL)
 			continue ;
 		ft_signal(SIGINT, exec_sigint_handler);
-		execute_cmd_lst(minishell);
-		free_cmd_lst(&minishell->cmd_lst);
+		execute_cmd_lst(ms);
+		free_cmd_lst(&ms->cmd_lst);
 		ft_signal(SIGINT, rl_sigint_handler);
 	}
-	free_minishell(&minishell);
+	free_minishell(&ms);
 	return (EXIT_SUCCESS);
 }

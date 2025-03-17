@@ -22,7 +22,7 @@ int	handle_redir_out(t_token **cur_token, t_cmd **cur_cmd,
 		return (EXIT_FAILURE);
 	ft_free(&(*cur_cmd)->outfile);
 	(*cur_cmd)->outfile = ft_strdup(token->next->value);
-	(*cur_cmd)->append = 0;
+	(*cur_cmd)->append = FALSE;
 	if (!(*cur_cmd)->outfile)
 		exit_minishell(EXIT_FAILURE, minishell, "parse redirection: malloc");
 	(*cur_token) = token->next->next;

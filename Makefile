@@ -53,6 +53,7 @@ C_FILES = main.c \
 	execute/heredoc.c \
 	execute/executable.c \
 	execute/builtin.c \
+	execute/utils.c \
 	execute/builtins/utils_args.c \
 	execute/builtins/cd/cd.c \
 	execute/builtins/cd/utils_dir.c \

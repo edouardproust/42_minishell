@@ -3,7 +3,7 @@
 /*                                                        :::      ::::::::   */
 /*   ft_lutoa_base.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: eproust <marvin@42.fr>                     +#+  +:+       +#+        */
+/*   By: eproust <contact@edouardproust.dev>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/20 11:28:00 by eproust           #+#    #+#             */
 /*   Updated: 2024/10/06 18:50:56 by eproust          ###   ########.fr       */

@@ -103,7 +103,8 @@ void	execute_cmd_lst(t_minishell *ms)
 	cmd = ms->cmd_lst;
 	while (cmd)
 	{
-		execute_cmd(cmd, ms);
+		if (!is_forbidden_cmd(cmd))
+			execute_cmd(cmd, ms);
 		cmd = cmd->next;
 	}
 	wait_for_processes(ms);
