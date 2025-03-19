@@ -34,8 +34,8 @@ int	handle_redir_out(t_token **cur_token, t_cmd **cur_cmd,
 		if (fd == -1)
 			put_error1("%s: failed to create file", (*cur_cmd)->outfile);
 		ft_close(&fd);
-		ft_free(&(*cur_cmd)->outfile);
 	}
+	ft_free(&(*cur_cmd)->outfile);
 	(*cur_cmd)->outfile = ft_strdup(token->next->value);
 	(*cur_cmd)->append = FALSE;
 	if (!(*cur_cmd)->outfile)
