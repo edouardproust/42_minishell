@@ -1,47 +1,11 @@
 #include "minishell.h"
 
 /**
- * Reads heredoc input until delimiter, writing to pipe.
- *
- * Reads the heredoc and writes each line to the write_fd descriptor.
- * The reading stops as soon as the delimiter (cmd->heredoc_del) is encountered.
- *
- * @param cmd Command structure containing delimiter
- * @param write_fd Pipe write end file descriptor
- * @return EXIT_SUCCESS on delimiter match, EXIT_FAILURE on error/EOF
- */
-static int	read_heredoc(t_cmd *cmd, int write_fd)
-{
-	char	*line;
-
-	while (1)
-	{
-		line = readline("> ");
-		if (!line)
-		{
-			if (get_and_reset_signal() == SIGINT)
-				return (ft_free(&line), E_SIGBASE + SIGINT);
-			put_error2("warning: here-document at line %s delimited by "
-				"end of file (wanted `%s')",
-				int_to_str(cmd->heredoc->start),
-				cmd->heredoc->delimiter);
-			return (EXIT_SUCCESS);
-		}
-		if (ft_strcmp(line, cmd->heredoc->delimiter) == 0)
-			return (ft_free(&line), EXIT_SUCCESS);
-		if (ft_putstr_fd(line, write_fd) == -1
-			|| ft_putstr_fd("\n", write_fd) == -1)
-			return (ft_free(&line), EXIT_FAILURE);
-		ft_free(&line);
-	}
-	return (EXIT_SUCCESS);
-}
-
-/**
  * Handles child process for heredoc input collection.
  *
  * @param pipefd Pipe file descriptors array
  * @param cmd Command structure containing heredoc details
+ * @param ms Struct containing data on the program
  */
 static void	handle_child_process(int *pipefd, t_cmd *cmd, t_minishell *ms)
 {
@@ -49,7 +13,7 @@ static void	handle_child_process(int *pipefd, t_cmd *cmd, t_minishell *ms)
 
 	ft_signal(SIGINT, heredoc_sigint_handler);
 	ft_close(&pipefd[0]);
-	exit_code = read_heredoc(cmd, pipefd[1]);
+	exit_code = read_heredoc(cmd, pipefd[1], ms);
 	flush_fds();
 	free_minishell(&ms);
 	exit(exit_code);
@@ -88,6 +52,7 @@ static int	handle_parent_process(int pid, int *pipefd, t_cmd *cmd)
  * Manages heredoc processing using pipe communication.
  *
  * @param cmd Command structure with heredoc details
+ * @param ms Struct containing data on the program
  * @return EXIT_SUCCESS on success, EXIT_FAILURE on pipe/fork error
  */
 static int	process_heredoc(t_cmd *cmd, t_minishell *ms)

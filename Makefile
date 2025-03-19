@@ -53,7 +53,8 @@ C_FILES = main.c \
 	execute/pipe.c \
 	execute/redirection/save_restore.c \
 	execute/redirection/setup.c \
-	execute/heredoc.c \
+	execute/heredoc/heredoc.c \
+	execute/heredoc/utils.c \
 	execute/executable.c \
 	execute/builtin.c \
 	execute/utils.c \

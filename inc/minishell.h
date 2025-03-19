@@ -185,7 +185,6 @@ char			*redir_error(t_token *token);
 int				check_ambiguous_redirect(t_token *file_token,
 					t_minishell *minishell);
 t_parse_op		*get_parse_ops(void);
-int				process_all_heredocs(t_minishell *ms);
 int				handle_token_type(t_token **cur_token, t_cmd **cur_cmd,
 					t_minishell *minishell);
 int				handle_redir_in(t_token **cur_token, t_cmd **cur_cmd,
@@ -215,7 +214,8 @@ int				handle_token_error(t_token **token_lst, char unmatched_quote,
 void			token_addback(t_token **tokens, t_token *new);
 int				skip_quotes(char *input, int *index, char *unmatched_quote);
 int				process_quotes(char c, t_expansion *exp);
-char			*remove_quotes_and_expand(char *str, t_minishell *minishell);
+char			*remove_quotes_and_expand(char *str, t_minishell *minishell,
+					t_bool remove_quotes);
 char			*handle_tilde_exp(char *original_word, int has_quotes,
 					t_minishell *minishell);
 char			*expand_tilde(char *word, t_minishell *minishell);
@@ -237,6 +237,8 @@ pid_t			run_in_child_process(t_builtin *builtin, t_cmd *cmd,
 					t_minishell *minishell);
 int				setup_redirections(t_cmd *cmd);
 t_bool			is_forbidden_cmd(t_cmd *cmd);
+int				process_all_heredocs(t_minishell *ms);
+int				read_heredoc(t_cmd *cmd, int write_fd, t_minishell *ms);
 
 /* Pipes and redirections */
 void			init_pipe_if(t_cmd *cmd, t_minishell *minishell);

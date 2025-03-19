@@ -14,7 +14,7 @@ int	do_pwd(char **args, t_minishell *minishell)
 	char	*path;
 
 	(void)minishell;
-	exit_code = error_if_options(args, "pwd");
+	exit_code = error_if_wrong_args(args, "pwd", 1);
 	if (exit_code)
 		return (exit_code);
 	path = getcwd(NULL, 0);

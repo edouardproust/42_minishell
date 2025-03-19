@@ -4,13 +4,14 @@
  * 1. Quote removal (handling nested/non-nested quotes)
  * 2. Variable expansion (`$VAR` substitution)
  * 3. Clean string construction
- * 
+ *
  * @param str Input string with potential quotes/variables
  * @return Newly allocated processed string, or NULL on:
  *         - Memory allocation failure
  *         - Unclosed quotes
  */
-char	*remove_quotes_and_expand(char *str, t_minishell *minishell)
+char	*remove_quotes_and_expand(char *str, t_minishell *minishell,
+	t_bool remove_quotes)
 {
 	t_expansion	exp;
 	int			error;
@@ -23,7 +24,7 @@ char	*remove_quotes_and_expand(char *str, t_minishell *minishell)
 	exp.cleaned[0] = '\0';
 	while (str[exp.input_pos] && !error)
 	{
-		if (is_quote_char(str[exp.input_pos]))
+		if (remove_quotes && is_quote_char(str[exp.input_pos]))
 			error = process_quotes(str[exp.input_pos], &exp);
 		else if ((!exp.in_quote || exp.in_quote == '"')
 			&& str[exp.input_pos] == '$')
