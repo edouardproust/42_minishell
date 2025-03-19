@@ -106,5 +106,5 @@ int	handle_token_error(t_token **token_lst, char unmatched_quote,
 	}
 	else
 		minishell->exit_code = 1;
-	return (EXIT_SUCCESS);
+	return (EXIT_SUCCESS); 
 }
