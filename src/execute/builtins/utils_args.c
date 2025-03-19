@@ -9,7 +9,7 @@ int	error_if_options(char **args, char *builtin_name)
 	{
 		if (args[i][0] == '-')
 		{
-			put_error2("%s: -%c: invalid option", builtin_name,
+			put_error2("%s: -%s: bad option", builtin_name,
 				char_to_str(args[i][1]));
 			return (E_CMDWRONGARG);
 		}

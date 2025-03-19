@@ -1,9 +1,9 @@
 #include "minishell.h"
 /**
  * Returns a static list of tokenization operators and their corresponding types.
- * 
+ *
  * Used in `handle_special_char()` to identify and categorize operators.
- * 
+ *
  * @return Pointer to a static array of `t_tokenize_op` structures.
  */
 t_tokenize_op	*get_tokenize_ops(void)
@@ -26,7 +26,7 @@ t_tokenize_op	*get_tokenize_ops(void)
  * - Compares the input string with predefined token patterns.
  * - Creates a token of the corresponding type if a match is found.
  * - Updates the input index accordingly.
- * 
+ *
  * @param input The input string to parse.
  * @param i Pointer to the current index in the input string.
  * @returns New token (`t_token *`) or NULL if no match is found.
@@ -59,7 +59,7 @@ t_token	*handle_special_char(char *input, int *i)
  *
  * - Calls `handle_special_char()` if the character is a special token.
  * - Calls `create_word_token()` otherwise.
- * 
+ *
  * @param input The input string to parse.
  * @param i Pointer to the current index in the input string.
  * @param unmatched_quote Pointer to the unmatched quote character, if any.
@@ -99,7 +99,7 @@ int	handle_token_error(t_token **token_lst, char unmatched_quote,
 	free_token_lst(token_lst);
 	if (unmatched_quote)
 	{
-		put_error1("unexpected EOF while looking for matching `%c'",
+		put_error1("unexpected EOF while looking for matching `%s'",
 			char_to_str(unmatched_quote));
 		minishell->exit_code = E_CRITICAL;
 		return (EXIT_FAILURE);
