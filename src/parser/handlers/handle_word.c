@@ -16,7 +16,7 @@
  * - Creates temporary tokens from split values
  * - Adds each split part as a separate command argument
  * - Ensures proper memory cleanup on allocation failure
- * 
+ *
  * @param cur_cmd Current command being built
  * @param split_tokens Temporary tokens created from splitting
  * @param minishell Shell context for error handling
@@ -46,7 +46,6 @@ static void	handle_unquoted_word(t_cmd *cur_cmd, t_token *split_tokens,
  * Handles a word token by copying its value and adding it to the current
  * command's arguments.
  * - Duplicates the word and adds it to the args list of the current command.
- * @TODO Check malloc error message (for now on NULL)
  */
 int	handle_word(t_token **cur_token, t_cmd **cur_cmd,
 	t_minishell *minishell)
@@ -59,7 +58,7 @@ int	handle_word(t_token **cur_token, t_cmd **cur_cmd,
 	{
 		arg_copy = ft_strdup(token->value);
 		if (!arg_copy)
-			exit_minishell(EXIT_FAILURE, minishell, NULL);
+			exit_minishell(EXIT_FAILURE, minishell, "parse word: strdup");
 		add_arg_to_cmd(*cur_cmd, arg_copy);
 	}
 	else

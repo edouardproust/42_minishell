@@ -14,7 +14,7 @@
 
 /**
  * Cleans up token and command lists.
- * 
+ *
  * @param minishell Shell instance containing token/cmd lists.
  * @param status Indicates failure (EXIT_FAILURE) or success.
  * @return The input `status` unchanged.
@@ -25,13 +25,13 @@ static void	parse_cleanup(t_minishell *minishell)
 	free_cmd_lst(&minishell->cmd_lst);
 }
 
-/* 
+/*
  * Parses a list of tokens and builds a linked list of commands.
  *
  * - Initializes the command list (`cmd_lst`).
  * - Delegates token processing to `handle_token_type`.
  * - Exits if an error occurs.
- * 
+ *
  * Returns: EXIT_SUCCESS on success, or EXIT_FAILURE on failure.
  */
 int	parse_tokens(t_minishell *minishell)

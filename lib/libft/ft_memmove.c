@@ -3,7 +3,7 @@
 /*                                                        :::      ::::::::   */
 /*   memmove.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: eproust <marvin@42.fr>                     +#+  +:+       +#+        */
+/*   By: eproust <contact@edouardproust.dev>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/17 15:28:41 by eproust           #+#    #+#             */
 /*   Updated: 2024/09/17 16:52:17 by eproust          ###   ########.fr       */
@@ -42,7 +42,7 @@ int	main(void)
 	int bytes_overlap = 3;
 	char *dest1;
 	char *dest2;
-	
+
 	printf("ft_memmove:\n");
 	dest1 = (char *)ft_memmove(src1 + bytes_overlap, src1, 10);
 	printf("- src: %s\n- dest: %s\n", src1, dest1);

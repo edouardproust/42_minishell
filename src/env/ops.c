@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   ops.c                                              :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: eproust <contact@edouardproust.dev>        +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2025/03/19 11:39:21 by fpapadak          #+#    #+#             */
+/*   Updated: 2025/03/19 11:39:27 by fpapadak         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "minishell.h"
 
 /**
@@ -22,19 +34,23 @@ t_envvar	*envvar_new(char *var)
 	node->next = NULL;
 	node->name = get_envp_var_identifier(var);
 	if (!node->name)
-		return (ft_free(1, &node), NULL);
+		return (free_envvar_node(&node), NULL);
 	node->value = get_envp_var_value(var);
 	if (!node->value)
-		return (ft_free(2, &node->name, &node), NULL);
+	{
+		ft_free(&node->name);
+		free_envvar_node(&node);
+		return (NULL);
+	}
 	return (node);
 }
 
 /**
  * Add a node at the end of the list.
- * 
+ *
  * @param lst Pointer to the list's head node
  * @param new New node to add
- * @return EXIT_SUCCESS if node added successfully, 
+ * @return EXIT_SUCCESS if node added successfully,
  * EXIT_FAILURE otherwise
  */
 int	envvar_addoneback(t_envvar **lst, t_envvar *new)
@@ -58,7 +74,7 @@ int	envvar_addoneback(t_envvar **lst, t_envvar *new)
 
 /**
  * Delete a t_envvar node if it exists.
- * 
+ *
  * @param lst Pointer to the head of the list of t_envvar nodes
  * @param to_remove Pointer to the t_envvar node to remove
  * @return EXIT_FAILURE if incorrect params, EXIT_SUCCESS otherwise
@@ -91,21 +107,21 @@ int	envvar_deleteone(t_envvar **lst, t_envvar *to_remove)
 
 /**
  * Update the 'value' member of the given t_envvar node.
- * 
- * This function does not check if the node exists in the list. 
- * You may want to use envvar_findbyname() before this function to 
+ *
+ * This function does not check if the node exists in the list.
+ * You may want to use envvar_findbyname() before this function to
  * prevent to make sure it exists and prevent any undefined behaviour.
- * 
+ *
  * @param lst Pointer to the head of the list of t_envvar nodes
  * @param name Name of the var to be found
- * @return EXIT_SUCCESS or EXIT_FAILURE (on malloc error or 
+ * @return EXIT_SUCCESS or EXIT_FAILURE (on malloc error or
  * wrong node / value)
  */
 int	envvar_updateone(t_envvar *node, char *new_value)
 {
 	if (!node || !new_value)
 		return (EXIT_FAILURE);
-	ft_free(1, &node->value);
+	ft_free(&node->value);
 	node->value = ft_strdup(new_value);
 	if (!node->value)
 		return (EXIT_FAILURE);

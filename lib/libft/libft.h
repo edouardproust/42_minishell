@@ -3,7 +3,7 @@
 /*                                                        :::      ::::::::   */
 /*   libft.h                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: eproust <marvin@42.fr>                     +#+  +:+       +#+        */
+/*   By: eproust <contact@edouardproust.dev>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/13 12:55:09 by eproust           #+#    #+#             */
 /*   Updated: 2025/02/06 18:55:07 by eproust          ###   ########.fr       */
@@ -14,10 +14,9 @@
 # define LIBFT_H
 
 # include <stddef.h>
-# include <stdint.h>
+# include <stdint.h> // SIZE_MAX
 # include <stdlib.h>
 # include <unistd.h>
-# include <stdarg.h>
 
 # ifndef BUFFER_SIZE
 #  define BUFFER_SIZE 1024
@@ -28,7 +27,7 @@ void	ft_exit(char *error_msg);
 void	ft_pexit(char *error_msg);
 
 /* Free */
-void	*ft_free(int count, ...);
+void	*ft_free(char **str);
 void	ft_free_split(char ***array);
 void	ft_free_splitn(char ***matrix, int n);
 
@@ -86,27 +85,5 @@ int		ft_putchar_fd(char c, int fd);
 int		ft_putstr_fd(char *s, int fd);
 void	ft_putendl_fd(char *s, int fd);
 void	ft_putnbr_fd(int n, int fd);
-
-/* Linked lists */
-typedef struct s_list
-{
-	void			*content;
-	struct s_list	*next;
-}	t_list;
-
-/* ft_printf */
-ssize_t	ft_printf(const char *format, ...);
-ssize_t	ft_fprintf(int fd, const char *format, ...);
-ssize_t	ft_vprintf(const char *format, va_list arg_ptr);
-ssize_t	ft_vfprintf(int fd, const char *format, va_list arg_ptr);
-ssize_t	ft_print_char(va_list arg_ptr, int fd);
-ssize_t	ft_print_str(va_list arg_ptr, int fd);
-ssize_t	ft_print_int(va_list arg_ptr, int fd);
-ssize_t	ft_print_uint(va_list arg_ptr, int fd);
-ssize_t	ft_print_hexa(va_list arg_ptr, char specifier, int fd);
-ssize_t	ft_print_ptr(va_list arg_ptr, int fd);
-
-/* get_next_line */
-char	*get_next_line(int fd);
 
 #endif

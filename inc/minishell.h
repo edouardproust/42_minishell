@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   minishell.h                                        :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: eproust & fpapadak                         +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2025/02/16 20:07:30 by eproust           #+#    #+#             */
+/*   Updated: 2025/02/16 20:07:31 by eproust          ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #ifndef MINISHELL_H
 # define MINISHELL_H
 
@@ -9,8 +21,7 @@
 # include <readline/history.h>
 # include <sys/wait.h>
 # include <signal.h>
-# include <sys/stat.h> 
-# include <termios.h>
+# include <sys/stat.h>
 
 /****************************************/
 /* Macros and Enums                     */
@@ -82,7 +93,7 @@ typedef struct s_cmd
 	char			*infile;
 	char			*outfile;
 	t_heredoc		*heredoc;
-	int				append;
+	t_bool			append;
 
 	struct s_cmd	*prev;
 	struct s_cmd	*next;
@@ -132,10 +143,12 @@ typedef struct s_builtin
 
 /* Error handling */
 void			set_errno(int err_no);
-void			put_error_va(char *fmt, va_list args);
-void			put_error(char *fmt, ...);
+void			put_error(char *err_msg);
+void			put_error1(char *fmt, char *arg);
+void			put_error2(char *fmt, char *arg1, char *arg2);
 
 /* Memory */
+void			ft_free_ptr(void **ptr);
 void			free_minishell(t_minishell **minishell);
 void			free_envvar_lst(t_envvar **var_lst);
 t_envvar		*free_envvar_node(t_envvar **node);
@@ -145,7 +158,9 @@ t_cmd			*free_cmd_node(t_cmd **cmd);
 
 /* Exit */
 void			exit_minishell(int exit_code, t_minishell *minishell,
-					char *fmt, ...);
+					char *err_msg);
+void			exit_minishell1(int exit_code, t_minishell *minishell,
+					char *fmt, char *arg);
 
 /* Env */
 t_envvar		*init_envvars(t_minishell *minishell);
@@ -213,11 +228,12 @@ int				handle_token_error(t_token **token_lst, char unmatched_quote,
 void			token_addback(t_token **tokens, t_token *new);
 int				skip_quotes(char *input, int *index, char *unmatched_quote);
 int				process_quotes(char c, t_expansion *exp);
-char			*remove_quotes_and_expand(char *str, t_minishell *minishell);
+char			*remove_quotes_and_expand(char *str, t_minishell *minishell,
+					t_bool remove_quotes);
 char			*handle_tilde_exp(char *original_word, int has_quotes,
 					t_minishell *minishell);
 char			*expand_tilde(char *word, t_minishell *minishell);
-t_token 		*split_unquoted(t_token *orig_token, char *expanded_val);
+t_token			*split_unquoted(t_token *orig_token, char *expanded_val);
 
 /* Vars expansion */
 void			init_expansion(t_expansion *exp, char *str);
@@ -235,6 +251,9 @@ pid_t			run_in_child_process(t_builtin *builtin, t_cmd *cmd,
 					t_minishell *minishell);
 int				process_all_heredocs(t_minishell *ms);
 int				setup_redirections(t_cmd *cmd);
+t_bool			is_forbidden_cmd(t_cmd *cmd);
+int				process_all_heredocs(t_minishell *ms);
+int				read_heredoc(t_cmd *cmd, int write_fd, t_minishell *ms);
 
 /* Pipes and redirections */
 void			init_pipe_if(t_cmd *cmd, t_minishell *minishell);
@@ -279,5 +298,7 @@ int				is_special_char(char c);
 int				is_space_char(char c);
 int				is_quote_char(char c);
 void			skip_whitespaces(char *input, int *i);
+char			*char_to_str(char c);
+char			*int_to_str(int n);
 
 #endif

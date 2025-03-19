@@ -3,7 +3,7 @@
 /*                                                        :::      ::::::::   */
 /*   ft_tolower.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: eproust <marvin@42.fr>                     +#+  +:+       +#+        */
+/*   By: eproust <contact@edouardproust.dev>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/17 13:02:49 by eproust           #+#    #+#             */
 /*   Updated: 2024/09/17 13:48:35 by eproust          ###   ########.fr       */
@@ -26,7 +26,7 @@ int	main(void)
 	int c = 'A';
 
 	printf("\'%c\' -> \'%c\'\n", c, ft_tolower(c));
-	printf("\'%c\' -> \'%c\'\n", c, tolower(c));	
+	printf("\'%c\' -> \'%c\'\n", c, tolower(c));
 
 	return (0);
 }

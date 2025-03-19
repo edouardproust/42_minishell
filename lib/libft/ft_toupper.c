@@ -3,7 +3,7 @@
 /*                                                        :::      ::::::::   */
 /*   ft_toupper.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: eproust <marvin@42.fr>                     +#+  +:+       +#+        */
+/*   By: eproust <contact@edouardproust.dev>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/17 13:02:35 by eproust           #+#    #+#             */
 /*   Updated: 2024/09/25 12:46:11 by eproust          ###   ########.fr       */
@@ -26,7 +26,7 @@ int	main(void)
 	int c = 'a';
 
 	printf("\'%c\' -> \'%c\'\n", c, ft_toupper(c));
-	printf("\'%c\' -> \'%c\'\n", c, toupper(c));	
+	printf("\'%c\' -> \'%c\'\n", c, toupper(c));
 
 	return (0);
 }

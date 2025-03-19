@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   signal.c                                           :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: eproust <contact@edouardproust.dev>        +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2025/03/19 11:39:21 by fpapadak          #+#    #+#             */
+/*   Updated: 2025/03/19 11:39:27 by fpapadak         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "minishell.h"
 
 static volatile sig_atomic_t	g_signal = 0;
@@ -20,7 +32,7 @@ int	get_and_reset_signal(void)
 void	rl_sigint_handler(int signal)
 {
 	g_signal = signal;
-	ft_printf("\n");
+	printf("\n");
 	rl_replace_line("", 0);
 	rl_on_new_line();
 	rl_redisplay();
@@ -32,7 +44,7 @@ void	rl_sigint_handler(int signal)
 void	heredoc_sigint_handler(int signal)
 {
 	g_signal = signal;
-	ft_printf("\n");
+	printf("\n");
 	rl_replace_line("", 0);
 	rl_on_new_line();
 	rl_done = 1;
@@ -45,5 +57,5 @@ void	heredoc_sigint_handler(int signal)
 void	exec_sigint_handler(int signal)
 {
 	g_signal = signal;
-	ft_printf("\n");
+	printf("\n");
 }

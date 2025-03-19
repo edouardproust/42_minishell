@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   setup.c                                            :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: eproust <contact@edouardproust.dev>        +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2025/03/19 11:39:21 by fpapadak          #+#    #+#             */
+/*   Updated: 2025/03/19 11:39:27 by fpapadak         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "minishell.h"
 
 static	int	setup_redir_heredoc(t_cmd *cmd)
@@ -21,7 +33,7 @@ static int	setup_redir_infile(t_cmd *cmd)
 	if (ft_dup2(cmd->fdin, STDIN_FILENO) == EXIT_FAILURE)
 	{
 		ft_close(&cmd->fdin);
-		return (put_error("%s: dup2", cmd->infile), EXIT_FAILURE);
+		return (put_error1("%s: dup2", cmd->infile), EXIT_FAILURE);
 	}
 	ft_close(&cmd->fdin);
 	return (EXIT_SUCCESS);
@@ -31,8 +43,7 @@ static int	setup_redir_outfile(t_cmd *cmd)
 {
 	ft_close(&cmd->fdout);
 	if (cmd->append)
-		cmd->fdout = open(cmd->outfile,
-				O_WRONLY | O_CREAT | O_APPEND, 0644);
+		cmd->fdout = open(cmd->outfile, O_WRONLY | O_CREAT | O_APPEND, 0644);
 	else
 		cmd->fdout = open(cmd->outfile, O_WRONLY | O_CREAT | O_TRUNC, 0644);
 	if (cmd->fdout == -1)
@@ -40,7 +51,7 @@ static int	setup_redir_outfile(t_cmd *cmd)
 	if (ft_dup2(cmd->fdout, STDOUT_FILENO) == EXIT_FAILURE)
 	{
 		ft_close(&cmd->fdout);
-		return (put_error("%s: dup2", cmd->outfile), EXIT_FAILURE);
+		return (put_error1("%s: dup2", cmd->outfile), EXIT_FAILURE);
 	}
 	ft_close(&cmd->fdout);
 	return (EXIT_SUCCESS);
@@ -48,7 +59,7 @@ static int	setup_redir_outfile(t_cmd *cmd)
 
 /**
  * Sets up input and output redirections for the current command.
- * 
+ *
  * Opens files and duplicates file descriptors as needed.
  *
  * @param cmd Command to execute.

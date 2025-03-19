@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   export                                             :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: eproust <contact@edouardproust.dev>        +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2025/03/19 11:39:21 by fpapadak          #+#    #+#             */
+/*   Updated: 2025/03/19 11:39:27 by fpapadak         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "minishell.h"
 
 /**
@@ -5,14 +17,14 @@
  * for the command `export`.
  *
  * @param lst Head node of t_envvar list
- * @return FAILURE if ft_printf fails. EXIT_SUCCESS otherwise.
+ * @return FAILURE if printf fails. EXIT_SUCCESS otherwise.
  */
 static int	put_export_vars(t_envvar *lst)
 {
 	while (lst)
 	{
-		if (ft_printf("export %s=\"%s\"\n", lst->name, lst->value) < 0)
-			return (put_error("export: ft_printf"), EXIT_FAILURE);
+		if (printf("export %s=\"%s\"\n", lst->name, lst->value) < 0)
+			return (put_error("export: printf"), EXIT_FAILURE);
 		lst = lst->next;
 	}
 	return (EXIT_SUCCESS);
@@ -55,21 +67,19 @@ int	do_export(char **args, t_minishell *ms)
 	if (ft_matrix_size(args) == 1)
 		return (put_export_vars(ms->envvar_lst));
 	exit_code = EXIT_SUCCESS;
-	i = 1;
-	while (args[i])
+	i = -1;
+	while (args[++i])
 	{
 		envvar = envvar_new(args[i]);
 		if (!envvar)
 			return (put_error("export"), EXIT_FAILURE);
 		if (!is_valid_envp_var(envvar->name))
 		{
-			put_error("export: `%s': not a valid identifier", envvar->name);
-			exit_code = EXIT_FAILURE;
-			free_envvar_node(&envvar);
+			put_error1("export: `%s': not a valid identifier", envvar->name);
+			exit_code = (free_envvar_node(&envvar), EXIT_FAILURE);
 		}
 		else
 			export_envvar(envvar, ms);
-		i++;
 	}
 	return (update_envp(ms) | exit_code);
 }

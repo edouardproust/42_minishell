@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   utils_dir.c                                        :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: eproust <contact@edouardproust.dev>        +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2025/03/19 11:39:21 by fpapadak          #+#    #+#             */
+/*   Updated: 2025/03/19 11:39:27 by fpapadak         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "minishell.h"
 
 char	*get_destdir(char **args, int args_nb, t_minishell *ms)
@@ -29,8 +41,8 @@ int	change_directory(char *dest_dir, char **pwd)
 {
 	if (chdir(dest_dir) == -1)
 	{
-		ft_free(1, pwd);
-		return (put_error("cd: %s", dest_dir), EXIT_FAILURE);
+		ft_free(pwd);
+		return (put_error1("cd: %s", dest_dir), EXIT_FAILURE);
 	}
 	return (EXIT_SUCCESS);
 }

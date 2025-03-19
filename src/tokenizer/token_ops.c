@@ -96,15 +96,14 @@ t_token	*handle_token_creation(char *input, int *i, char *unmatched_quote,
 
 /**
  * Handles tokenization errors, such as unmatched quotes.
- * 
+ *
  * - Frees the token list if an error is encountered.
  * - Exits the minishell with an appropriate error message.
- * 
+ *
  * @param token_lst Pointer to the list of tokens to free.
  * @param unmatched_quote The unmatched quote character, if any.
  * @param minishell Pointer to the minishell data structure.
  * @return Always returns EXIT_SUCCESS.
- * //TODO Interactive mode in case of unmatching quotes?
  */
 int	handle_token_error(t_token **token_lst, char unmatched_quote,
 	t_minishell *minishell)
@@ -112,8 +111,8 @@ int	handle_token_error(t_token **token_lst, char unmatched_quote,
 	free_token_lst(token_lst);
 	if (unmatched_quote)
 	{
-		put_error("unexpected EOF while looking for matching `%c'",
-			unmatched_quote);
+		put_error1("unexpected EOF while looking for matching `%s'",
+			char_to_str(unmatched_quote));
 		minishell->exit_code = E_CRITICAL;
 		return (EXIT_FAILURE);
 	}

@@ -1,8 +1,20 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   envvars.c                                          :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: eproust <contact@edouardproust.dev>        +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2025/03/19 11:39:21 by fpapadak          #+#    #+#             */
+/*   Updated: 2025/03/19 11:39:27 by fpapadak         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "minishell.h"
 
 /**
  * Find the t_envvar based on the var name.
- * 
+ *
  * @param lst Head of the list of t_envvar nodes
  * @param name Name of the var to be found
  * @return The found t_envvar or NULL if not found
@@ -25,7 +37,7 @@ t_envvar	*envvar_findbyname(t_envvar *lst, char *name)
 
 /**
  * Count the number of nodes in a t_envvar list.
- * 
+ *
  * @param head Head node of the list
  * @return Count of nodes in the list.
  */
@@ -48,10 +60,10 @@ int	envvar_lstsize(t_envvar *head)
 
 /**
  * Get the value of an environment variable from its name.
- * 
+ *
  * This function is searching through the member  * t_envvar_lst of
  * t_minishell.
- * 
+ *
  * @param var_name Name of the searched environment variable
  * @param minishell Struct containing global Minishell data, including
  * the environment variables list (`envvar_lst`).

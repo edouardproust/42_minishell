@@ -23,14 +23,13 @@
  *
  * @return A pointer to the head of the command list (`cmd_lst`), or NULL if
  * tokenization failed.
- * @TODO Check error messages
  */
 void	init_cmd_lst(t_minishell *minishell)
 {
 	t_token	*tokens;
 
 	tokens = tokenizer(minishell);
-	ft_free(1, &minishell->input);
+	ft_free(&minishell->input);
 	if (!tokens)
 		return ;
 	minishell->token_lst = tokens;

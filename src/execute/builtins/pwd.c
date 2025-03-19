@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   pwd.c                                              :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: eproust <contact@edouardproust.dev>        +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2025/03/19 11:39:21 by fpapadak          #+#    #+#             */
+/*   Updated: 2025/03/19 11:39:27 by fpapadak         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "minishell.h"
 
 /**
@@ -14,17 +26,17 @@ int	do_pwd(char **args, t_minishell *minishell)
 	char	*path;
 
 	(void)minishell;
-	exit_code = error_if_options(args, "pwd");
+	exit_code = error_if_wrong_args(args, "pwd", 1);
 	if (exit_code)
 		return (exit_code);
 	path = getcwd(NULL, 0);
 	if (!path)
 		return (put_error("pwd: getcwd"), EXIT_FAILURE);
-	if (ft_printf("%s\n", path) < 0)
+	if (printf("%s\n", path) < 0)
 	{
-		ft_free(1, &path);
-		return (put_error("pwd: ft_printf"), EXIT_FAILURE);
+		ft_free(&path);
+		return (put_error("pwd: printf"), EXIT_FAILURE);
 	}
-	ft_free(1, &path);
+	ft_free(&path);
 	return (EXIT_SUCCESS);
 }

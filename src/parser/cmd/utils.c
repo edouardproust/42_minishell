@@ -38,6 +38,6 @@ void	add_arg_to_cmd(t_cmd *cmd, char *arg)
 		new_args[i] = cmd->args[i];
 	new_args[count] = arg;
 	new_args[count + 1] = NULL;
-	ft_free(1, &cmd->args);
+	ft_free_ptr((void **)&cmd->args);
 	cmd->args = new_args;
 }

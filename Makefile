@@ -7,8 +7,7 @@ NAME = ./minishell
 
 C_DIR = src
 
-C_FILES = debug.c \
-	main.c \
+C_FILES = main.c \
 	utils/free/minishell.c \
 	utils/free/envvar.c \
 	utils/free/token.c \
@@ -16,6 +15,7 @@ C_FILES = debug.c \
 	utils/exit.c \
 	utils/error.c \
 	utils/string.c \
+	utils/char.c \
 	utils/fd.c \
 	env/init.c \
 	env/ops.c \
@@ -54,9 +54,11 @@ C_FILES = debug.c \
 	execute/pipe.c \
 	execute/redirection/save_restore.c \
 	execute/redirection/setup.c \
-	execute/heredoc.c \
+	execute/heredoc/heredoc.c \
+	execute/heredoc/utils.c \
 	execute/executable.c \
 	execute/builtin.c \
+	execute/utils.c \
 	execute/builtins/utils_args.c \
 	execute/builtins/cd/cd.c \
 	execute/builtins/cd/utils_dir.c \
@@ -86,8 +88,7 @@ OBJS = $(addprefix $(O_DIR)/,$(C_FILES:.c=.o))
 
 H_DIR = inc
 
-H_FILES = debug.h \
-	minishell.h
+H_FILES = minishell.h
 
 HEADERS = $(addprefix $(H_DIR)/,$(H_FILES))
 

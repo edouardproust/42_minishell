@@ -28,8 +28,8 @@ int	handle_redir_heredoc(t_token **cur_token, t_cmd **cur_cmd,
 		return (EXIT_FAILURE);
 	if (check_ambiguous_redir(token->next, minishell) == EXIT_FAILURE)
 		return (EXIT_FAILURE);
-	ft_free(1, &(*cur_cmd)->infile);
-	ft_free(1, &(*cur_cmd)->heredoc->delimiter);
+	ft_free(&(*cur_cmd)->infile);
+	ft_free(&(*cur_cmd)->heredoc->delimiter);
 	(*cur_cmd)->heredoc->delimiter = ft_strdup(token->next->value);
 	if (!(*cur_cmd)->heredoc->delimiter)
 		exit_minishell(EXIT_FAILURE, minishell, NULL);

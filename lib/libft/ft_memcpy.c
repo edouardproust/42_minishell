@@ -3,7 +3,7 @@
 /*                                                        :::      ::::::::   */
 /*   ft_memcpy.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: eproust <marvin@42.fr>                     +#+  +:+       +#+        */
+/*   By: eproust <contact@edouardproust.dev>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/17 13:56:09 by eproust           #+#    #+#             */
 /*   Updated: 2024/09/27 19:32:23 by eproust          ###   ########.fr       */
@@ -35,7 +35,7 @@ int main()
 	char src[] = "Hello World!";
 	char dest1[20];
 	char dest2[20];
-    
+
 	printf("src: %s\n", src);
 	ft_memcpy(src + 2, src, 8);
 	printf("ft_memcpy: '%s'\n", dest1);

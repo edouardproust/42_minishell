@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   path.c                                             :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: eproust <contact@edouardproust.dev>        +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2025/03/19 11:39:21 by fpapadak          #+#    #+#             */
+/*   Updated: 2025/03/19 11:39:27 by fpapadak         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "minishell.h"
 
 /**
@@ -25,7 +37,7 @@ static char	*dup_valid_path(char *progpath, t_minishell *minishell)
 
 /**
  * Constructs and validates a relative path (./progname).
- * 
+ *
  * @param progname Executable name.
  * @return "./progname" if executable, NULL otherwise.
  * @note	- On access failure: returns NULL, errno set by access().
@@ -40,7 +52,7 @@ static char	*get_valid_relpath(char *progname, t_minishell *minishell)
 		exit_minishell(EXIT_FAILURE, minishell, progname);
 	if (access(relpath, X_OK) == -1)
 	{
-		ft_free(1, &relpath);
+		ft_free(&relpath);
 		return (NULL);
 	}
 	return (relpath);
@@ -48,7 +60,7 @@ static char	*get_valid_relpath(char *progname, t_minishell *minishell)
 
 /**
  * Searches directories for an executable (dir/progname).
- * 
+ *
  * @param dirnames Directories to search (from PATH).
  * @param progname Executable name.
  * @return Valid path if found and executable, NULL otherwise.
@@ -70,7 +82,7 @@ static char	*find_abspath(char **dirnames, char *progname,
 			exit_minishell(EXIT_FAILURE, minishell, progname);
 		if (access(abspath_tmp, X_OK) == 0)
 			return (abspath_tmp);
-		ft_free(1, &abspath_tmp);
+		ft_free(&abspath_tmp);
 		if (errno == EACCES)
 			return (NULL);
 		i++;
@@ -81,7 +93,7 @@ static char	*find_abspath(char **dirnames, char *progname,
 
 /**
  * Searches PATH directories for an executable.
- * 
+ *
  * @param envpath_value Colon-separated PATH string.
  * @return Valid path if found, NULL otherwise.
  * @note - On malloc failure (split): exits process.
@@ -103,7 +115,7 @@ char	*find_abspath_in_envvars(char *progname, char *envpath_value,
 
 /**
  * Resolves executable path (absolute, relative, or PATH search).
- * 
+ *
  * @param progname Executable name/path.
  * @return Malloc'd path string (caller must free).
  * @note - On critical errors (malloc): exits process.
@@ -130,7 +142,7 @@ char	*get_exec_path(char *progname, t_minishell *minishell)
 		if (errno == ENOENT)
 			exit_minishell(E_CMDNOTFOUND, minishell, progname);
 		else if (errno == 0)
-			exit_minishell(E_CMDNOTFOUND, minishell, "%s: command not found",
+			exit_minishell1(E_CMDNOTFOUND, minishell, "%s: command not found",
 				progname);
 		else
 			exit_minishell(E_CMDNOTEXEC, minishell, progname);

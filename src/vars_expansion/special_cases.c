@@ -54,7 +54,7 @@ static void	handle_exit_status(t_expansion *exp, t_minishell *minishell)
  * Handles special cases during variable expansion:
  * - `$?`: Expands to the last exit code.
  * - Lone `$` or `$` followed by invalid characters (not alphanum/"_").
- * 
+ *
  * @param exp Expansion context (buffer state)
  * @param str Input string being processed
  * @param minishell Shell context for exit code

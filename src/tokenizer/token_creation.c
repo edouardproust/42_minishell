@@ -88,7 +88,7 @@ t_token	*create_word_token(char *input, int *index, char *unmatched_quote,
 	if (!original_word)
 		return (NULL);
 	original_word = handle_tilde_exp(original_word, has_quotes, minishell);
-	expanded_word = remove_quotes_and_expand(original_word, minishell);
+	expanded_word = remove_quotes_and_expand(original_word, minishell, TRUE);
 	if (!expanded_word)
 		return (free(original_word), minishell->exit_code = 1, NULL);
 	return (create_token_with_values(original_word, expanded_word,

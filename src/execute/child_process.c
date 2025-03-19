@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   child_process.c                                    :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: eproust <contact@edouardproust.dev>        +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2025/03/19 11:39:21 by fpapadak          #+#    #+#             */
+/*   Updated: 2025/03/19 11:39:27 by fpapadak         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "minishell.h"
 
 /**
@@ -5,7 +17,7 @@
  *
  * @param builtin Struct containing data on the builtin to be executed.
  *  NULL if an executable must be executed instead.
- * @param cmd Struct of the command to be executed. NULL if a builtin 
+ * @param cmd Struct of the command to be executed. NULL if a builtin
  *  must be executed instead.
  * @return Child process PID
  * @note Exit on: fork failure, child process exit code > E_ERRMAX

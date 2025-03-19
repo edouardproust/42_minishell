@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   echo.c                                             :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: eproust <contact@edouardproust.dev>        +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2025/03/19 11:39:21 by fpapadak          #+#    #+#             */
+/*   Updated: 2025/03/19 11:39:27 by fpapadak         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "minishell.h"
 
 /**
@@ -37,22 +49,22 @@ int	do_echo(char **args, t_minishell *minishell)
 	char	*err_msg;
 
 	(void)minishell;
-	err_msg = "echo: ft_printf";
+	err_msg = "echo: printf";
 	i = 1;
 	option_n = handle_option_n(args, &i);
 	while (args[i])
 	{
-		if (ft_printf("%s", args[i]) < 0)
+		if (printf("%s", args[i]) < 0)
 			return (put_error(err_msg), EXIT_FAILURE);
 		if (args[i + 1])
 		{
-			if (ft_printf(" ") < 0)
+			if (printf(" ") < 0)
 				return (put_error(err_msg), EXIT_FAILURE);
 		}
 		i++;
 	}
 	if (option_n == FALSE)
-		if (ft_printf("\n") < 0)
+		if (printf("\n") < 0)
 			return (put_error(err_msg), EXIT_FAILURE);
 	return (EXIT_SUCCESS);
 }

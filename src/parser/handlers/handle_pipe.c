@@ -51,7 +51,7 @@ int	handle_pipe(t_token **cur_token, t_cmd **cur_cmd,
 	if ((!(*cur_cmd)->args && !(*cur_cmd)->infile && !(*cur_cmd)->outfile)
 		|| !token->next || token->next->type == TOKEN_PIPE)
 	{
-		put_error("syntax error near unexpected token `%s'",
+		put_error1("syntax error near unexpected token `%s'",
 			pipe_error(token, *cur_cmd));
 		minishell->exit_code = E_CRITICAL;
 		return (EXIT_FAILURE);

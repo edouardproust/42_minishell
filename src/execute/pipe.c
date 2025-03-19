@@ -1,8 +1,20 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   pipe.c                                             :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: eproust <contact@edouardproust.dev>        +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2025/03/19 11:39:21 by fpapadak          #+#    #+#             */
+/*   Updated: 2025/03/19 11:39:27 by fpapadak         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "minishell.h"
 
 /**
  *  * Initializes pipe file descriptors for the current command if needed.
- * 
+ *
  * Sets `cmd->fdin` to the read end of the previous command's pipe if it exists.
  * Creates a new pipe and sets `cmd->fdout` to its write end if there's a next
  * command.
@@ -27,7 +39,7 @@ void	init_pipe_if(t_cmd *cmd, t_minishell *ms)
 
 /**
  * Sets up input and output file descriptors for the current command.
- * 
+ *
  * Duplicates `cmd->fdin` to `STDIN_FILENO` and `cmd->fdout` to `STDOUT_FILENO`
  * if needed.
  *
@@ -53,7 +65,7 @@ void	setup_pipe_ends(t_cmd *cmd, t_minishell *minishell)
 
 /**
  * Closes unnecessary file descriptors in the parent process.
- * 
+ *
  * Ensures proper reference counting and EOF handling by closing:
  * - The write end of the pipe if created for this command.
  * - The read end of the pipe if created for the previous command.

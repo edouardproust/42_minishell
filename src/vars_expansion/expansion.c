@@ -53,6 +53,6 @@ int	expand_var(t_expansion *exp, char *str, t_minishell *minishell)
 		return (0);
 	process_valid_var(exp, var_name, minishell);
 	exp->input_pos = exp->input_pos + chars_consumed;
-	ft_free(1, &var_name);
+	ft_free(&var_name);
 	return (0);
 }

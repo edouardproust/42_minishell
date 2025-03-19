@@ -1,7 +1,7 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   env.c                                              :+:      :+:    :+:   */
+/*   utils.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: eproust <contact@edouardproust.dev>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
@@ -13,28 +13,21 @@
 #include "minishell.h"
 
 /**
- * Implementation of the env builtin, with no option or argument.
+ * Check if the command is a forbidden one.
  *
- * @param args Array of arguments passed to env.
- * @param minishell Struct containing global Minishell data, including the
- * 	environment variables list (`envvar_lst`).
- * @return EXIT_SUCCESS on success. EXIT_FAILURE on failure.
- * @note The quotes around args are removed during tokenization.
+ * Display an error if the command is forbidden.
+ *
+ * @param cmd The command to check
+ * @return TRUE if the cmd is forbidden, or FALSE
  */
-int	do_env(char **args, t_minishell *minishell)
+t_bool	is_forbidden_cmd(t_cmd *cmd)
 {
-	int			exit_code;
-	t_envvar	*current;
-
-	exit_code = error_if_wrong_args(args, "env", 1);
-	if (exit_code)
-		return (exit_code);
-	current = minishell->envvar_lst;
-	while (current)
+	if (ft_matrix_size(cmd->args) == 0)
+		return (FALSE);
+	if (cmd->prev || cmd->next)
 	{
-		if (printf("%s=%s\n", current->name, current->value) < 0)
-			return (put_error("env: printf"), EXIT_FAILURE);
-		current = current->next;
+		if (ft_strcmp("./minishell", cmd->args[0]) == 0)
+			return (put_error("cannot call itself in a sub-process"), TRUE);
 	}
-	return (EXIT_SUCCESS);
+	return (FALSE);
 }
