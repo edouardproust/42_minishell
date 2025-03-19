@@ -68,7 +68,7 @@ t_token	*handle_special_char(char *input, int *i)
 t_token	*handle_token_creation(char *input, int *i, char *unmatched_quote,
 		t_minishell *minishell)
 {
-	t_token	*token;
+	t_token		*token;
 
 	if (is_special_char(input[*i]))
 		return (handle_special_char(input, i));
