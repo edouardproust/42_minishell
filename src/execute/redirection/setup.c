@@ -43,8 +43,7 @@ static int	setup_redir_outfile(t_cmd *cmd)
 {
 	ft_close(&cmd->fdout);
 	if (cmd->append)
-		cmd->fdout = open(cmd->outfile,
-				O_WRONLY | O_CREAT | O_APPEND, 0644);
+		cmd->fdout = open(cmd->outfile, O_WRONLY | O_CREAT | O_APPEND, 0644);
 	else
 		cmd->fdout = open(cmd->outfile, O_WRONLY | O_CREAT | O_TRUNC, 0644);
 	if (cmd->fdout == -1)
