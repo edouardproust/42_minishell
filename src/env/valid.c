@@ -1,12 +1,24 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   valid.c                                            :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: eproust <contact@edouardproust.dev>        +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2025/03/19 11:39:21 by fpapadak          #+#    #+#             */
+/*   Updated: 2025/03/19 11:39:27 by fpapadak         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "minishell.h"
 
 /**
  * Checks if a string represents a relative or absolute path.
- * 
+ *
  * The strings represents a path:
  * - if it start by: /, ./ or ../
  * - or if it contains a / anywhere
- * 
+ *
  * @param s The string to check. If `NULL` or empty, returns `FALSE`.
  * @return t_bool `TRUE` if the string represents an path..
  */
@@ -26,7 +38,7 @@ t_bool	is_path(char *s)
 
 /**
  * Checks if a path matches with an existing directory.
- * 
+ *
  * @param s The path to check. If `NULL` or empty, returns `FALSE`.
  * @return t_bool `TRUE` if the path is a valid directory.
  */
@@ -45,7 +57,7 @@ t_bool	is_directory(char *path)
 
 /**
  * Check if the given string corresponds to a valid envp variable.
- * 
+ *
  * @param str The string to check
  * @return TRUE if is a valid envp variable, FALSE otherwise
  */

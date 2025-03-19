@@ -10,6 +10,8 @@
 /*                                                                            */
 /* ************************************************************************** */
 
+#include "minishell.h"
+
 /**
  * Skips all leading whitespace characters in the input string.
  * Advances the `i` index to the next non-whitespace character.

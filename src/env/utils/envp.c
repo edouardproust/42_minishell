@@ -1,12 +1,24 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   envp.c                                        :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: eproust <contact@edouardproust.dev>        +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2025/03/19 11:39:21 by fpapadak          #+#    #+#             */
+/*   Updated: 2025/03/19 11:39:27 by fpapadak         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "minishell.h"
 
 /**
  * Duplicate and return the identifier part of a envp variable string
  * "identifier=value".
- * 
+ *
  * If the string is not a valid envp var string, the whole string is
  * duplicated.
- * 
+ *
  * @param var The envp variable string. Must not be NULL.
  * @return A newly allocated string containing the identifier part (if valid)
  * or the whole string. Returns NULL if allocation fails.
@@ -27,10 +39,10 @@ char	*get_envp_var_identifier(char *var)
 
 /**
  * Get the value part of an envp variable string "identifier=value".
- * 
+ *
  * If the string is not a valid envp var string, allocate and return an
  * empty string.
- * 
+ *
  * @param var The envp variable string. Must not be NULL.
  * @return A newly allocated string containing the value part (if valid)
  * or an empty string. Returns NULL if allocation fails.
@@ -52,7 +64,7 @@ char	*get_envp_var_value(char *var)
 /**
  * Parse back minishell->envvar_lst into an array of strings (null-terminated)
  * and store it in minishell->envp.
- * 
+ *
  * @param minishell Struct containing global Minishell data, including the 
  * 	environment variables list (`envvar_lst`) and the environment array (`envp`).
  * @return EXIT_SUCCESS on success. EXIT_FAILURE otherwise.

@@ -10,6 +10,8 @@
 /*                                                                            */
 /* ************************************************************************** */
 
+#include "minishell.h"
+
 /**
  * Initializes process-related fields in the t_cmd structure.
  *
