@@ -30,7 +30,6 @@ C_FILES = debug.c \
 	tokenizer/token_creation.c \
 	tokenizer/token_list.c \
 	tokenizer/quote_handling.c \
-	tokenizer/split_tokens.c \
 	tokenizer/remove_quotes_expand.c \
 	vars_expansion/exp_init.c \
 	vars_expansion/var_name_extraction.c \
@@ -41,13 +40,15 @@ C_FILES = debug.c \
 	parser/cmd/new_cmd.c \
 	parser/cmd/utils.c \
 	parser/parser.c \
-	parser/parser_utils.c \
+	parser/parser_ops.c \
 	parser/handlers/handle_word.c \
 	parser/handlers/handle_pipe.c \
 	parser/handlers/handle_redir_in.c \
 	parser/handlers/handle_redir_out.c \
 	parser/handlers/handle_redir_append.c \
 	parser/handlers/handle_redir_heredoc.c \
+	parser/handlers/split_tokens.c \
+	parser/handlers/utils.c \
 	execute/parent_process.c \
 	execute/child_process.c \
 	execute/pipe.c \

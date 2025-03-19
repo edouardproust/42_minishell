@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   parser_ops.c                                       :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: fpapadak <fpapadak@student.42barcelon      +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2025/03/19 11:43:49 by fpapadak          #+#    #+#             */
+/*   Updated: 2025/03/19 11:43:51 by fpapadak         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "minishell.h"
 /* 
  * Returns a static list of parsing operators and their corresponding handlers.
@@ -50,50 +62,4 @@ int	handle_token_type(t_token **cur_token, t_cmd **cur_cmd,
 	}
 	exit_minishell(EXIT_FAILURE, minishell, NULL);
 	return (EXIT_FAILURE);
-}
-
-/**
- * Determines the error message for invalid redirection syntax.
- * 
- * @param token Current token (e.g., `<`, `>`, `<<`, `>>`).
- * @return "newline" if no token follows, "|" for unexpected pipes.
- * 
- */
-char	*redir_error(t_token *token)
-{
-	if (!token->next)
-		return ("newline");
-	if (token->next->type == TOKEN_PIPE)
-		return ("|");
-	return (token->next->value);
-}
-
-/**
- * Validates redirection targets to prevent ambiguous filenames.
- * 
- * @param file_token Token containing filename (after expansion)
- * @param minishell Shell context for error reporting
- * @return EXIT_SUCCESS if valid, EXIT_FAILURE if:
- *         - Value is empty/unset
- *         - Contains spaces in unquoted token
- * @note Uses original token value for error messages
- */
-int	check_ambiguous_redirect(t_token *file_token, t_minishell *minishell)
-{
-	char	*expanded_val;
-
-	expanded_val = file_token->value;
-	if (!expanded_val || expanded_val[0] == '\0')
-	{
-		put_error("%s: ambiguous redirect", file_token->original_value);
-		minishell->exit_code = E_CRITICAL;
-		return (EXIT_FAILURE);
-	}
-	if (ft_strchr(expanded_val, ' ') && !file_token->was_quoted)
-	{
-		put_error("%s: ambiguous redirect", file_token->original_value);
-		minishell->exit_code = E_CRITICAL;
-		return (EXIT_FAILURE);
-	}
-	return (EXIT_SUCCESS);
 }
