@@ -3,7 +3,6 @@
  * Handles a word token by copying its value and adding it to the current
  * command's arguments.
  * - Duplicates the word and adds it to the args list of the current command.
- * @TODO Check malloc error message (for now on NULL)
  */
 int	handle_word(t_token **cur_token, t_cmd **cur_cmd,
 	t_minishell *minishell)
