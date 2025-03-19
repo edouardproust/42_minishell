@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   token_creation.c                                   :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: fpapadak <fpapadak@student.42barcelon      +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2025/03/19 11:36:22 by fpapadak          #+#    #+#             */
+/*   Updated: 2025/03/19 11:37:26 by fpapadak         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "minishell.h"
 /**
  * Creates a token with both original and expanded values, tracking quote status.
@@ -17,8 +29,6 @@ static t_token	*create_token_with_values(char *original, char *expanded,
 		return (free(original), free(expanded), NULL);
 	token->original_value = original;
 	token->was_quoted = was_quoted;
-	if (!was_quoted && ft_strchr(expanded, ' '))
-		return (split_unquoted(token, expanded));
 	return (token);
 }
 
@@ -81,5 +91,6 @@ t_token	*create_word_token(char *input, int *index, char *unmatched_quote,
 	expanded_word = remove_quotes_and_expand(original_word, minishell, TRUE);
 	if (!expanded_word)
 		return (free(original_word), minishell->exit_code = 1, NULL);
-	return (create_token_with_values(original_word, expanded_word, has_quotes));
+	return (create_token_with_values(original_word, expanded_word,
+			has_quotes));
 }

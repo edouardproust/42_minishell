@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   token_ops.c                                        :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: fpapadak <fpapadak@student.42barcelon      +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2025/03/19 11:36:48 by fpapadak          #+#    #+#             */
+/*   Updated: 2025/03/19 11:36:51 by fpapadak         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "minishell.h"
 /**
  * Returns a static list of tokenization operators and their corresponding types.
@@ -68,7 +80,7 @@ t_token	*handle_special_char(char *input, int *i)
 t_token	*handle_token_creation(char *input, int *i, char *unmatched_quote,
 		t_minishell *minishell)
 {
-	t_token	*token;
+	t_token		*token;
 
 	if (is_special_char(input[*i]))
 		return (handle_special_char(input, i));

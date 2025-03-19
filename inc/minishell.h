@@ -182,8 +182,10 @@ t_cmd			*cmd_new(t_cmd *prev_cmd);
 void			add_arg_to_cmd(t_cmd *cmd, char *arg);
 int				parse_tokens(t_minishell *minishell);
 char			*redir_error(t_token *token);
-int				check_ambiguous_redirect(t_token *file_token,
+int				check_redir_syntax(t_token *token, t_minishell *minishell);
+int				check_ambiguous_redir(t_token *file_token,
 					t_minishell *minishell);
+int				cleanup_redir(t_cmd *cmd, int ret);
 t_parse_op		*get_parse_ops(void);
 int				handle_token_type(t_token **cur_token, t_cmd **cur_cmd,
 					t_minishell *minishell);
@@ -235,6 +237,7 @@ void			execute_cmd_lst(t_minishell *minishell);
 char			*get_exec_path(char *arg, t_minishell *minishell);
 pid_t			run_in_child_process(t_builtin *builtin, t_cmd *cmd,
 					t_minishell *minishell);
+int				process_all_heredocs(t_minishell *ms);
 int				setup_redirections(t_cmd *cmd);
 t_bool			is_forbidden_cmd(t_cmd *cmd);
 int				process_all_heredocs(t_minishell *ms);
