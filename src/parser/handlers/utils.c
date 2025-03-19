@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   utils.c                                            :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: fpapadak <fpapadak@student.42barcelon      +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2025/03/19 11:41:32 by fpapadak          #+#    #+#             */
+/*   Updated: 2025/03/19 11:43:14 by fpapadak         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "minishell.h"
 /**
  * Determines the error message for invalid redirection syntax.
@@ -15,7 +27,7 @@ char	*redir_error(t_token *token)
 	return (token->next->value);
 }
 
-int check_redir_syntax(t_token *token, t_minishell *minishell)
+int	check_redir_syntax(t_token *token, t_minishell *minishell)
 {
 	if (!token->next || token->next->type != TOKEN_WORD)
 	{
@@ -40,7 +52,7 @@ int check_redir_syntax(t_token *token, t_minishell *minishell)
 int	check_ambiguous_redir(t_token *file_token, t_minishell *minishell)
 {
 	char	*expanded_val;
- 
+
 	expanded_val = file_token->value;
 	if (!expanded_val || expanded_val[0] == '\0')
 	{
@@ -56,4 +68,3 @@ int	check_ambiguous_redir(t_token *file_token, t_minishell *minishell)
 	}
 	return (EXIT_SUCCESS);
 }
-

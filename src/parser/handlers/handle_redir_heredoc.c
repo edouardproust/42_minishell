@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   handle_redir_heredoc.c                             :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: fpapadak <fpapadak@student.42barcelon      +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2025/03/19 11:40:26 by fpapadak          #+#    #+#             */
+/*   Updated: 2025/03/19 11:40:29 by fpapadak         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "minishell.h"
 /**
  * Handles heredoc redirection (`<<`) token by setting the delimiter for the

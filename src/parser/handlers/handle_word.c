@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   handle_word.c                                      :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: fpapadak <fpapadak@student.42barcelon      +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2025/03/19 11:41:26 by fpapadak          #+#    #+#             */
+/*   Updated: 2025/03/19 11:42:26 by fpapadak         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "minishell.h"
 /**
  * Handles unquoted word tokens by splitting them into individual arguments.
@@ -44,15 +56,15 @@ int	handle_word(t_token **cur_token, t_cmd **cur_cmd,
 
 	token = *cur_token;
 	if (token->was_quoted)
-	{	
+	{
 		arg_copy = ft_strdup(token->value);
 		if (!arg_copy)
 			exit_minishell(EXIT_FAILURE, minishell, NULL);
 		add_arg_to_cmd(*cur_cmd, arg_copy);
 	}
 	else
-	handle_unquoted_word(*cur_cmd,
-		split_unquoted(token, token->value), minishell);
+		handle_unquoted_word(*cur_cmd,
+			split_unquoted(token, token->value), minishell);
 	*cur_token = token->next;
 	return (EXIT_SUCCESS);
 }
