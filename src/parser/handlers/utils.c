@@ -68,3 +68,28 @@ int	check_ambiguous_redir(t_token *file_token, t_minishell *minishell)
 	}
 	return (EXIT_SUCCESS);
 }
+
+int	add_path_to_redirs(char ***redirs, char *value)
+{
+	size_t	count;
+	char	**new_redirs;
+	size_t	i;
+
+	count = ft_matrix_size(*redirs);
+	new_redirs = malloc((count + 2) * sizeof(char *));
+	if (!new_redirs)
+		return (EXIT_FAILURE);
+	i = 0;
+	while (i < count)
+	{
+		new_redirs[i] = (*redirs)[i];
+		i++;
+	}
+	new_redirs[count] = ft_strdup(value);
+	if (!new_redirs[count])
+		return (free(new_redirs), EXIT_FAILURE);
+	new_redirs[count + 1] = NULL;
+	free(*redirs);
+	*redirs = new_redirs;
+	return (EXIT_SUCCESS);
+}

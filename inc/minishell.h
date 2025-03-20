@@ -43,6 +43,7 @@ enum	e_token
 
 /* Exit codes */
 # define E_CRITICAL 2
+# define E_PARSEREDIR 2
 # define E_CMDWRONGARG 2
 # define E_CMDNOTEXEC 126
 # define E_CMDNOTFOUND 127
@@ -79,6 +80,19 @@ typedef struct s_heredoc
 	int		start;
 }	t_heredoc;
 
+typedef struct s_infile
+{
+	t_bool		is_heredoc;
+	char		*path;
+	t_heredoc	*heredoc;
+}	t_infile;
+
+typedef struct s_outfile
+{
+	char	*path;
+	t_bool	append;
+}	t_outfile;
+
 typedef struct s_cmd
 {
 	char			**args;
@@ -90,10 +104,8 @@ typedef struct s_cmd
 
 	int				fdin;
 	int				fdout;
-	char			*infile;
-	char			*outfile;
-	t_heredoc		*heredoc;
-	t_bool			append;
+	t_infile		**infiles;
+	char			**outfiles;
 
 	struct s_cmd	*prev;
 	struct s_cmd	*next;
@@ -197,7 +209,6 @@ char			*redir_error(t_token *token);
 int				check_redir_syntax(t_token *token, t_minishell *minishell);
 int				check_ambiguous_redir(t_token *file_token,
 					t_minishell *minishell);
-int				cleanup_redir(t_cmd *cmd, int ret);
 t_parse_op		*get_parse_ops(void);
 int				handle_token_type(t_token **cur_token, t_cmd **cur_cmd,
 					t_minishell *minishell);
@@ -213,6 +224,7 @@ int				handle_redir_heredoc(t_token **cur_token, t_cmd **cur_cmd,
 					t_minishell *minishell);
 int				handle_redir_append(t_token **cur_token, t_cmd **cur_cmd,
 					t_minishell *minishell);
+int				add_path_to_redirs(char ***redirs, char *value);
 
 /* Tokenization */
 t_token			*tokenizer(t_minishell *minishell);

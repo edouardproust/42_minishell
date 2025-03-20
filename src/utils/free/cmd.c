@@ -25,10 +25,10 @@ t_cmd	*free_cmd_node(t_cmd **cmd)
 	ft_free_split(&(*cmd)->args);
 	if ((*cmd)->pipe)
 		ft_free_ptr((void **)&(*cmd)->pipe);
-	if ((*cmd)->infile)
-		ft_free(&(*cmd)->infile);
-	if ((*cmd)->outfile)
-		ft_free(&(*cmd)->outfile);
+	if ((*cmd)->infiles)
+		ft_free_split(&(*cmd)->infiles);
+	if ((*cmd)->outfiles)
+		ft_free_split(&(*cmd)->outfiles);
 	if ((*cmd)->heredoc)
 	{
 		if ((*cmd)->heredoc->delimiter)

@@ -22,12 +22,16 @@ int	handle_redir_heredoc(t_token **cur_token, t_cmd **cur_cmd,
 	t_minishell *minishell)
 {
 	t_token	*token;
+	int		ret;
 
 	token = *cur_token;
 	if (check_redir_syntax(token, minishell) != EXIT_SUCCESS)
 		return (EXIT_FAILURE);
 	if (check_ambiguous_redir(token->next, minishell) == EXIT_FAILURE)
 		return (EXIT_FAILURE);
+	ret = add_path_to_redirs(&(*cur_cmd)->infiles, token->next->value);
+	if (ret == EXIT_FAILURE)
+		exit_minishell(EXIT_FAILURE, minishell, "parse heredoc: malloc");
 	ft_free(&(*cur_cmd)->infile);
 	ft_free(&(*cur_cmd)->heredoc->delimiter);
 	(*cur_cmd)->heredoc->delimiter = ft_strdup(token->next->value);

@@ -22,25 +22,17 @@ int	handle_redir_append(t_token **cur_token, t_cmd **cur_cmd,
 	t_minishell *minishell)
 {
 	t_token	*token;
-	int		fd;
+	int		ret;
 
 	token = *cur_token;
 	if (check_redir_syntax(token, minishell) != EXIT_SUCCESS)
 		return (EXIT_FAILURE);
 	if (check_ambiguous_redir(token->next, minishell) == EXIT_FAILURE)
 		return (EXIT_FAILURE);
-	if ((*cur_cmd)->outfile != NULL)
-	{
-		fd = open((*cur_cmd)->outfile, O_WRONLY | O_CREAT | O_APPEND, 0644);
-		if (fd == -1)
-			return (put_error((*cur_cmd)->outfile), EXIT_FAILURE);
-		ft_close(&fd);
-	}
-	ft_free(&(*cur_cmd)->outfile);
-	(*cur_cmd)->outfile = ft_strdup(token->next->value);
+	ret = add_path_to_redirs(&(*cur_cmd)->outfiles, token->next->value);
+	if (ret == EXIT_FAILURE)
+		exit_minishell(EXIT_FAILURE, minishell, "parse redirection");
 	(*cur_cmd)->append = TRUE;
-	if (!(*cur_cmd)->outfile)
-		exit_minishell(EXIT_FAILURE, minishell, "parse heredoc: malloc");
 	*cur_token = token->next->next;
 	return (EXIT_SUCCESS);
 }

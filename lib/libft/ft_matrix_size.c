@@ -14,12 +14,12 @@
 
 /**
  * Calculate the size of a null-terminated array of strings.
- * 
+ *
  * @param matrix A null-temrinated array of strings
  */
 size_t	ft_matrix_size(char **matrix)
 {
-	int	count;
+	size_t	count;
 
 	if (!matrix || !*matrix)
 		return (0);

@@ -59,8 +59,8 @@ static int	init_cmd_redirections(t_cmd *cmd)
 {
 	cmd->fdin = STDIN_FILENO;
 	cmd->fdout = STDOUT_FILENO;
-	cmd->infile = NULL;
-	cmd->outfile = NULL;
+	cmd->infiles = NULL;
+	cmd->outfiles = NULL;
 	cmd->append = FALSE;
 	if (init_cmd_heredoc(cmd) != EXIT_SUCCESS)
 		return (EXIT_FAILURE);

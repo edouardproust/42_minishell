@@ -52,12 +52,7 @@ int	handle_token_type(t_token **cur_token, t_cmd **cur_cmd,
 	while (parse_ops[i].handler)
 	{
 		if (parse_ops[i].type == type)
-		{
-			if (parse_ops[i].handler(cur_token, cur_cmd, minishell)
-				== EXIT_FAILURE)
-				return (EXIT_FAILURE);
-			return (EXIT_SUCCESS);
-		}
+			return (parse_ops[i].handler(cur_token, cur_cmd, minishell));
 		i++;
 	}
 	exit_minishell(EXIT_FAILURE, minishell, NULL);
