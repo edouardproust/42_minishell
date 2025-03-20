@@ -31,11 +31,11 @@ C_FILES = main.c \
 	tokenizer/token_list.c \
 	tokenizer/quote_handling.c \
 	tokenizer/remove_quotes_expand.c \
-	vars_expansion/exp_init.c \
-	vars_expansion/var_name_extraction.c \
-	vars_expansion/special_cases.c \
-	vars_expansion/expansion.c \
-	vars_expansion/tilde_expansion.c \
+	tokenizer/vars_expansion/exp_init.c \
+	tokenizer/vars_expansion/var_name_extraction.c \
+	tokenizer/vars_expansion/special_cases.c \
+	tokenizer/vars_expansion/expansion.c \
+	tokenizer/vars_expansion/tilde_expansion.c \
 	parser/cmd/init_list.c \
 	parser/cmd/new_cmd.c \
 	parser/cmd/utils.c \

@@ -6,31 +6,11 @@
 /*   By: fpapadak <fpapadak@student.42barcelon      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/19 11:38:31 by fpapadak          #+#    #+#             */
-/*   Updated: 2025/03/19 11:38:33 by fpapadak         ###   ########.fr       */
+/*   Updated: 2025/03/20 11:52:09 by fpapadak         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
-/*
- * Expands `$$` to the current process ID (PID).
- * Converts `getpid()` to a string and appends it to the output buffer.
- */
-
-static void	handle_pid_expansion(t_expansion *exp)
-{
-	char	*pid_str;
-	int		pid_len;
-
-	pid_str = ft_itoa(getpid());
-	if (!pid_str)
-		return ;
-	pid_len = ft_strlen(pid_str);
-	ensure_buffer_space(exp, pid_len);
-	ft_strlcpy(exp->cleaned + exp->output_pos, pid_str, pid_len + 1);
-	exp->output_pos = exp->output_pos + pid_len;
-	free(pid_str);
-}
-
 /*
  * Expands `$?` to the last exit code stored in `minishell->exit_code`.
  * Converts the integer to a string and appends it to the output buffer.
@@ -66,12 +46,6 @@ int	handle_special_cases(t_expansion *exp, char *str, t_minishell *minishell)
 	if (str[exp->input_pos] == '$' && str[exp->input_pos + 1] == '?')
 	{
 		handle_exit_status(exp, minishell);
-		exp->input_pos = exp->input_pos + 2;
-		return (1);
-	}
-	else if (str[exp->input_pos] == '$' && str[exp->input_pos + 1] == '$')
-	{
-		handle_pid_expansion(exp);
 		exp->input_pos = exp->input_pos + 2;
 		return (1);
 	}
