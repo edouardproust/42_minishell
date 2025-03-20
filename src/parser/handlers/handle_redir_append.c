@@ -33,7 +33,7 @@ int	handle_redir_append(t_token **cur_token, t_cmd **cur_cmd,
 	{
 		fd = open((*cur_cmd)->outfile, O_WRONLY | O_CREAT | O_APPEND, 0644);
 		if (fd == -1)
-			put_error1("%s: failed to create file", (*cur_cmd)->outfile);
+			return (put_error((*cur_cmd)->outfile), EXIT_FAILURE);
 		ft_close(&fd);
 	}
 	ft_free(&(*cur_cmd)->outfile);

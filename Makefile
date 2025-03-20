@@ -130,7 +130,7 @@ $(O_DIR)/%.o: $(C_DIR)/%.c Makefile $(HEADERS)
 	@mkdir -p $(@D)
 	cc -c -o $@ $< $(INCLUDES) $(CFLAGS)
 
-$(NAME): $(OBJS)
+$(NAME): $(OBJS) $(LIBFT)
 	cc -o $@ $^ $(LIBS)
 
 clean:
@@ -153,4 +153,4 @@ valgrind:
 # Phony                              *
 # ************************************
 
-.PHONY: all clean fclean re libft
+.PHONY: all clean fclean re libft valgrind

@@ -27,6 +27,11 @@ int	handle_redir_in(t_token **cur_token, t_cmd **cur_cmd,
 		return (EXIT_FAILURE);
 	if (check_ambiguous_redir(token->next, minishell) == EXIT_FAILURE)
 		return (EXIT_FAILURE);
+	if ((*cur_cmd)->infile != NULL)
+	{
+		if (access((*cur_cmd)->infile, F_OK))
+			return (put_error((*cur_cmd)->infile), EXIT_FAILURE);
+	}
 	ft_free(&(*cur_cmd)->infile);
 	(*cur_cmd)->infile = ft_strdup(token->next->value);
 	if (!(*cur_cmd)->infile)
