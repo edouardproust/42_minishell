@@ -18,6 +18,7 @@ C_FILES = debug.c \
 	utils/string.c \
 	utils/char.c \
 	utils/fd.c \
+	utils/cmd.c \
 	env/init.c \
 	env/ops.c \
 	env/path.c \
@@ -57,6 +58,7 @@ C_FILES = debug.c \
 	execute/pipe.c \
 	execute/redirection/save_restore.c \
 	execute/redirection/setup.c \
+	execute/redirection/utils.c \
 	execute/heredoc/heredoc.c \
 	execute/heredoc/utils.c \
 	execute/executable.c \
