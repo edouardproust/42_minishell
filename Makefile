@@ -7,7 +7,8 @@ NAME = ./minishell
 
 C_DIR = src
 
-C_FILES = main.c \
+C_FILES = debug.c \
+	main.c \
 	utils/free/minishell.c \
 	utils/free/envvar.c \
 	utils/free/token.c \
@@ -47,8 +48,10 @@ C_FILES = main.c \
 	parser/handlers/handle_redir_out.c \
 	parser/handlers/handle_redir_append.c \
 	parser/handlers/handle_redir_heredoc.c \
+	parser/handlers/utils/redir_valid.c \
+	parser/handlers/utils/redir_create.c \
+	parser/handlers/utils/redir_add.c \
 	parser/handlers/split_tokens.c \
-	parser/handlers/utils.c \
 	execute/parent_process.c \
 	execute/child_process.c \
 	execute/pipe.c \
@@ -88,7 +91,8 @@ OBJS = $(addprefix $(O_DIR)/,$(C_FILES:.c=.o))
 
 H_DIR = inc
 
-H_FILES = minishell.h
+H_FILES = debug.h \
+	minishell.h
 
 HEADERS = $(addprefix $(H_DIR)/,$(H_FILES))
 

@@ -21,10 +21,10 @@ size_t	ft_matrix_size(char **matrix)
 {
 	size_t	count;
 
-	if (!matrix || !*matrix)
+	if (!matrix)
 		return (0);
 	count = 0;
-	while (matrix[count])
+	while (matrix[count] != NULL)
 		count++;
 	return (count);
 }

@@ -1,7 +1,7 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   utils.c                                            :+:      :+:    :+:   */
+/*   redir_valid.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: fpapadak <fpapadak@student.42barcelon      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
@@ -11,12 +11,12 @@
 /* ************************************************************************** */
 
 #include "minishell.h"
+
 /**
  * Determines the error message for invalid redirection syntax.
- * 
+ *
  * @param token Current token (e.g., `<`, `>`, `<<`, `>>`).
  * @return "newline" if no token follows, "|" for unexpected pipes.
- * 
  */
 char	*redir_error(t_token *token)
 {
@@ -41,7 +41,7 @@ int	check_redir_syntax(t_token *token, t_minishell *minishell)
 
 /**
  * Validates redirection targets to prevent ambiguous filenames.
- * 
+ *
  * @param file_token Token containing filename (after expansion)
  * @param minishell Shell context for error reporting
  * @return EXIT_SUCCESS if valid, EXIT_FAILURE if:
@@ -66,30 +66,5 @@ int	check_ambiguous_redir(t_token *file_token, t_minishell *minishell)
 		minishell->exit_code = E_CRITICAL;
 		return (EXIT_FAILURE);
 	}
-	return (EXIT_SUCCESS);
-}
-
-int	add_path_to_redirs(char ***redirs, char *value)
-{
-	size_t	count;
-	char	**new_redirs;
-	size_t	i;
-
-	count = ft_matrix_size(*redirs);
-	new_redirs = malloc((count + 2) * sizeof(char *));
-	if (!new_redirs)
-		return (EXIT_FAILURE);
-	i = 0;
-	while (i < count)
-	{
-		new_redirs[i] = (*redirs)[i];
-		i++;
-	}
-	new_redirs[count] = ft_strdup(value);
-	if (!new_redirs[count])
-		return (free(new_redirs), EXIT_FAILURE);
-	new_redirs[count + 1] = NULL;
-	free(*redirs);
-	*redirs = new_redirs;
 	return (EXIT_SUCCESS);
 }

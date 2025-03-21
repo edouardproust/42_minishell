@@ -11,6 +11,7 @@
 /* ************************************************************************** */
 
 #include "minishell.h"
+
 /**
  * Handles input redirection (`<`) token by setting the infile for the
  * current command.
@@ -20,17 +21,19 @@
 int	handle_redir_in(t_token **cur_token, t_cmd **cur_cmd,
 	t_minishell *minishell)
 {
-	t_token	*token;
-	int		ret;
+	t_token		*token;
+	t_infile	*new_infile;
 
 	token = *cur_token;
 	if (check_redir_syntax(token, minishell) != EXIT_SUCCESS)
 		return (EXIT_FAILURE);
 	if (check_ambiguous_redir(token->next, minishell) == EXIT_FAILURE)
 		return (EXIT_FAILURE);
-	ret = add_path_to_redirs(&(*cur_cmd)->infiles, token->next->value);
-	if (ret == EXIT_FAILURE)
-		exit_minishell(EXIT_FAILURE, minishell, "parse redirection");
+	new_infile = create_infile_from_path(token->next->value);
+	if (!new_infile)
+		exit_minishell(EXIT_FAILURE, minishell, "parse infile"); //TODO exit minishell OR print error + new prompt?
+	if (add_infile_to_cmd(*cur_cmd, new_infile) == EXIT_FAILURE)
+		exit_minishell(EXIT_FAILURE, minishell, "parse infile"); //TODO exit minishell OR print error + new prompt?
 	*cur_token = token->next->next;
 	return (EXIT_SUCCESS);
 }

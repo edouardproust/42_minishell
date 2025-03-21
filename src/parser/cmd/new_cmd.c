@@ -32,23 +32,6 @@ static int	init_cmd_process(t_cmd *cmd)
 }
 
 /**
- * Initializes heredoc-related fields in the t_cmd structure.
- *
- * @param cmd The command structure to initialize.
- * @return EXIT_SUCCESS on success, EXIT_FAILURE on malloc failure.
- */
-static int	init_cmd_heredoc(t_cmd *cmd)
-{
-	cmd->heredoc = malloc(sizeof(t_heredoc));
-	if (!cmd->heredoc)
-		return (EXIT_FAILURE);
-	cmd->heredoc->delimiter = NULL;
-	cmd->heredoc->fd = -1;
-	cmd->heredoc->start = 0;
-	return (EXIT_SUCCESS);
-}
-
-/**
  * Initializes redirection-related fields in the t_cmd structure.
  *
  * @param cmd The command structure to initialize.
@@ -61,9 +44,6 @@ static int	init_cmd_redirections(t_cmd *cmd)
 	cmd->fdout = STDOUT_FILENO;
 	cmd->infiles = NULL;
 	cmd->outfiles = NULL;
-	cmd->append = FALSE;
-	if (init_cmd_heredoc(cmd) != EXIT_SUCCESS)
-		return (EXIT_FAILURE);
 	return (EXIT_SUCCESS);
 }
 

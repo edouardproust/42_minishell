@@ -13,18 +13,35 @@
 #include "minishell.h"
 
 /**
+ * Checks if a t_cmd has any input files (infiles) or output files (outfiles).
+ *
+ * @param cmd Pointer to the t_cmd struct.
+ * @return TRUE if infiles or outfiles exist, FALSE otherwise.
+ */
+static t_bool	cmd_has_redirections(t_cmd *cmd)
+{
+	t_bool	ret;
+
+	ret = FALSE;
+	if (cmd->infiles != NULL && cmd->infiles[0] != NULL)
+		ret = TRUE;
+	if (cmd->outfiles != NULL && cmd->outfiles[0] != NULL)
+		ret = TRUE;
+	return (ret);
+}
+
+/**
  * Determines the error message for invalid pipe syntax by analyzing context.
  * - Checks for empty commands (leading pipes)
  * - Checks for consecutive/trailing pipes
- * 
+ *
  * @param token Current pipe token being processed
  * @param cur_cmd Current command structure to validate context
  * @return Error token string to display ("|" or next token's value)
  */
 static char	*pipe_error(t_token *token, t_cmd *cur_cmd)
 {
-	if (!cur_cmd->args && !ft_matrix_size(cur_cmd->infiles)
-		&& !ft_matrix_size(cur_cmd->outfiles))
+	if (!cur_cmd->args && !cmd_has_redirections(cur_cmd))
 		return ("|");
 	if (!token->next)
 		return ("|");
@@ -50,8 +67,7 @@ int	handle_pipe(t_token **cur_token, t_cmd **cur_cmd,
 	t_token	*token;
 
 	token = *cur_token;
-	if ((!(*cur_cmd)->args && !ft_matrix_size((*cur_cmd)->infiles)
-		&& !ft_matrix_size((*cur_cmd)->outfiles))
+	if ((!(*cur_cmd)->args && !cmd_has_redirections(*cur_cmd))
 		|| !token->next || token->next->type == TOKEN_PIPE)
 	{
 		put_error1("syntax error near unexpected token `%s'",
