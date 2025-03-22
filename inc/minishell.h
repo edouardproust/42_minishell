@@ -30,6 +30,7 @@
 # define FD_LIMIT 1024
 # define TRUE 1
 # define FALSE 0
+# define ERROR_BUFFER_SIZE 1024
 
 enum	e_token
 {
@@ -145,6 +146,12 @@ typedef struct s_builtin
 	int		(*fn)(char **args, t_minishell *minishell);
 }	t_builtin;
 
+typedef struct s_errorbuffer
+{
+	char	buffer[ERROR_BUFFER_SIZE];
+	int		index;
+}	t_errorbuffer;
+
 /****************************************/
 /* Functions                            */
 /****************************************/
@@ -228,11 +235,13 @@ int				handle_special_cases(t_expansion *exp, char *str,
 					t_minishell *minishell);
 t_bool			is_valid_varchar(char c, t_bool first_char);
 /* Redirections */
-int 			add_infile_to_cmd(t_cmd *cmd, t_infile *new_infile);
-int 			add_outfile_to_cmd(t_cmd *cmd, t_outfile *new_outfile);
+int				add_infile_to_cmd(t_cmd *cmd, t_infile *new_infile);
+int				add_outfile_to_cmd(t_cmd *cmd, t_outfile *new_outfile);
 t_infile		*create_infile_from_heredoc(char *delimiter, int start);
 t_infile		*create_infile_from_path(char *path);
 t_outfile		*create_outfile(char *path, t_bool append);
+void			set_infile_fdin(t_cmd *cmd, t_infile *infile);
+int				duplicate_last_infile(t_cmd *cmd, t_infile *infile);
 
 /******** Execution ********/
 void			execute_cmd_lst(t_minishell *minishell);
@@ -240,7 +249,6 @@ char			*get_exec_path(char *arg, t_minishell *minishell);
 pid_t			run_in_child_process(t_builtin *builtin, t_cmd *cmd,
 					t_minishell *minishell);
 int				process_all_heredocs(t_minishell *ms);
-t_bool			is_forbidden_cmd(t_cmd *cmd);
 int				process_all_heredocs(t_minishell *ms);
 int				read_heredoc(t_infile *infile, int write_fd, t_minishell *ms);
 /* Pipes and redirections */
@@ -250,7 +258,6 @@ void			close_pipe_if(t_cmd *cmd);
 int				setup_redirections(t_cmd *cmd);
 void			save_stdin_stdout(t_cmd *cmd, t_minishell *minishell);
 void			restore_stdin_stdout(t_cmd *cmd, t_minishell *minishell);
-t_infile		*get_last_infile(t_infile **infiles);
 int				open_outfile(t_outfile *outfile);
 /* Executables */
 void			run_executable(t_cmd *cmd, t_minishell *minishell);
@@ -281,6 +288,8 @@ void			set_errno(int err_no);
 void			put_error(char *err_msg);
 void			put_error1(char *fmt, char *arg);
 void			put_error2(char *fmt, char *arg1, char *arg2);
+void			append_to_error_buffer(const char *str);
+void			flush_error_buffer(void);
 /* Memory */
 void			ft_free_ptr(void **ptr);
 void			free_minishell(t_minishell **minishell);
@@ -308,5 +317,6 @@ char			*char_to_str(char c);
 char			*int_to_str(int n);
 /* Command */
 t_bool			cmd_has_redirections(t_cmd *cmd);
+t_bool			is_forbidden_cmd(t_cmd *cmd);
 
 #endif

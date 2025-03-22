@@ -30,7 +30,8 @@ int	handle_redir_heredoc(t_token **cur_token, t_cmd **cur_cmd,
 		return (EXIT_FAILURE);
 	if (check_ambiguous_redir(token->next, minishell) == EXIT_FAILURE)
 		return (EXIT_FAILURE);
-	new_heredoc = create_infile_from_heredoc(token->next->value, minishell->input_line);
+	new_heredoc = create_infile_from_heredoc(token->next->value,
+			minishell->input_line);
 	if (!new_heredoc)
 		exit_minishell(EXIT_FAILURE, minishell, "parse heredoc");
 	if (add_infile_to_cmd(*cur_cmd, new_heredoc) == EXIT_FAILURE)

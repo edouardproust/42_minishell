@@ -42,7 +42,7 @@ static void	free_infiles(t_cmd *cmd)
  * @param cmd The command struct holding the outfiles array.
  * @return void
  */
-static void free_outfiles(t_cmd *cmd)
+static void	free_outfiles(t_cmd *cmd)
 {
 	int	i;
 

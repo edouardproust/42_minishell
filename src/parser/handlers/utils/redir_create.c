@@ -24,7 +24,7 @@
  */
 t_infile	*create_infile_from_heredoc(char *delimiter, int start)
 {
-    t_infile	*new_infile;
+	t_infile	*new_infile;
 
 	if (!delimiter)
 		return (NULL);
@@ -49,7 +49,7 @@ t_infile	*create_infile_from_heredoc(char *delimiter, int start)
  */
 t_infile	*create_infile_from_path(char *path)
 {
-    t_infile	*new_infile;
+	t_infile	*new_infile;
 
 	if (!path)
 		return (NULL);
@@ -73,14 +73,14 @@ t_infile	*create_infile_from_path(char *path)
  */
 t_outfile	*create_outfile(char *path, t_bool append)
 {
-    t_outfile	*new_outfile;
+	t_outfile	*new_outfile;
 
 	new_outfile = malloc(sizeof(t_outfile));
-    if (!new_outfile)
-        return (NULL);
-    new_outfile->filepath = ft_strdup(path);
+	if (!new_outfile)
+		return (NULL);
+	new_outfile->filepath = ft_strdup(path);
 	if (!new_outfile->filepath)
 		return (free(new_outfile), NULL);
-    new_outfile->append = append;
-    return (new_outfile);
+	new_outfile->append = append;
+	return (new_outfile);
 }

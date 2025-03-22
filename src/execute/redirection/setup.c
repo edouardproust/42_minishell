@@ -12,33 +12,26 @@
 
 #include "minishell.h"
 
-static	int	setup_redir_heredoc(t_cmd *cmd, t_infile *infile)
+static int	setup_redir_infiles(t_cmd *cmd)
 {
-	cmd->fdin = infile->hdoc_fd;
-	if (cmd->fdin == -1)
-		return (put_error("heredoc: invalid fd"), EXIT_FAILURE);
-	if (ft_dup2(cmd->fdin, STDIN_FILENO) == EXIT_FAILURE)
-	{
-		ft_close(&cmd->fdin);
-		infile->hdoc_fd = -1;
-		return (put_error("heredoc: dup2"), EXIT_FAILURE);
-	}
-	ft_close(&cmd->fdin);
-	infile->hdoc_fd = -1;
-	return (EXIT_SUCCESS);
-}
+	int		i;
 
-static int	setup_redir_infile(t_cmd *cmd, char *filepath)
-{
-	cmd->fdin = open(filepath, O_RDONLY);
-	if (cmd->fdin == -1)
-		return (put_error(filepath), EXIT_FAILURE);
-	if (ft_dup2(cmd->fdin, STDIN_FILENO) == EXIT_FAILURE)
+	if (!cmd->infiles)
+		return (EXIT_SUCCESS);
+	i = 0;
+	while (cmd->infiles[i])
 	{
+		set_infile_fdin(cmd, cmd->infiles[i]);
+		if (cmd->fdin == -1)
+			return (EXIT_FAILURE);
+		if (cmd->infiles[i + 1] == NULL)
+		{
+			if (duplicate_last_infile(cmd, cmd->infiles[i]) == EXIT_FAILURE)
+				return (EXIT_FAILURE);
+		}
 		ft_close(&cmd->fdin);
-		return (put_error1("%s: dup2", filepath), EXIT_FAILURE);
+		i++;
 	}
-	ft_close(&cmd->fdin);
 	return (EXIT_SUCCESS);
 }
 
@@ -53,7 +46,7 @@ static int	setup_redir_infile(t_cmd *cmd, char *filepath)
  */
 static int	setup_redir_outfiles(t_cmd *cmd)
 {
-	int			i;
+	int	i;
 
 	if (!cmd->outfiles)
 		return (EXIT_SUCCESS);
@@ -88,21 +81,7 @@ static int	setup_redir_outfiles(t_cmd *cmd)
  */
 int	setup_redirections(t_cmd *cmd)
 {
-	t_infile	*last_in;
-	int			ret;
-
-	last_in = get_last_infile(cmd->infiles);
-	if (last_in)
-	{
-		if (last_in->is_heredoc)
-			ret = setup_redir_heredoc(cmd, last_in);
-		else
-			ret = setup_redir_infile(cmd, last_in->filepath);
-		if (ret != EXIT_SUCCESS)
-			return (EXIT_FAILURE);
-	}
-	ret = setup_redir_outfiles(cmd);
-	if (ret != EXIT_SUCCESS)
+	if (setup_redir_infiles(cmd) == EXIT_FAILURE)
 		return (EXIT_FAILURE);
-	return (EXIT_SUCCESS);
+	return (setup_redir_outfiles(cmd));
 }
