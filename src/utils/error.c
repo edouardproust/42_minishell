@@ -29,7 +29,7 @@ static void	put_error_format(char *fmt, char **args, int arg_count)
 			i++;
 		}
 		else
-			append_to_error_buffer(&fmt[i]);
+			append_to_error_buffer(char_to_str(fmt[i]));
 		i++;
 	}
 }
