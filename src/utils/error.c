@@ -38,8 +38,13 @@ static void	put_error_format(char *fmt, char **args, int arg_count)
  * Writes a formatted error message to the error buffer using the provided
  * arguments.
  */
-static void	put_error_with_args(char *fmt, char **args, int arg_count)
+static void	do_put_error(char *fmt, char **args, int arg_count)
 {
+	static t_bool	locked = FALSE;
+
+	while (locked)
+		;
+	locked = TRUE;
 	append_to_error_buffer("minishell: ");
 	put_error_format(fmt, args, arg_count);
 	if (errno)
@@ -49,6 +54,7 @@ static void	put_error_with_args(char *fmt, char **args, int arg_count)
 	}
 	append_to_error_buffer("\n");
 	flush_error_buffer();
+	locked = FALSE;
 }
 
 /**
@@ -56,17 +62,12 @@ static void	put_error_with_args(char *fmt, char **args, int arg_count)
  */
 void	put_error(char *err_msg)
 {
+	char	*args[1];
+
 	if (!err_msg || !err_msg[0])
 		return ;
-	append_to_error_buffer("minishell: ");
-	append_to_error_buffer(err_msg);
-	if (errno)
-	{
-		append_to_error_buffer(": ");
-		append_to_error_buffer(strerror(errno));
-	}
-	append_to_error_buffer("\n");
-	flush_error_buffer();
+	args[0] = err_msg;
+	do_put_error("%s", args, 1);
 }
 
 /**
@@ -77,7 +78,7 @@ void	put_error1(char *fmt, char *arg)
 	char	*args[1];
 
 	args[0] = arg;
-	put_error_with_args(fmt, args, 1);
+	do_put_error(fmt, args, 1);
 }
 
 /**
@@ -89,5 +90,5 @@ void	put_error2(char *fmt, char *arg1, char *arg2)
 
 	args[0] = arg1;
 	args[1] = arg2;
-	put_error_with_args(fmt, args, 2);
+	do_put_error(fmt, args, 2);
 }
