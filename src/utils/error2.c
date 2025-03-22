@@ -48,12 +48,10 @@ void	append_to_error_buffer(const char *str)
 	int				len;
 
 	err_buf = get_error_buffer();
-	len = strlen(str);
+	len = ft_strlen(str);
 	if (err_buf->index + len >= ERROR_BUFFER_SIZE)
-	{
 		flush_error_buffer();
-	}
-	memcpy(err_buf->buffer + err_buf->index, str, len);
+	ft_memcpy(err_buf->buffer + err_buf->index, str, len);
 	err_buf->index += len;
 }
 

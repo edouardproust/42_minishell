@@ -24,7 +24,10 @@ static int	put_export_vars(t_envvar *lst)
 	while (lst)
 	{
 		if (printf("export %s=\"%s\"\n", lst->name, lst->value) < 0)
-			return (put_error("export: printf"), EXIT_FAILURE);
+		{
+			put_error("export: printf");
+			return (EXIT_FAILURE);
+		}
 		lst = lst->next;
 	}
 	return (EXIT_SUCCESS);
@@ -38,11 +41,32 @@ static void	export_envvar(t_envvar *envvar, t_minishell *minishell)
 	if (found_node)
 	{
 		if (envvar_updateone(found_node, envvar->value) != EXIT_SUCCESS)
-			return (put_error("export"));
+		{
+			put_error("export");
+			return ;
+		}
 		free_envvar_node(&envvar);
 	}
 	else
 		envvar_addoneback(&minishell->envvar_lst, envvar);
+}
+
+static int	export_argument(char *arg, int *exit_code, t_minishell *ms)
+{
+	t_envvar	*envvar;
+
+	envvar = envvar_new(arg);
+	if (!envvar)
+		return (put_error("export"), EXIT_FAILURE);
+	if (!is_valid_envp_var(envvar->name))
+	{
+		put_error1("export: `%s': not a valid identifier", envvar->name);
+		free_envvar_node(&envvar);
+		*exit_code = EXIT_FAILURE;
+	}
+	else
+		export_envvar(envvar, ms);
+	return (EXIT_SUCCESS);
 }
 
 /**
@@ -57,9 +81,8 @@ static void	export_envvar(t_envvar *envvar, t_minishell *minishell)
  */
 int	do_export(char **args, t_minishell *ms)
 {
-	int			exit_code;
-	t_envvar	*envvar;
-	int			i;
+	int	exit_code;
+	int	i;
 
 	exit_code = error_if_options(args, "export");
 	if (exit_code)
@@ -72,16 +95,8 @@ int	do_export(char **args, t_minishell *ms)
 	{
 		if (ft_strchr(args[i], '=') == NULL)
 			continue ;
-		envvar = envvar_new(args[i]);
-		if (!envvar)
-			return (put_error("export"), EXIT_FAILURE);
-		if (!is_valid_envp_var(envvar->name))
-		{
-			put_error1("export: `%s': not a valid identifier", envvar->name);
-			exit_code = (free_envvar_node(&envvar), EXIT_FAILURE);
-		}
-		else
-			export_envvar(envvar, ms);
+		if (export_argument(args[i], &exit_code, ms) == EXIT_FAILURE)
+			return (EXIT_FAILURE);
 	}
-	return (update_envp(ms) | exit_code);
+	return (update_envp(ms) || exit_code);
 }

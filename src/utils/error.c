@@ -12,17 +12,11 @@
 
 #include "minishell.h"
 
-/**
- * Writes a formatted error message to the error buffer using the provided
- * arguments.
- */
-static void	put_error_with_args(char *fmt, char **args, int arg_count)
+static void	put_error_format(char *fmt, char **args, int arg_count)
 {
 	int		i;
 	int		arg_index;
-	char	c;
 
-	append_to_error_buffer("minishell: ");
 	i = 0;
 	arg_index = 0;
 	while (fmt[i])
@@ -35,12 +29,19 @@ static void	put_error_with_args(char *fmt, char **args, int arg_count)
 			i++;
 		}
 		else
-		{
-			c = fmt[i];
-			append_to_error_buffer(&c);
-		}
+			append_to_error_buffer(&fmt[i]);
 		i++;
 	}
+}
+
+/**
+ * Writes a formatted error message to the error buffer using the provided
+ * arguments.
+ */
+static void	put_error_with_args(char *fmt, char **args, int arg_count)
+{
+	append_to_error_buffer("minishell: ");
+	put_error_format(fmt, args, arg_count);
 	if (errno)
 	{
 		append_to_error_buffer(": ");
