@@ -12,48 +12,69 @@
 
 #include "minishell.h"
 
-static	int	setup_redir_heredoc(t_cmd *cmd)
+static	int	setup_redir_heredoc(t_cmd *cmd, t_infile *infile)
 {
-	cmd->fdin = cmd->heredoc->fd;
-	cmd->heredoc->fd = -1;
+	cmd->fdin = infile->hdoc_fd;
+	if (cmd->fdin == -1)
+		return (put_error("heredoc: invalid fd"), EXIT_FAILURE);
 	if (ft_dup2(cmd->fdin, STDIN_FILENO) == EXIT_FAILURE)
 	{
 		ft_close(&cmd->fdin);
+		infile->hdoc_fd = -1;
 		return (put_error("heredoc: dup2"), EXIT_FAILURE);
 	}
 	ft_close(&cmd->fdin);
+	infile->hdoc_fd = -1;
 	return (EXIT_SUCCESS);
 }
 
-static int	setup_redir_infile(t_cmd *cmd)
+static int	setup_redir_infile(t_cmd *cmd, char *filepath)
 {
-	cmd->fdin = open(cmd->infile, O_RDONLY);
+	cmd->fdin = open(filepath, O_RDONLY);
 	if (cmd->fdin == -1)
-		return (put_error(cmd->infile), EXIT_FAILURE);
+		return (put_error(filepath), EXIT_FAILURE);
 	if (ft_dup2(cmd->fdin, STDIN_FILENO) == EXIT_FAILURE)
 	{
 		ft_close(&cmd->fdin);
-		return (put_error1("%s: dup2", cmd->infile), EXIT_FAILURE);
+		return (put_error1("%s: dup2", filepath), EXIT_FAILURE);
 	}
 	ft_close(&cmd->fdin);
 	return (EXIT_SUCCESS);
 }
 
-static int	setup_redir_outfile(t_cmd *cmd)
+/**
+ * Create all the outfiles for the current command. Assign the last
+ * outfile's fd to stdout.
+ *
+ * @param outfiles Array of outfiles
+ * @return EXIT_SUCCESS, or EXIT_FAILURE if an intermediary outfile could not
+ * be created or the dup of the last outfile on stdout failed. The function
+ * prints error messages.
+ */
+static int	setup_redir_outfiles(t_cmd *cmd)
 {
-	ft_close(&cmd->fdout);
-	if (cmd->append)
-		cmd->fdout = open(cmd->outfile, O_WRONLY | O_CREAT | O_APPEND, 0644);
-	else
-		cmd->fdout = open(cmd->outfile, O_WRONLY | O_CREAT | O_TRUNC, 0644);
-	if (cmd->fdout == -1)
-		return (put_error(cmd->outfile), EXIT_FAILURE);
-	if (ft_dup2(cmd->fdout, STDOUT_FILENO) == EXIT_FAILURE)
+	int			i;
+
+	if (!cmd->outfiles)
+		return (EXIT_SUCCESS);
+	i = 0;
+	while (cmd->outfiles[i])
 	{
+		cmd->fdout = open_outfile(cmd->outfiles[i]);
+		if (cmd->fdout == -1)
+			return (put_error(cmd->outfiles[i]->filepath), EXIT_FAILURE);
+		if (cmd->outfiles[i + 1] == NULL)
+		{
+			if (ft_dup2(cmd->fdout, STDOUT_FILENO) == EXIT_FAILURE)
+			{
+				ft_close(&cmd->fdout);
+				return (put_error1("%s: dup2", cmd->outfiles[i]->filepath),
+					EXIT_FAILURE);
+			}
+		}
 		ft_close(&cmd->fdout);
-		return (put_error1("%s: dup2", cmd->outfile), EXIT_FAILURE);
+		i++;
 	}
-	ft_close(&cmd->fdout);
 	return (EXIT_SUCCESS);
 }
 
@@ -67,20 +88,21 @@ static int	setup_redir_outfile(t_cmd *cmd)
  */
 int	setup_redirections(t_cmd *cmd)
 {
-	if (cmd->heredoc->fd != -1)
+	t_infile	*last_in;
+	int			ret;
+
+	last_in = get_last_infile(cmd->infiles);
+	if (last_in)
 	{
-		if (setup_redir_heredoc(cmd) != EXIT_SUCCESS)
+		if (last_in->is_heredoc)
+			ret = setup_redir_heredoc(cmd, last_in);
+		else
+			ret = setup_redir_infile(cmd, last_in->filepath);
+		if (ret != EXIT_SUCCESS)
 			return (EXIT_FAILURE);
 	}
-	if (cmd->infile)
-	{
-		if (setup_redir_infile(cmd) != EXIT_SUCCESS)
-			return (EXIT_FAILURE);
-	}
-	if (cmd->outfile)
-	{
-		if (setup_redir_outfile(cmd) != EXIT_SUCCESS)
-			return (EXIT_FAILURE);
-	}
+	ret = setup_redir_outfiles(cmd);
+	if (ret != EXIT_SUCCESS)
+		return (EXIT_FAILURE);
 	return (EXIT_SUCCESS);
 }

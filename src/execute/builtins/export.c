@@ -67,9 +67,11 @@ int	do_export(char **args, t_minishell *ms)
 	if (ft_matrix_size(args) == 1)
 		return (put_export_vars(ms->envvar_lst));
 	exit_code = EXIT_SUCCESS;
-	i = -1;
+	i = 0;
 	while (args[++i])
 	{
+		if (ft_strchr(args[i], '=') == NULL)
+			continue ;
 		envvar = envvar_new(args[i]);
 		if (!envvar)
 			return (put_error("export"), EXIT_FAILURE);

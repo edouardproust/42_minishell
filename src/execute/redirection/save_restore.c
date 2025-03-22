@@ -26,12 +26,14 @@
  */
 void	save_stdin_stdout(t_cmd *cmd, t_minishell *ms)
 {
-	if (cmd->infile || (cmd->heredoc->delimiter != NULL))
+	if (!cmd_has_redirections(cmd))
+		return ;
+	if (cmd->infiles && cmd->infiles[0])
 	{
 		if (ft_dup(STDIN_FILENO, &cmd->saved_stdin) == EXIT_FAILURE)
 			exit_minishell(EXIT_FAILURE, ms, "dup");
 	}
-	if (cmd->outfile)
+	if (cmd->outfiles && cmd->outfiles[0])
 	{
 		if (ft_dup(STDOUT_FILENO, &cmd->saved_stdout) == EXIT_FAILURE)
 		{
@@ -54,13 +56,15 @@ void	save_stdin_stdout(t_cmd *cmd, t_minishell *ms)
  */
 void	restore_stdin_stdout(t_cmd *cmd, t_minishell *ms)
 {
-	if ((cmd->infile || (cmd->heredoc->delimiter != NULL))
+	if (!cmd_has_redirections(cmd))
+		return ;
+	if ((cmd->infiles && cmd->infiles[0])
 		&& cmd->saved_stdin != -1)
 	{
 		if (ft_dup2(cmd->saved_stdin, STDIN_FILENO) == EXIT_FAILURE)
 			exit_minishell(EXIT_FAILURE, ms, "dup2");
 	}
-	if (cmd->outfile && cmd->saved_stdout != -1)
+	if (cmd->outfiles && cmd->outfiles[0])
 	{
 		if (ft_dup2(cmd->saved_stdout, STDOUT_FILENO) == EXIT_FAILURE)
 			exit_minishell(EXIT_FAILURE, ms, "dup2");
