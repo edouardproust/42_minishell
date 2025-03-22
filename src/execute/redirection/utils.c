@@ -30,20 +30,14 @@ t_infile	*get_last_infile(t_infile **infiles)
 	return (last);
 }
 
-t_outfile	*get_last_outfile(t_outfile **outfiles)
+int	open_outfile(t_outfile *outfile)
 {
-	t_outfile	*last;
-	int			i;
+	int	flags;
+	int	fdout;
 
-	last = NULL;
-	if (outfiles)
-	{
-		i = 0;
-		while (outfiles[i])
-		{
-			last = outfiles[i];
-			i++;
-		}
-	}
-	return (last);
+	flags = O_WRONLY | O_CREAT | O_TRUNC;
+	if (outfile->append)
+		flags = O_WRONLY | O_CREAT | O_APPEND;
+	fdout = open(outfile->filepath, flags, 0644);
+	return (fdout);
 }

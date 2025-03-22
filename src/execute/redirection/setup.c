@@ -15,7 +15,7 @@
 static	int	setup_redir_heredoc(t_cmd *cmd, t_infile *infile)
 {
 	cmd->fdin = infile->hdoc_fd;
-	if (cmd->fdin = -1)
+	if (cmd->fdin == -1)
 		return (put_error("heredoc: invalid fd"), EXIT_FAILURE);
 	if (ft_dup2(cmd->fdin, STDIN_FILENO) == EXIT_FAILURE)
 	{
@@ -42,22 +42,39 @@ static int	setup_redir_infile(t_cmd *cmd, char *filepath)
 	return (EXIT_SUCCESS);
 }
 
-static int	setup_redir_outfile(t_cmd *cmd, t_outfile *outfile)
+/**
+ * Create all the outfiles for the current command. Assign the last
+ * outfile's fd to stdout.
+ *
+ * @param outfiles Array of outfiles
+ * @return EXIT_SUCCESS, or EXIT_FAILURE if an intermediary outfile could not
+ * be created or the dup of the last outfile on stdout failed. The function
+ * prints error messages.
+ */
+static int	setup_redir_outfiles(t_cmd *cmd)
 {
-	int	flags;
+	int			i;
 
-	flags = O_WRONLY | O_CREAT | O_APPEND;
-	if (outfile->append)
-		flags = O_WRONLY | O_CREAT | O_TRUNC;
-	cmd->fdout = open(outfile->filepath, flags, 0644);
-	if (cmd->fdout == -1)
-		return (put_error(outfile->filepath), EXIT_FAILURE);
-	if (ft_dup2(cmd->fdout, STDOUT_FILENO) == EXIT_FAILURE)
+	if (!cmd->outfiles)
+		return (EXIT_SUCCESS);
+	i = 0;
+	while (cmd->outfiles[i])
 	{
+		cmd->fdout = open_outfile(cmd->outfiles[i]);
+		if (cmd->fdout == -1)
+			return (put_error(cmd->outfiles[i]->filepath), EXIT_FAILURE);
+		if (cmd->outfiles[i + 1] == NULL)
+		{
+			if (ft_dup2(cmd->fdout, STDOUT_FILENO) == EXIT_FAILURE)
+			{
+				ft_close(&cmd->fdout);
+				return (put_error1("%s: dup2", cmd->outfiles[i]->filepath),
+					EXIT_FAILURE);
+			}
+		}
 		ft_close(&cmd->fdout);
-		return (put_error1("%s: dup2", outfile->filepath), EXIT_FAILURE);
+		i++;
 	}
-	ft_close(&cmd->fdout);
 	return (EXIT_SUCCESS);
 }
 
@@ -72,7 +89,6 @@ static int	setup_redir_outfile(t_cmd *cmd, t_outfile *outfile)
 int	setup_redirections(t_cmd *cmd)
 {
 	t_infile	*last_in;
-	t_outfile	*last_out;
 	int			ret;
 
 	last_in = get_last_infile(cmd->infiles);
@@ -85,12 +101,8 @@ int	setup_redirections(t_cmd *cmd)
 		if (ret != EXIT_SUCCESS)
 			return (EXIT_FAILURE);
 	}
-	last_out = get_last_outfile(cmd->outfiles);
-	if (last_out)
-	{
-		ret = setup_redir_outfile(cmd, last_out);
-		if (ret != EXIT_SUCCESS)
-			return (EXIT_FAILURE);
-	}
+	ret = setup_redir_outfiles(cmd);
+	if (ret != EXIT_SUCCESS)
+		return (EXIT_FAILURE);
 	return (EXIT_SUCCESS);
 }

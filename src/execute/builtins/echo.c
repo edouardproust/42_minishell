@@ -14,6 +14,7 @@
 
 /**
  * Defines if the option -n is active for this command or not.
+ * Increments index of the first arg to print if the -n option is present.
  *
  * @param args Array of args (strings) of the current t_cmd
  * @param i Pointer to the args index

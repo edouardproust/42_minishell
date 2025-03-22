@@ -38,7 +38,7 @@ static int	read_heredoc_line(char *line, int write_fd,
  * @param ms Struct containing data on the program
  * @return EXIT_SUCCESS on delimiter match, EXIT_FAILURE on error/EOF
  */
-int	read_heredoc(t_cmd *cmd, int write_fd, t_minishell *ms)
+int	read_heredoc(t_infile *infile, int write_fd, t_minishell *ms)
 {
 	char	*line;
 
@@ -51,11 +51,11 @@ int	read_heredoc(t_cmd *cmd, int write_fd, t_minishell *ms)
 				return (ft_free(&line), E_SIGBASE + SIGINT);
 			put_error2("warning: here-document at line %s delimited by "
 				"end of file (wanted `%s')",
-				int_to_str(cmd->heredoc->start),
-				cmd->heredoc->delimiter);
+				int_to_str(infile->hdoc_start),
+				infile->hdoc_delimiter);
 			return (EXIT_SUCCESS);
 		}
-		if (ft_strcmp(line, cmd->heredoc->delimiter) == 0)
+		if (ft_strcmp(line, infile->hdoc_delimiter) == 0)
 			return (ft_free(&line), EXIT_SUCCESS);
 		if (read_heredoc_line(line, write_fd, ms) == EXIT_FAILURE)
 			return (EXIT_FAILURE);

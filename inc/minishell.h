@@ -240,10 +240,9 @@ char			*get_exec_path(char *arg, t_minishell *minishell);
 pid_t			run_in_child_process(t_builtin *builtin, t_cmd *cmd,
 					t_minishell *minishell);
 int				process_all_heredocs(t_minishell *ms);
-int				setup_redirections(t_cmd *cmd);
 t_bool			is_forbidden_cmd(t_cmd *cmd);
 int				process_all_heredocs(t_minishell *ms);
-int				read_heredoc(t_cmd *cmd, int write_fd, t_minishell *ms);
+int				read_heredoc(t_infile *infile, int write_fd, t_minishell *ms);
 /* Pipes and redirections */
 void			init_pipe_if(t_cmd *cmd, t_minishell *minishell);
 void			setup_pipe_ends(t_cmd *cmd, t_minishell *minishell);
@@ -252,7 +251,7 @@ int				setup_redirections(t_cmd *cmd);
 void			save_stdin_stdout(t_cmd *cmd, t_minishell *minishell);
 void			restore_stdin_stdout(t_cmd *cmd, t_minishell *minishell);
 t_infile		*get_last_infile(t_infile **infiles);
-t_outfile		*get_last_outfile(t_outfile **outfiles);
+int				open_outfile(t_outfile *outfile);
 /* Executables */
 void			run_executable(t_cmd *cmd, t_minishell *minishell);
 void			setup_pipe_ends(t_cmd *cmd, t_minishell *minishell);
