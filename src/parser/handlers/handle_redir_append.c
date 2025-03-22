@@ -32,9 +32,9 @@ int	handle_redir_append(t_token **cur_token, t_cmd **cur_cmd,
 		return (EXIT_FAILURE);
 	new_outfile = create_outfile(token->next->value, TRUE);
 	if (!new_outfile)
-		exit_minishell(EXIT_FAILURE, minishell, "parse outfile"); //TODO exit minishell OR print error + new prompt?
+		exit_minishell(EXIT_FAILURE, minishell, "parse outfile");
 	if (add_outfile_to_cmd(*cur_cmd, new_outfile) == EXIT_FAILURE)
-		exit_minishell(EXIT_FAILURE, minishell, "parse outfile"); //TODO exit minishell OR print error + new prompt?
+		exit_minishell(EXIT_FAILURE, minishell, "parse outfile");
 	*cur_token = token->next->next;
 	return (EXIT_SUCCESS);
 }

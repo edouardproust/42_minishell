@@ -7,8 +7,7 @@ NAME = ./minishell
 
 C_DIR = src
 
-C_FILES = debug.c \
-	main.c \
+C_FILES = main.c \
 	utils/free/minishell.c \
 	utils/free/envvar.c \
 	utils/free/token.c \
@@ -93,8 +92,7 @@ OBJS = $(addprefix $(O_DIR)/,$(C_FILES:.c=.o))
 
 H_DIR = inc
 
-H_FILES = debug.h \
-	minishell.h
+H_FILES = minishell.h
 
 HEADERS = $(addprefix $(H_DIR)/,$(H_FILES))
 

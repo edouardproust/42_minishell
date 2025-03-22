@@ -31,9 +31,9 @@ int	handle_redir_in(t_token **cur_token, t_cmd **cur_cmd,
 		return (EXIT_FAILURE);
 	new_infile = create_infile_from_path(token->next->value);
 	if (!new_infile)
-		exit_minishell(EXIT_FAILURE, minishell, "parse infile"); //TODO exit minishell OR print error + new prompt?
+		exit_minishell(EXIT_FAILURE, minishell, "parse infile");
 	if (add_infile_to_cmd(*cur_cmd, new_infile) == EXIT_FAILURE)
-		exit_minishell(EXIT_FAILURE, minishell, "parse infile"); //TODO exit minishell OR print error + new prompt?
+		exit_minishell(EXIT_FAILURE, minishell, "parse infile");
 	*cur_token = token->next->next;
 	return (EXIT_SUCCESS);
 }

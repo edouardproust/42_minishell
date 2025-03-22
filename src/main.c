@@ -84,7 +84,6 @@ static int	set_input(t_minishell *ms)
  * @param envp Array containing the environment variables on program startup
  * @return EXIT_SUCCESS or EXIT_FAILURE
  */
-#include "debug.h" //DEBUG
 int	main(int ac, char **av, char **envp)
 {
 	t_minishell	*ms;
@@ -103,7 +102,6 @@ int	main(int ac, char **av, char **envp)
 		init_cmd_lst(ms);
 		if (ms->cmd_lst == NULL)
 			continue ;
-		debug_cmd_lst(ms->cmd_lst); //DEBUG
 		ft_signal(SIGINT, exec_sigint_handler);
 		execute_cmd_lst(ms);
 		free_cmd_lst(&ms->cmd_lst);
