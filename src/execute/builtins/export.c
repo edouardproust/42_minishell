@@ -64,6 +64,8 @@ static int	expand_envvar(t_envvar *envvar, t_minishell *ms)
 		free_envvar_node(&envvar);
 		return (EXIT_FAILURE);
 	}
+	ft_free(&envvar->name);
+	ft_free(&envvar->value);
 	envvar->name = expanded_identifier;
 	envvar->value = expanded_value;
 	return (EXIT_SUCCESS);
