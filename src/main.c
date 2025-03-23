@@ -57,7 +57,7 @@ static int	set_input(t_minishell *ms)
 	int	sig;
 
 	set_errno(EXIT_SUCCESS);
-	ms->input = readline("minishell$ ");
+	ms->input = readline(BLUE "minishell$ " RST);
 	add_history(ms->input);
 	ms->input_line++;
 	sig = get_and_reset_signal();
