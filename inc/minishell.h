@@ -31,9 +31,6 @@
 # define TRUE 1
 # define FALSE 0
 # define ERROR_BUFFER_SIZE 1024
-/* Style */
-# define BLUE "\033[1m\033[34m"
-# define RST "\033[0m" // Reset
 
 enum	e_token
 {
