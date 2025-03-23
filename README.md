@@ -1,6 +1,6 @@
-# minishell
+# Minishell (42 Barcelona)
 
-**The "Minishell" project from 42 School recreates a simple Unix shell in C, featuring: command parsing, command execution, environment management, heredoc handling and several built-ins (echo, cd, pwd, env, export, unset, exit).**
+**The "Minishell" project from 42 School recreates a simple Unix shell in C, featuring: command parsing, command execution, environment management, heredoc handling, multi infiles our outfiles support, readline history and 7 builtins.**
 
 - **Subject:** [English](subject/en.subject.pdf) / [Spanish](subject/es.subject.pdf)
 - **Location:** 42 School Barcelona
@@ -8,19 +8,7 @@
 
 ## TODO
 
-### Features
-- (optional) Bonus:
-	- && and || with parenthesis for priorities
-	- Wildcards * should work for the current working directory.
-
-### Fix
-- `minishell$ ./minishell | echo` or `minishell$ ./minishell | ls`: waiting for input + broken display
-- Don't print `exit` in this case: `$ sleep 3000 | exit`
-- Deal with more than 1 outfile or infile in a t_cmd (eg. `$ echo hello > out1 >> out2`)
-- (optional) "Zombie-process" architecture
-
 ### Final checks
-- Add 42 headers to all files
 - Remove any `.bak` file, `debug.c` and `debug.h` + clean all reference to them in the code
 - Memory leaks (in all case senarios)
 - Fds leaks (in all case senarios)
@@ -31,27 +19,107 @@
 - Verify if `valgrind` rule in `Makefile` is norn compliant
 - Norminette final check
 
-## How to use?
+## How to use
 
-// TODO
+### Installation
 
-## Overview
+1. **Clone the repository:**
+   ```bash
+   git clone https://github.com/your-username/minishell.git
+   cd minishell
+   ```
+2. **Compile the project:**
+	Use the provided Makefile to compile the Minishell executable.
+	```bash
+	make
+	```
+3. **Run Minishell:**
+	```bash
+	./minishell
+	```
+	Minishell only work in interactive mode, so no arguments are allowed for this command.
 
-**Features:**
+### Basic Usage
 
-- Display a prompt when waiting for a new command.
-- Have a working history.
-- Execute commands with arguments.
-- Handle environment variables ($ followed by a sequence of characters).
-- Manage signals (Ctrl+C, Ctrl+D, Ctrl+\).
-- Redirections (>, <, <<, >>).
-- Pipes (|).
-- Built-ins (echo, cd, export, unset, env, exit).
+Once Minishell is running, you will see a prompt `minishell>` where you can enter commands. Here are some examples of what you can do:
 
-## Requirements
+- **Execute commands:**
+
+	```bash
+	minishell> ls -l
+	minishell> echo "Hello, World!"
+	```
+
+- **Environment variables:**
+
+	```bash
+	minishell> echo $HOME
+	minishell> export MY_VAR="42"
+	minishell> echo $MY_VAR
+	```
+
+- **Pipes**
+
+	You can use an unlimited number of pipes.
+	```bash
+	minishell> ls -l | grep .c
+	minishell> cat file.txt | wc -l
+	```
+
+- **Built-in commands**
+
+	Minishell supports the following builtins: `echo`, `cd`, `pwd`, `env`, `export`, `unset`, `exit`
+	```bash
+	minishell> cd /path/to/directory
+	minishell> pwd
+	minishell> exit
+	```
+
+- **Redirections**
+
+	```bash
+	minishell> echo "Hello" > output.txt
+	minishell> cat < input.txt
+	minishell> ls -l >> output.txt
+	```
+
+- **Heredoc**
+
+	You can use an unlimited number of heredocs in you command, either seperated by pipes or in one sub-command.
+	```bash
+	minishell> cat << EOF
+	```
+
+## Other features
+
+- **Signals**
+
+	Minishell handles the following signals (including inside heredoc interactive mode):
+	- **Ctrl+C (SIGINT):** Interrupts the current command and displays a new prompt.
+	- **Ctrl+D (EOF):** Exits the shell gracefully.
+	- **Ctrl+\ (SIGQUIT):** Quits the shell (if no command is running).
+
+- **Multi infiles and outfiles**
+
+	Minishell is handling an unfinite number of infiles and outfiles. So, even if this command makes no sense, Minishell will treat it like `bash` would:
+	```bash
+	minishell$ < a << b << EOF cat > c >> d | << EOF < e sort >> f > g
+	```
+- **Readline history**
+
+	Use arrows `UP` and `DOWN` to display your previous prompts.
+
+- **Leaks free**
+
+	Minishell guaranties no memory / file descriptors leaks except the ones causes natively by the readline library. Use this command to run Minishell in debug mode:
+	```bash
+	make valgrind
+	```
+
+## Project constraints
 
 ### Allowed functions:
-					
+
 **Readline Library Functions**
 - `readline(prompt)`: Displays a prompt (e.g., minishell> ) and waits for user input. Returns the input string (dynamically allocated).
 - `rl_clear_history()`: Clears the history of commands entered via readline.
@@ -131,43 +199,6 @@
 - `tgetstr(capname, buffer)`: Gets the string value of a terminal capability (capname).
 - `tgoto(capname, col, row)`: Computes a cursor movement string to position (col, row).
 - `tputs(string, affcnt, putc)`: Outputs a terminal capability string (string) with the given number of affected lines (affcnt). Behaviour : Should match Bash as close as possible.
-
-## Features/Implementation Details
-				
-**Command Execution**
-
-    How execve is used to run commands.
-    Handling paths and PATH variable.
-    Error handling for invalid commands.
-
-**Pipes (|)**
-
-    How pipes connect the output of one command to the input of another.
-    Use of pipe() and dup2().
-
-**Redirections (>, <, >>)**
-
-    File handling with open(), dup2(), and close().
-    Managing multiple redirections in a single command.
-
-**Signals**
-
-    How signals like Ctrl+C (SIGINT) and Ctrl+D (EOF) are managed.
-
-**Environment Variables**
-
-    Using getenv to handle environment variables.
-    Built-ins like export and unset.
-
-**Built-in Commands**
-
-Details of the implementation of each built-in:
-
-    cd, echo, exit, export, unset, etc.
-    
-## Error Handling
-
-// TODO: Description of how errors are handled. Mention where and how error messages are displayed.
 
 ## External references:
 
