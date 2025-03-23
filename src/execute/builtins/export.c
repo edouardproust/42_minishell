@@ -58,14 +58,14 @@ static int	expand_envvar(t_envvar *envvar, t_minishell *ms)
 
 	expanded_identifier = remove_quotes_and_expand(envvar->name, ms, FALSE);
 	expanded_value = remove_quotes_and_expand(envvar->value, ms, FALSE);
+	ft_free(&envvar->name);
+	ft_free(&envvar->value);
 	if (!expanded_identifier || !expanded_value)
 	{
 		put_error1("export: `%s': var expansion", envvar->name);
 		free_envvar_node(&envvar);
 		return (EXIT_FAILURE);
 	}
-	ft_free(&envvar->name);
-	ft_free(&envvar->value);
 	envvar->name = expanded_identifier;
 	envvar->value = expanded_value;
 	return (EXIT_SUCCESS);
@@ -89,7 +89,10 @@ static int	export_argument(char *arg, int *exit_code, t_minishell *ms)
 	else
 	{
 		if (ft_strchr(arg, '=') == NULL || ft_strcmp("_", envvar->name) == 0)
+		{
+			free_envvar_node(&envvar);
 			return (E_CMDWRONGARG);
+		}
 		export_envvar(envvar, ms);
 	}
 	return (EXIT_SUCCESS);
