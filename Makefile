@@ -14,9 +14,11 @@ C_FILES = main.c \
 	utils/free/cmd.c \
 	utils/exit.c \
 	utils/error.c \
+	utils/error2.c \
 	utils/string.c \
 	utils/char.c \
 	utils/fd.c \
+	utils/cmd.c \
 	env/init.c \
 	env/ops.c \
 	env/path.c \
@@ -47,18 +49,19 @@ C_FILES = main.c \
 	parser/handlers/handle_redir_out.c \
 	parser/handlers/handle_redir_append.c \
 	parser/handlers/handle_redir_heredoc.c \
+	parser/handlers/utils/redir_valid.c \
+	parser/handlers/utils/redir_create.c \
+	parser/handlers/utils/redir_add.c \
 	parser/handlers/split_tokens.c \
-	parser/handlers/utils.c \
 	execute/parent_process.c \
 	execute/child_process.c \
 	execute/pipe.c \
 	execute/redirection/save_restore.c \
 	execute/redirection/setup.c \
-	execute/heredoc/heredoc.c \
-	execute/heredoc/utils.c \
+	execute/redirection/heredoc.c \
+	execute/redirection/utils.c \
 	execute/executable.c \
 	execute/builtin.c \
-	execute/utils.c \
 	execute/builtins/utils_args.c \
 	execute/builtins/cd/cd.c \
 	execute/builtins/cd/utils_dir.c \
@@ -130,7 +133,7 @@ $(O_DIR)/%.o: $(C_DIR)/%.c Makefile $(HEADERS)
 	@mkdir -p $(@D)
 	cc -c -o $@ $< $(INCLUDES) $(CFLAGS)
 
-$(NAME): $(OBJS)
+$(NAME): $(OBJS) $(LIBFT)
 	cc -o $@ $^ $(LIBS)
 
 clean:
@@ -153,4 +156,4 @@ valgrind:
 # Phony                              *
 # ************************************
 
-.PHONY: all clean fclean re libft
+.PHONY: all clean fclean re libft valgrind

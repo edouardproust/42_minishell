@@ -1,5 +1,7 @@
 test
+subject
 minishell
+README.md
 src/_obj
 *.a
 *.o
@@ -10,3 +12,13 @@ src/_obj
 ..gitignore
 .gitguardian.yaml
 .vscode
+a
+b
+c
+d
+e
+f
+infile*
+outfile*
+*.TXT
+*.txt

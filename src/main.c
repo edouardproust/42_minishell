@@ -70,7 +70,7 @@ static int	set_input(t_minishell *ms)
 		else
 		{
 			printf("exit\n");
-			exit_minishell(EXIT_SUCCESS, ms, NULL);
+			exit_minishell(ms->exit_code, ms, NULL);
 		}
 	}
 	return (EXIT_SUCCESS);

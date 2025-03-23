@@ -19,13 +19,13 @@
  * @param cmd Command structure containing heredoc details
  * @param ms Struct containing data on the program
  */
-static void	handle_child_process(int *pipefd, t_cmd *cmd, t_minishell *ms)
+static void	handle_child_process(int *pipefd, t_infile *infile, t_minishell *ms)
 {
 	int	exit_code;
 
 	ft_signal(SIGINT, heredoc_sigint_handler);
 	ft_close(&pipefd[0]);
-	exit_code = read_heredoc(cmd, pipefd[1], ms);
+	exit_code = read_heredoc(infile, pipefd[1], ms);
 	flush_fds();
 	free_minishell(&ms);
 	exit(exit_code);
@@ -39,7 +39,7 @@ static void	handle_child_process(int *pipefd, t_cmd *cmd, t_minishell *ms)
  * @param cmd Command structure to store heredoc fd
  * @return EXIT_SUCCESS on success, EXIT_FAILURE on child error
  */
-static int	handle_parent_process(int pid, int *pipefd, t_cmd *cmd)
+static int	handle_parent_process(int pid, int *pipefd, t_infile *infile)
 {
 	int	status;
 
@@ -52,11 +52,11 @@ static int	handle_parent_process(int pid, int *pipefd, t_cmd *cmd)
 		if (WEXITSTATUS(status) > E_SIGBASE)
 		{
 			ft_close(&pipefd[0]);
-			cmd->heredoc->fd = -1;
+			infile->hdoc_fd = -1;
 		}
 		return (WEXITSTATUS(status));
 	}
-	cmd->heredoc->fd = pipefd[0];
+	infile->hdoc_fd = pipefd[0];
 	return (EXIT_SUCCESS);
 }
 
@@ -67,13 +67,11 @@ static int	handle_parent_process(int pid, int *pipefd, t_cmd *cmd)
  * @param ms Struct containing data on the program
  * @return EXIT_SUCCESS on success, EXIT_FAILURE on pipe/fork error
  */
-static int	process_heredoc(t_cmd *cmd, t_minishell *ms)
+static int	process_heredoc(t_infile *infile, t_minishell *ms)
 {
 	int		pipefd[2];
 	pid_t	pid;
 
-	if (!cmd->heredoc->delimiter)
-		return (EXIT_SUCCESS);
 	if (pipe(pipefd) == -1)
 		return (put_error("pipe"), EXIT_FAILURE);
 	pid = fork();
@@ -84,8 +82,8 @@ static int	process_heredoc(t_cmd *cmd, t_minishell *ms)
 		return (put_error("fork"), EXIT_FAILURE);
 	}
 	if (pid == 0)
-		handle_child_process(pipefd, cmd, ms);
-	return (handle_parent_process(pid, pipefd, cmd));
+		handle_child_process(pipefd, infile, ms);
+	return (handle_parent_process(pid, pipefd, infile));
 }
 
 /**
@@ -103,18 +101,24 @@ int	process_all_heredocs(t_minishell *ms)
 {
 	t_cmd	*cmd;
 	int		exit_code;
+	int		i;
 
 	cmd = ms->cmd_lst;
 	while (cmd)
 	{
-		if (cmd->heredoc->delimiter)
+		i = 0;
+		while (cmd->infiles && cmd->infiles[i])
 		{
-			exit_code = process_heredoc(cmd, ms);
-			if (exit_code != EXIT_SUCCESS)
+			if (cmd->infiles[i]->is_heredoc)
 			{
-				ms->exit_code = exit_code;
-				return (exit_code);
+				exit_code = process_heredoc(cmd->infiles[i], ms);
+				if (exit_code != EXIT_SUCCESS)
+				{
+					ms->exit_code = exit_code;
+					return (exit_code);
+				}
 			}
+			i++;
 		}
 		cmd = cmd->next;
 	}

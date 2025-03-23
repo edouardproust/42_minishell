@@ -1,7 +1,7 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   utils.c                                            :+:      :+:    :+:   */
+/*   redir_valid.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: fpapadak <fpapadak@student.42barcelon      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
@@ -11,12 +11,12 @@
 /* ************************************************************************** */
 
 #include "minishell.h"
+
 /**
  * Determines the error message for invalid redirection syntax.
- * 
+ *
  * @param token Current token (e.g., `<`, `>`, `<<`, `>>`).
  * @return "newline" if no token follows, "|" for unexpected pipes.
- * 
  */
 char	*redir_error(t_token *token)
 {
@@ -41,7 +41,7 @@ int	check_redir_syntax(t_token *token, t_minishell *minishell)
 
 /**
  * Validates redirection targets to prevent ambiguous filenames.
- * 
+ *
  * @param file_token Token containing filename (after expansion)
  * @param minishell Shell context for error reporting
  * @return EXIT_SUCCESS if valid, EXIT_FAILURE if:
