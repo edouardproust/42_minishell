@@ -51,24 +51,26 @@ static void	export_envvar(t_envvar *envvar, t_minishell *minishell)
 		envvar_addoneback(&minishell->envvar_lst, envvar);
 }
 
-static t_envvar	*get_check_envvar(char *arg)
+static int	export_argument(char *arg, int *exit_code, t_minishell *ms)
 {
 	t_envvar	*envvar;
 
 	envvar = envvar_new(arg);
 	if (!envvar)
-		return (put_error("export"), NULL);
-	if (is_valid_envp_var(envvar->name))
-		return (envvar);
-	put_error1("export: `%s': not a valid identifier", envvar->name);
-	free_envvar_node(&envvar);
-	return (NULL);
-}
-
-static t_bool	is_skip_case(char *arg, t_envvar *envvar)
-{
-	return (ft_strchr(arg, '=') == NULL
-		|| ft_strcmp("_", envvar->name) == 0);
+		return (put_error("export"), EXIT_FAILURE);
+	if (!is_valid_envp_var(envvar->name))
+	{
+		put_error1("export: `%s': not a valid identifier", envvar->name);
+		free_envvar_node(&envvar);
+		*exit_code = EXIT_FAILURE;
+	}
+	else
+	{
+		if (ft_strchr(arg, '=') == NULL || ft_strcmp("_", envvar->name) == 0)
+			return (E_CMDWRONGARG);
+		export_envvar(envvar, ms);
+	}
+	return (EXIT_SUCCESS);
 }
 
 /**
@@ -83,9 +85,9 @@ static t_bool	is_skip_case(char *arg, t_envvar *envvar)
  */
 int	do_export(char **args, t_minishell *ms)
 {
-	int			exit_code;
-	int			i;
-	t_envvar	*envvar;
+	int	exit_code;
+	int	i;
+	int	ret;
 
 	exit_code = error_if_options(args, "export");
 	if (exit_code)
@@ -96,13 +98,11 @@ int	do_export(char **args, t_minishell *ms)
 	i = 0;
 	while (args[++i])
 	{
-		envvar = get_check_envvar(args[i]);
-		if (!envvar)
-			return (EXIT_FAILURE);
-		if (is_skip_case(args[i], envvar))
+		ret = export_argument(args[i], &exit_code, ms);
+		if (ret == E_CMDWRONGARG)
 			continue ;
-		else
-			export_envvar(envvar, ms);
+		else if (ret == EXIT_FAILURE)
+			return (EXIT_FAILURE);
 	}
 	return (update_envp(ms) || exit_code);
 }
