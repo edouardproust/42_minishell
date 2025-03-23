@@ -82,7 +82,7 @@ Once Minishell is running, you will see a prompt `minishell$` where you can ente
 	minishell$ cat << EOF
 	```
 
-- **Variables expeansion:**
+- **Variables expansion:**
 
 	Environment variables:
 	```bash
