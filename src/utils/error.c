@@ -16,6 +16,7 @@ static void	put_error_format(char *fmt, char **args, int arg_count)
 {
 	int		i;
 	int		arg_index;
+	char	ch[2];
 
 	i = 0;
 	arg_index = 0;
@@ -29,7 +30,11 @@ static void	put_error_format(char *fmt, char **args, int arg_count)
 			i++;
 		}
 		else
-			append_to_error_buffer(char_to_str(fmt[i]));
+		{
+			ch[0] = fmt[i];
+			ch[1] = '\0';
+			append_to_error_buffer(ch);
+		}
 		i++;
 	}
 }
