@@ -51,6 +51,24 @@ static void	export_envvar(t_envvar *envvar, t_minishell *minishell)
 		envvar_addoneback(&minishell->envvar_lst, envvar);
 }
 
+static int	expand_envvar(t_envvar *envvar, t_minishell *ms)
+{
+	char		*expanded_identifier;
+	char		*expanded_value;
+
+	expanded_identifier = remove_quotes_and_expand(envvar->name, ms, FALSE);
+	expanded_value = remove_quotes_and_expand(envvar->value, ms, FALSE);
+	if (!expanded_identifier || !expanded_value)
+	{
+		put_error1("export: `%s': var expansion", envvar->name);
+		free_envvar_node(&envvar);
+		return (EXIT_FAILURE);
+	}
+	envvar->name = expanded_identifier;
+	envvar->value = expanded_value;
+	return (EXIT_SUCCESS);
+}
+
 static int	export_argument(char *arg, int *exit_code, t_minishell *ms)
 {
 	t_envvar	*envvar;
@@ -58,6 +76,8 @@ static int	export_argument(char *arg, int *exit_code, t_minishell *ms)
 	envvar = envvar_new(arg);
 	if (!envvar)
 		return (put_error("export"), EXIT_FAILURE);
+	if (expand_envvar(envvar, ms) == EXIT_FAILURE)
+		return (EXIT_FAILURE);
 	if (!is_valid_envp_var(envvar->name))
 	{
 		put_error1("export: `%s': not a valid identifier", envvar->name);
