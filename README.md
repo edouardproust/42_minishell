@@ -41,53 +41,63 @@
 
 ### Basic Usage
 
-Once Minishell is running, you will see a prompt `minishell>` where you can enter commands. Here are some examples of what you can do:
+Once Minishell is running, you will see a prompt `minishell$` where you can enter commands. Here are some examples of what you can do:
 
 - **Execute commands:**
 
 	```bash
-	minishell> ls -l
-	minishell> echo "Hello, World!"
-	```
-
-- **Environment variables:**
-
-	```bash
-	minishell> echo $HOME
-	minishell> export MY_VAR="42"
-	minishell> echo $MY_VAR
+	minishell$ ls -l
+	minishell$ echo "Hello, World!"
 	```
 
 - **Pipes**
 
 	You can use an unlimited number of pipes.
 	```bash
-	minishell> ls -l | grep .c
-	minishell> cat file.txt | wc -l
+	minishell$ ls -l | grep .c
+	minishell$ cat file.txt | wc -l
 	```
 
 - **Built-in commands**
 
 	Minishell supports the following builtins: `echo`, `cd`, `pwd`, `env`, `export`, `unset`, `exit`
 	```bash
-	minishell> cd /path/to/directory
-	minishell> pwd
-	minishell> exit
+	minishell$ cd /path/to/directory
+	minishell$ pwd
+	minishell$ exit
 	```
 
 - **Redirections**
 
 	```bash
-	minishell> echo "Hello" > output.txt
-	minishell> cat < input.txt
-	minishell> ls -l >> output.txt
+	minishell$ echo "Hello" > output.txt
+	minishell$ cat < input.txt
+	minishell$ ls -l >> output.txt
 	```
 
 - **Heredoc**
 
 	You can use an unlimited number of heredocs in you command, either seperated by pipes or in one sub-command.
 	```bash
-	minishell> cat << EOF
+	minishell$ cat << EOF
+	```
+
+- **Variables expeansion:**
+
+	Environment variables:
+	```bash
+	minishell$ echo $HOME
+	minishell$ export MY_VAR="42"
+	minishell$ echo $MY_VAR
+	```
+	Error codes:
+	```bash
+	minishell$ cat -invalidoption
+	minishell$ echo $?
+	```
+	HOME path:
+	```bash
+	minishell$ cd ~
 	```
 
 ## Other features
@@ -121,7 +131,7 @@ Once Minishell is running, you will see a prompt `minishell>` where you can ente
 ### Allowed functions:
 
 **Readline Library Functions**
-- `readline(prompt)`: Displays a prompt (e.g., minishell> ) and waits for user input. Returns the input string (dynamically allocated).
+- `readline(prompt)`: Displays a prompt (e.g., minishell$ ) and waits for user input. Returns the input string (dynamically allocated).
 - `rl_clear_history()`: Clears the history of commands entered via readline.
 - `rl_on_new_line()`: Notifies the readline library that the cursor is on a new line (used after signals like CTRL+C).
 - `rl_replace_line(new_line, clear_undo)`: Replaces the current input line with new_line. The clear_undo parameter specifies whether to reset undo history.
