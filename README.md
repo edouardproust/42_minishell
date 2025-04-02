@@ -6,18 +6,7 @@
 - **Location:** 42 School Barcelona
 - **Validation:** March 2025
 
-## TODO
-
-### Final checks
-- Remove any `.bak` file, `debug.c` and `debug.h` + clean all reference to them in the code
-- Memory leaks (in all case senarios)
-- Fds leaks (in all case senarios)
-- exit codes (in all case senarios)
-- error messages (in all case senarios)
-- Search for any "TODO" and "DEBUG" and fix / remove them
-- Review `..gitignore` and rename it into into `.gitignore`
-- Verify if `valgrind` rule in `Makefile` is norn compliant
-- Norminette final check
+![Minishell 42 Barcelona](test/screenshot/minishell.gif "Minishell 42 barcelona project GIF")
 
 ## How to use
 
